@@ -7,14 +7,76 @@
     <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body data-role="ACTOR" data-endpoint="/api/auth/actors" data-mode="professional">
-    <main class="auth-page">
-        <section class="auth-card" aria-labelledby="module-title">
-            <a href="/index.html" class="back-link">&larr; All Modules</a>
-            <header class="brand-header">
-                <div class="brand-badge" aria-hidden="true">PR</div>
-                <h1 id="module-title">Professionals Portal</h1>
-                <p class="brand-subtitle">Actors, Actresses, Influencers &amp; Creative Talent</p>
-            </header>
+    <main class="pro-auth-shell">
+        <!-- Left Cinema Showcase Panel (Matches Professional Dashboard) -->
+        <aside class="pro-showcase" aria-label="Professionals portal overview">
+            <div class="pro-showcase-bg" aria-hidden="true"></div>
+            <div class="pro-showcase-inner">
+                <div class="pro-showcase-top">
+                    <a href="/index.html" class="pro-back-pill">&larr; All Modules</a>
+                    <div class="pro-brand-lockup">
+                        <span class="pro-brand-logo" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </span>
+                        <div>
+                            <span class="pro-brand-name">Entertainment World</span>
+                            <span class="pro-brand-sub">PROFESSIONAL PORTAL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pro-showcase-copy">
+                    <span class="pro-eyebrow">VERIFIED TALENT &amp; CASTING NETWORK</span>
+                    <h1>Step into your <em>spotlight</em> today.</h1>
+                    <p>Manage auditions, event appearances, brand sponsorships, and verified industry connections in one unified workspace.</p>
+
+                    <div class="pro-highlights">
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">01</span>
+                            <div>
+                                <strong>Audition, Event &amp; Brand Invites</strong>
+                                <span>Confirm casting slots, RSVP to premieres &amp; negotiate brand deals</span>
+                            </div>
+                        </div>
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">02</span>
+                            <div>
+                                <strong>Mutual Network &amp; Direct Chat</strong>
+                                <span>Two-way approved connections with casting directors &amp; producers</span>
+                            </div>
+                        </div>
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">03</span>
+                            <div>
+                                <strong>Showreels, AI Practice &amp; Media Kit</strong>
+                                <span>Showcase your portfolio and track every application in real time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" id="open-video-tour" class="pro-tour-card">
+                    <img src="/images/tour/tour-step1.jpg" alt="Platform Video Tour preview" class="pro-tour-thumb">
+                    <div class="pro-tour-card-text">
+                        <span class="pro-tour-badge">VIDEO TOUR • 0:28</span>
+                        <strong>Watch Professional Dashboard Tour</strong>
+                        <span>See how Talent &amp; Casting work together</span>
+                    </div>
+                    <span class="pro-tour-play" aria-hidden="true">&#9654;</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Right Auth Card (Warm Cream & Crimson/Gold Theme Matching Professional Dashboard) -->
+        <section class="pro-auth-pane">
+            <section class="auth-card pro-auth-card" aria-labelledby="module-title">
+                <header class="pro-card-header">
+                    <span class="pro-portal-pill">Actor &bull; Actress &bull; Influencer</span>
+                    <h2 id="module-title">Sign in to your workspace</h2>
+                    <p>Access your Professional Dashboard or create a verified talent profile.</p>
+                </header>
 
             <div class="tab-bar" role="tablist" aria-label="Professionals authentication">
                 <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
@@ -36,7 +98,7 @@
                     </div>
                 </div>
                 <span class="demo-hint">Demo: <code>actor@entertainmentworld.com</code> / <code>actor123</code></span>
-                <button type="submit" class="submit-btn" id="login-submit">Sign In</button>
+                <button type="submit" class="submit-btn" id="login-submit">Sign In to Dashboard</button>
                 <p class="terms-note">
                     By signing in, you agree to Entertainment World's
                     <button type="button" class="terms-link" data-open-terms>Terms &amp; Conditions</button>.
@@ -144,6 +206,7 @@
                 </div>
                 <button type="submit" class="submit-btn" id="register-submit">Create Professional Profile</button>
             </form>
+            </section>
         </section>
     </main>
 
@@ -162,6 +225,44 @@
                 <p><strong>5. Account Governance:</strong> Entertainment World reserves the right to suspend accounts that submit misleading credentials or violate community guidelines.</p>
             </div>
             <button type="button" id="terms-modal-accept" class="submit-btn">I Understand</button>
+        </div>
+    </div>
+
+    <!-- Professional Dashboard Video Tour Modal -->
+    <div id="tour-modal" class="terms-modal" role="dialog" aria-modal="true" aria-labelledby="tour-modal-title" hidden>
+        <div class="terms-modal-card tour-modal-card">
+            <div class="terms-modal-header">
+                <div>
+                    <span class="tour-eyebrow">INTERACTIVE WALKTHROUGH</span>
+                    <h2 id="tour-modal-title">Professional Dashboard Video Tour</h2>
+                </div>
+                <button type="button" id="tour-modal-close" class="terms-modal-close" aria-label="Close Video Tour">&times;</button>
+            </div>
+
+            <div class="tour-player-stage">
+                <div class="tour-stage-top">
+                    <span id="tour-chapter-pill" class="tour-chapter-pill">Chapter 1 of 4</span>
+                    <span id="tour-time-label" class="tour-time-label">00:00 / 00:28</span>
+                </div>
+                <div class="tour-video-wrap">
+                    <canvas id="tour-canvas" width="1280" height="720" hidden></canvas>
+                    <video id="tour-video" class="tour-video" autoplay muted playsinline></video>
+                </div>
+                <div id="tour-progress-track" class="tour-progress-track" title="Click to seek">
+                    <div id="tour-progress-bar" class="tour-progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="tour-controls">
+                    <div class="tour-controls-left">
+                        <button type="button" id="tour-prev-btn" class="tour-ctrl-btn" aria-label="Previous chapter">&larr; Prev</button>
+                        <button type="button" id="tour-play-btn" class="tour-ctrl-btn primary">Pause</button>
+                        <button type="button" id="tour-next-btn" class="tour-ctrl-btn" aria-label="Next chapter">Next &rarr;</button>
+                        <button type="button" id="tour-fullscreen-btn" class="tour-ctrl-btn" aria-label="Fullscreen video">Fullscreen</button>
+                    </div>
+                    <button type="button" id="tour-try-demo" class="tour-demo-btn">Fill Demo Login &amp; Sign In</button>
+                </div>
+            </div>
+
+            <div id="tour-chapters" class="tour-chapters"></div>
         </div>
     </div>
 

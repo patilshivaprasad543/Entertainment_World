@@ -13,41 +13,13 @@
             { id: 'u-4', name: 'Nova Brand House', email: 'brand@entertainmentworld.com', role: 'BRAND', active: true },
             { id: 'u-5', name: 'Starlight Events', email: 'events@entertainmentworld.com', role: 'EVENT_MANAGEMENT', active: true }
         ],
-        professionals: [
-            { id: 'p-1', title: 'Alex Rivera', meta: 'Actor • Mumbai • Pro Elite (₹399)', status: 'Verified', badge: 'shortlisted' },
-            { id: 'p-2', title: 'Diya Sharma', meta: 'Theatre & Screen Actor • Delhi NCR • Pro Elite', status: 'Pending Seal', badge: 'review' },
-            { id: 'p-3', title: 'Kabir Malhotra', meta: 'Commercial & Voice Actor • Bengaluru • Premium', status: 'Verified', badge: 'shortlisted' }
-        ],
-        casting: [
-            { id: 'c-1', title: 'Apex Casting Studio', meta: '3 Active Casting Calls • Mumbai', status: 'Approved', badge: 'shortlisted' },
-            { id: 'c-2', title: 'RedFrame Originals', meta: 'Lead Actor – Web Series • Under Review', status: 'Active', badge: 'audition' }
-        ],
-        production: [
-            { id: 'pr-1', title: 'SilverScreen Pictures', meta: 'Feature Film Production • Mumbai', status: 'Verified', badge: 'shortlisted' },
-            { id: 'pr-2', title: 'NovaCut Studios', meta: 'Post-Production & Editing • Bengaluru', status: 'Active', badge: 'audition' }
-        ],
-        brands: [
-            { id: 'b-1', title: 'Nova Brand House', meta: '2 Sponsored Campaigns • Lifestyle', status: 'Approved', badge: 'shortlisted' },
-            { id: 'b-2', title: 'Veloce Audio', meta: 'Tech Launch Influencer Campaign', status: 'Active', badge: 'review' }
-        ],
-        influencers: [
-            { id: 'i-1', title: 'Aarav Mehta', meta: '240K Reach • Lifestyle & Cinema', status: 'Verified', badge: 'shortlisted' },
-            { id: 'i-2', title: 'Neha Kulkarni', meta: '115K Reach • Tech & Fashion', status: 'Active', badge: 'audition' }
-        ],
-        events: [
-            { id: 'e-1', title: 'Starlight Events', meta: 'Film Festival & Award Night Permits', status: 'Approved', badge: 'shortlisted' },
-            { id: 'e-2', title: 'Prime Stage Vendors', meta: 'Stage, Lighting & Audio Rigging', status: 'Active', badge: 'review' }
-        ],
         payments: [
-            { id: 'pay-1', title: 'Pro Elite Plan Settlement (#INV-9021)', meta: '216 Subscribers • ₹86,184', status: 'Settled', badge: 'shortlisted' },
-            { id: 'pay-2', title: 'Vendor Escrow Payout — Starlight Events', meta: '₹45,000 • Milestone 1', status: 'Pending', badge: 'review' }
-        ],
-        content: [
-            { id: 'cnt-1', title: 'Homepage Banner: Monsoon Casting Drive', meta: 'Featured Spotlight • Actors & Crew', status: 'Published', badge: 'shortlisted' },
-            { id: 'cnt-2', title: 'Showreel Moderation Queue (4 reels)', meta: 'Awaiting quality check', status: 'In Review', badge: 'review' }
+            { id: 'pay-1', title: 'Pro Plan Settlement (#INV-9021)', meta: '216 Subscribers • ₹86,184', status: 'Settled', badge: 'shortlisted' },
+            { id: 'pay-2', title: 'Premium Plan Settlement (#INV-9020)', meta: '284 Subscribers • ₹56,516', status: 'Settled', badge: 'shortlisted' },
+            { id: 'pay-3', title: 'Vendor Escrow Payout — Starlight Events', meta: '₹45,000 • Milestone 1', status: 'Pending', badge: 'review' }
         ],
         broadcasts: [
-            { id: 'bc-1', title: 'New 3-Tier Professional Plans Live', audience: 'Professionals (Actors)', message: 'Basic Free, Premium ₹199, and Pro Elite ₹399 plans are now active.', time: 'Yesterday' }
+            { id: 'bc-1', title: 'New 3-Tier Professional Plans Live', audience: 'Professionals (Actors)', message: 'Basic Free, Premium ₹199, and Pro ₹399 plans are now active.', time: 'Yesterday' }
         ],
         complaints: [
             { id: 'CMP-1009', subject: 'Brand campaign brief missing shoot dates', category: 'Casting / Opportunity Dispute', priority: 'High', status: 'Open', badgeClass: 'audition', createdAt: '1 day ago' }
@@ -223,7 +195,6 @@
         await loadVerifications();
     }
 
-    // Sub-module Renderers
     function renderUsers() {
         const container = document.getElementById('admin-users-list');
         if (!container) return;
@@ -252,10 +223,10 @@
         `).join('');
     }
 
-    function renderModuleList(containerId, items) {
-        const container = document.getElementById(containerId);
+    function renderPayments() {
+        const container = document.getElementById('admin-payments-list');
         if (!container) return;
-        container.innerHTML = items.map((item) => `
+        container.innerHTML = adminState.payments.map((item) => `
             <article class="ew-app-card">
                 <div class="ew-app-info">
                     <h3>${escapeHtml(item.title)}</h3>
@@ -336,7 +307,6 @@
         return div.innerHTML;
     }
 
-    // Event Delegation
     document.addEventListener('click', (e) => {
         const navBtn = e.target.closest('.ew-nav-item[data-view]');
         if (navBtn) {
@@ -420,21 +390,13 @@
         saveAdminState();
         renderBroadcasts();
         e.target.reset();
-        showToast('Broadcast announcement sent');
+        showToast('Announcement sent');
     });
 
     refreshBtn?.addEventListener('click', loadVerifications);
 
-    // Initial Render
     renderUsers();
-    renderModuleList('admin-professionals-list', adminState.professionals);
-    renderModuleList('admin-casting-list', adminState.casting);
-    renderModuleList('admin-production-list', adminState.production);
-    renderModuleList('admin-brand-list', adminState.brands);
-    renderModuleList('admin-influencer-list', adminState.influencers);
-    renderModuleList('admin-event-list', adminState.events);
-    renderModuleList('admin-payments-list', adminState.payments);
-    renderModuleList('admin-content-list', adminState.content);
+    renderPayments();
     renderBroadcasts();
     renderAdminComplaints();
     loadVerifications();

@@ -242,12 +242,230 @@
             }
         ],
         wishlistIds: ['opp-1', 'opp-3'],
-        network: [
-            { id: 'net-1', name: 'Meera Nair', role: 'Casting Director • Mumbai', connected: true },
-            { id: 'net-2', name: 'Rohan Kapoor', role: 'Executive Producer • RedFrame', connected: true },
-            { id: 'net-3', name: 'Ananya Verma', role: 'Talent Manager • Starlight', connected: false },
-            { id: 'net-4', name: 'Vikram Sethi', role: 'Director of Photography', connected: false }
+        auditionInvitations: [
+            {
+                id: 'ainv-1',
+                projectTitle: 'Shadows of Bombay — OTT Thriller',
+                castingHouse: 'Moonlight Cinema Casting',
+                roleName: 'Lead Detective (Kabir)',
+                auditionMode: 'In-Person',
+                slotDate: '04 Dec 2026 • 11:30 AM',
+                location: 'Andheri West Studio 4, Mumbai',
+                compensation: '₹1,50,000 / episode',
+                rsvpDeadline: 'Confirm in 2 days',
+                status: 'Pending',
+                scriptNote: '2-page interrogation scene sides attached. Prepare both intense and understated takes.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'ainv-2',
+                projectTitle: 'Monsoon Echoes — Feature Film',
+                castingHouse: 'SilverScreen Casting',
+                roleName: 'Supporting Lead (Vikram)',
+                auditionMode: 'Self-Tape',
+                slotDate: 'Submit by 07 Dec 2026 • 6:00 PM',
+                location: 'Online Portal Upload (HD 1080p)',
+                compensation: '₹2,20,000 (Full Shoot)',
+                rsvpDeadline: 'Due in 4 days',
+                status: 'Pending',
+                scriptNote: 'Record 1 dramatic monologue (90 sec) + 1 slate intro in natural daylight.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'ainv-3',
+                projectTitle: 'Katha — National TV Commercial',
+                castingHouse: 'Prism Ad Films',
+                roleName: 'Young Entrepreneur (Featured)',
+                auditionMode: 'Live Video',
+                slotDate: '09 Dec 2026 • 3:00 PM',
+                location: 'Zoom Casting Room (Link on Confirm)',
+                compensation: '₹75,000 (1-Day Shoot)',
+                rsvpDeadline: 'Confirm in 5 days',
+                status: 'Pending',
+                scriptNote: 'Live chemistry read with director and brand creative lead; casual smart wardrobe.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'ainv-4',
+                projectTitle: 'Raag & Rhythm — Stage Musical',
+                castingHouse: 'NCPA Performing Arts',
+                roleName: 'Ensemble Vocalist & Actor',
+                auditionMode: 'In-Person',
+                slotDate: '12 Dec 2026 • 10:00 AM',
+                location: 'NCPA Experimental Theatre, Mumbai',
+                compensation: '₹60,000 (Run of Show)',
+                rsvpDeadline: 'Confirmed',
+                status: 'Accepted',
+                scriptNote: 'Prepare 1 classical/semi-classical verse and 1 contemporary theatre monologue.',
+                counterFee: '',
+                counterNote: ''
+            }
         ],
+        eventInvitations: [
+            {
+                id: 'einv-1',
+                eventTitle: 'Filmfare Spotlight Gala Night',
+                organizer: 'Apex Live Events',
+                eventType: 'Award Show',
+                date: '14 Dec 2026 • 7:00 PM',
+                venue: 'Jio World Convention Centre',
+                city: 'Mumbai',
+                role: 'VIP Red-Carpet Guest & Award Presenter',
+                fee: '₹85,000',
+                dressCode: 'Black Tie / Designer Ethnic',
+                travelCovered: 'Business Class + 5-Star Stay',
+                rsvpDeadline: 'RSVP in 3 days',
+                status: 'Pending',
+                notes: 'Includes 15-min red-carpet media interaction and presenting Best Debut Director award.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'einv-2',
+                eventTitle: 'Echoes of Monsoon — Grand Premiere',
+                organizer: 'SilverScreen Live',
+                eventType: 'Film Premiere',
+                date: '21 Dec 2026 • 6:30 PM',
+                venue: 'PVR ICON, Phoenix Palladium',
+                city: 'Mumbai',
+                role: 'Celebrity Panelist & Press Q&A',
+                fee: '₹45,000',
+                dressCode: 'Smart Formal',
+                travelCovered: 'Chauffeur Pick-up & Drop',
+                rsvpDeadline: 'RSVP in 5 days',
+                status: 'Pending',
+                notes: 'Post-screening Q&A with director and lead cast, followed by VIP dinner.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'einv-3',
+                eventTitle: 'Sunburn Arena — NYE Countdown',
+                organizer: 'VibeNation Entertainment',
+                eventType: 'Music Festival',
+                date: '31 Dec 2026 • 8:00 PM',
+                venue: 'Vagator Hilltop Arena',
+                city: 'Goa',
+                role: 'Main Stage Host / Emcee',
+                fee: '₹1,10,000',
+                dressCode: 'Festival Couture (Styled)',
+                travelCovered: 'Return Flights + Villa Stay',
+                rsvpDeadline: 'RSVP in 6 days',
+                status: 'Pending',
+                notes: '4-hour live stage hosting across headliner sets and midnight countdown.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'einv-4',
+                eventTitle: 'TechVista Annual Leadership Summit',
+                organizer: 'Crestline Corporate Events',
+                eventType: 'Corporate Gala',
+                date: '10 Jan 2027 • 7:30 PM',
+                venue: 'ITC Grand Chola',
+                city: 'Chennai',
+                role: 'Keynote Fireside Moderator',
+                fee: '₹70,000',
+                dressCode: 'Business Formal',
+                travelCovered: 'Flights + 2-Night Suite',
+                rsvpDeadline: 'Confirmed',
+                status: 'Accepted',
+                notes: '45-minute moderated fireside chat on AI in Cinema & Entertainment.',
+                counterFee: '',
+                counterNote: ''
+            }
+        ],
+        brandInvitations: [
+            {
+                id: 'binv-1',
+                campaignTitle: 'Chronos Heritage Watch Launch',
+                brandName: 'Chronos Geneve India',
+                industry: 'Luxury Accessories',
+                format: 'Product Launch',
+                deliverables: '2 Instagram Reels + 4 Stories + Launch Event Appearance',
+                compensation: '₹1,40,000',
+                commissionNote: 'Direct Brand Invite • Zero agency middleman',
+                timeline: '15 Dec – 28 Dec 2026',
+                exclusivity: '30 days (Watches)',
+                location: 'Mumbai / Studio + Social',
+                responseDeadline: 'Respond in 2 days',
+                status: 'Pending',
+                brief: 'Showcase the new brushed-titanium dress watch in an editorial evening reel and attend the flagship boutique unveiling.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'binv-2',
+                campaignTitle: 'Lumina Glow Serum — Winter Campaign',
+                brandName: 'Lumina Botanicals',
+                industry: 'Skincare & Beauty',
+                format: 'Reels & Stories',
+                deliverables: '3 Skincare Routine Reels + 1 YouTube Short',
+                compensation: '₹65,000',
+                commissionNote: 'Includes ₹15,000 PR hamper',
+                timeline: '10 Dec – 24 Dec 2026',
+                exclusivity: '45 days (Facial Serums)',
+                location: 'Remote / Home Studio',
+                responseDeadline: 'Respond in 4 days',
+                status: 'Pending',
+                brief: 'Authentic morning-to-set skincare routine highlighting hydration under studio lighting.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'binv-3',
+                campaignTitle: 'StrideX Flagship Store Opening',
+                brandName: 'StrideX Athleisure',
+                industry: 'Sportswear & Fashion',
+                format: 'Store Appearance',
+                deliverables: '2-Hour Store Ribbon Cutting + Meet & Greet + 2 Reels',
+                compensation: '₹90,000',
+                commissionNote: 'Travel & styling wardrobe provided',
+                timeline: '19 Dec 2026',
+                exclusivity: '15 days (Athleisure)',
+                location: 'DLF Avenue, New Delhi',
+                responseDeadline: 'Respond in 5 days',
+                status: 'Pending',
+                brief: 'Lead the flagship store opening in South Delhi with fan photo-ops and a styling reel.',
+                counterFee: '',
+                counterNote: ''
+            },
+            {
+                id: 'binv-4',
+                campaignTitle: 'Veloce Studio ANC — Creator Series',
+                brandName: 'Veloce Audio',
+                industry: 'Consumer Tech',
+                format: 'TV / Digital Ad',
+                deliverables: '1-Day Commercial Shoot + 30s Digital Cut',
+                compensation: '₹1,25,000',
+                commissionNote: '6-month digital usage rights included',
+                timeline: '06 Jan 2027',
+                exclusivity: '60 days (Audio)',
+                location: 'Bengaluru Studio',
+                responseDeadline: 'Confirmed',
+                status: 'Accepted',
+                brief: 'Feature as the lead creator in Veloce Audio’s Q1 digital commercial for noise-cancelling studio headphones.',
+                counterFee: '',
+                counterNote: ''
+            }
+        ],
+        network: [
+            { id: 'net-1', name: 'Meera Nair', role: 'Casting Director • Mumbai', connected: true, status: 'mutual' },
+            { id: 'net-2', name: 'Rohan Kapoor', role: 'Executive Producer • RedFrame', connected: true, status: 'mutual' },
+            { id: 'net-3', name: 'Ananya Verma', role: 'Talent Manager • Starlight', connected: false, status: 'pending_incoming' },
+            { id: 'net-4', name: 'Vikram Sethi', role: 'Director of Photography', connected: false, status: 'not_connected' }
+        ],
+        networkChats: {
+            'net-1': [
+                { sender: 'peer', text: 'Hi! Loved your latest showreel. Let us stay in touch for upcoming casting calls.', time: 'Yesterday' }
+            ],
+            'net-2': [
+                { sender: 'peer', text: 'Thanks for connecting! We are casting for Q1 web series roles soon.', time: '2 days ago' }
+            ]
+        },
         teammateSuggestions: [
             {
                 id: 'tm-1',
@@ -361,7 +579,20 @@
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return structuredClone(DEFAULT_STATE);
-            return { ...structuredClone(DEFAULT_STATE), ...JSON.parse(raw) };
+            const parsed = JSON.parse(raw);
+            return {
+                ...structuredClone(DEFAULT_STATE),
+                ...parsed,
+                auditionInvitations: Array.isArray(parsed.auditionInvitations) && parsed.auditionInvitations.length
+                    ? parsed.auditionInvitations
+                    : structuredClone(DEFAULT_STATE.auditionInvitations),
+                eventInvitations: Array.isArray(parsed.eventInvitations) && parsed.eventInvitations.length
+                    ? parsed.eventInvitations
+                    : structuredClone(DEFAULT_STATE.eventInvitations),
+                brandInvitations: Array.isArray(parsed.brandInvitations) && parsed.brandInvitations.length
+                    ? parsed.brandInvitations
+                    : structuredClone(DEFAULT_STATE.brandInvitations)
+            };
         } catch {
             return structuredClone(DEFAULT_STATE);
         }
@@ -369,6 +600,10 @@
 
     let state = loadState();
     let appStatusFilter = 'All';
+    let auditionInvFilter = 'All';
+    let eventInvFilter = 'All';
+    let brandInvFilter = 'All';
+    let activeInvModal = null;
     let categoryFilterMode = 'all';
     let teammateFilterMode = 'all';
     let compareTrack = 'professional';
@@ -638,6 +873,335 @@
         }).join('');
     }
 
+    function getInvitationBadgeClass(status) {
+        if (status === 'Accepted') return 'accepted';
+        if (status === 'Negotiating') return 'negotiating';
+        if (status === 'Declined') return 'declined';
+        return 'pending';
+    }
+
+    function updateInvitationBadges() {
+        const pendingAuditions = state.auditionInvitations.filter((i) => i.status === 'Pending').length;
+        const pendingEvents = state.eventInvitations.filter((i) => i.status === 'Pending').length;
+        const pendingBrands = state.brandInvitations.filter((i) => i.status === 'Pending').length;
+
+        const auditionBadge = document.getElementById('audition-inv-nav-badge');
+        const eventBadge = document.getElementById('event-inv-nav-badge');
+        const brandBadge = document.getElementById('brand-inv-nav-badge');
+        const auditionMeta = document.getElementById('audition-inv-header-meta');
+        const eventMeta = document.getElementById('event-inv-header-meta');
+        const brandMeta = document.getElementById('brand-inv-header-meta');
+
+        if (auditionBadge) auditionBadge.textContent = String(pendingAuditions);
+        if (eventBadge) eventBadge.textContent = String(pendingEvents);
+        if (brandBadge) brandBadge.textContent = String(pendingBrands);
+        if (auditionMeta) auditionMeta.textContent = `${pendingAuditions} Pending Audition${pendingAuditions === 1 ? '' : 's'}`;
+        if (eventMeta) eventMeta.textContent = `${pendingEvents} Pending RSVP${pendingEvents === 1 ? '' : 's'}`;
+        if (brandMeta) brandMeta.textContent = `${pendingBrands} Pending Offer${pendingBrands === 1 ? '' : 's'}`;
+    }
+
+    function renderInvitationSummary(containerId, items, acceptedLabel) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const total = items.length;
+        const pending = items.filter((i) => i.status === 'Pending').length;
+        const accepted = items.filter((i) => i.status === 'Accepted').length;
+        const negotiating = items.filter((i) => i.status === 'Negotiating').length;
+
+        container.innerHTML = `
+            <div class="ew-inv-stat">
+                <div class="ew-inv-stat-val">${total}</div>
+                <div class="ew-inv-stat-label">Total Invitations</div>
+            </div>
+            <div class="ew-inv-stat">
+                <div class="ew-inv-stat-val">${pending}</div>
+                <div class="ew-inv-stat-label">Pending Response</div>
+            </div>
+            <div class="ew-inv-stat">
+                <div class="ew-inv-stat-val">${accepted}</div>
+                <div class="ew-inv-stat-label">${escapeHtml(acceptedLabel)}</div>
+            </div>
+            <div class="ew-inv-stat">
+                <div class="ew-inv-stat-val">${negotiating}</div>
+                <div class="ew-inv-stat-label">In Negotiation</div>
+            </div>
+        `;
+    }
+
+    function renderAuditionInvitations() {
+        updateInvitationBadges();
+        renderInvitationSummary('audition-inv-summary', state.auditionInvitations, 'Confirmed Slots');
+        const container = document.getElementById('audition-invitations-list');
+        if (!container) return;
+
+        const query = (document.getElementById('audition-inv-search')?.value || '').trim().toLowerCase();
+        const modeFilter = document.getElementById('audition-inv-mode')?.value || 'All';
+
+        const filtered = state.auditionInvitations.filter((inv) => {
+            const matchesStatus = auditionInvFilter === 'All' || inv.status === auditionInvFilter;
+            const matchesMode = modeFilter === 'All' || inv.auditionMode === modeFilter;
+            const matchesQuery = !query ||
+                inv.projectTitle.toLowerCase().includes(query) ||
+                inv.castingHouse.toLowerCase().includes(query) ||
+                inv.roleName.toLowerCase().includes(query) ||
+                inv.location.toLowerCase().includes(query);
+            return matchesStatus && matchesMode && matchesQuery;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="ew-panel"><p>No audition invitations match your current filter.</p></div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map((inv) => {
+            const badgeCls = getInvitationBadgeClass(inv.status);
+            const badgeLabel = inv.status === 'Negotiating' ? 'Reschedule Requested' : inv.status;
+            const isDecided = inv.status === 'Accepted' || inv.status === 'Declined';
+            return `
+                <article class="ew-panel ew-inv-card">
+                    <div class="ew-inv-header">
+                        <div>
+                            <span class="ew-badge ${badgeCls}">${escapeHtml(badgeLabel)}</span>
+                            <h3 class="ew-inv-title">${escapeHtml(inv.projectTitle)}</h3>
+                            <div class="ew-app-meta">${escapeHtml(inv.castingHouse)} • ${escapeHtml(inv.auditionMode)}</div>
+                        </div>
+                        <span class="ew-app-meta">${escapeHtml(inv.rsvpDeadline)}</span>
+                    </div>
+                    <p style="margin: 0;">${escapeHtml(inv.scriptNote)}</p>
+                    <div class="ew-opp-specs" style="margin-bottom: 4px;">
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Role</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.roleName)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Compensation</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.compensation)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Audition Slot</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.slotDate)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Location / Mode</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.location)}</span>
+                        </div>
+                    </div>
+                    ${inv.counterFee ? `<div class="ew-inv-counter-note"><strong>Reschedule / Note Sent:</strong> ${escapeHtml(inv.counterFee)} — ${escapeHtml(inv.counterNote)}</div>` : ''}
+                    <div class="ew-inv-actions">
+                        <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-inv-accept="audition:${escapeHtml(inv.id)}" ${inv.status === 'Accepted' ? 'disabled' : ''}>
+                            ${inv.status === 'Accepted' ? 'Slot Confirmed' : 'Confirm Slot'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-negotiate="audition:${escapeHtml(inv.id)}" ${isDecided ? 'disabled' : ''}>
+                            Reschedule
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-decline="audition:${escapeHtml(inv.id)}" ${inv.status === 'Declined' ? 'disabled' : ''}>
+                            ${inv.status === 'Declined' ? 'Declined' : 'Decline'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-view="audition:${escapeHtml(inv.id)}">
+                            Audition Brief
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    function renderEventInvitations() {
+        updateInvitationBadges();
+        renderInvitationSummary('event-inv-summary', state.eventInvitations, 'Confirmed Events');
+        const container = document.getElementById('event-invitations-list');
+        if (!container) return;
+
+        const query = (document.getElementById('event-inv-search')?.value || '').trim().toLowerCase();
+        const typeFilter = document.getElementById('event-inv-type')?.value || 'All';
+
+        const filtered = state.eventInvitations.filter((inv) => {
+            const matchesStatus = eventInvFilter === 'All' || inv.status === eventInvFilter;
+            const matchesType = typeFilter === 'All' || inv.eventType === typeFilter;
+            const matchesQuery = !query ||
+                inv.eventTitle.toLowerCase().includes(query) ||
+                inv.organizer.toLowerCase().includes(query) ||
+                inv.venue.toLowerCase().includes(query) ||
+                inv.city.toLowerCase().includes(query) ||
+                inv.role.toLowerCase().includes(query);
+            return matchesStatus && matchesType && matchesQuery;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="ew-panel"><p>No event invitations match your current filter.</p></div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map((inv) => {
+            const badgeCls = getInvitationBadgeClass(inv.status);
+            const isDecided = inv.status === 'Accepted' || inv.status === 'Declined';
+            return `
+                <article class="ew-panel ew-inv-card">
+                    <div class="ew-inv-header">
+                        <div>
+                            <span class="ew-badge ${badgeCls}">${escapeHtml(inv.status)}</span>
+                            <h3 class="ew-inv-title">${escapeHtml(inv.eventTitle)}</h3>
+                            <div class="ew-app-meta">${escapeHtml(inv.organizer)} • ${escapeHtml(inv.eventType)}</div>
+                        </div>
+                        <span class="ew-app-meta">${escapeHtml(inv.rsvpDeadline)}</span>
+                    </div>
+                    <p style="margin: 0;">${escapeHtml(inv.notes)}</p>
+                    <div class="ew-opp-specs" style="margin-bottom: 4px;">
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Invited Role</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.role)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Appearance Fee</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.fee)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Date &amp; Time</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.date)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Venue &amp; City</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.venue)}, ${escapeHtml(inv.city)}</span>
+                        </div>
+                    </div>
+                    ${inv.counterFee ? `<div class="ew-inv-counter-note"><strong>Counter Offer Sent:</strong> ${escapeHtml(inv.counterFee)} — ${escapeHtml(inv.counterNote)}</div>` : ''}
+                    <div class="ew-inv-actions">
+                        <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-inv-accept="event:${escapeHtml(inv.id)}" ${inv.status === 'Accepted' ? 'disabled' : ''}>
+                            ${inv.status === 'Accepted' ? 'Accepted' : 'Accept Invite'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-negotiate="event:${escapeHtml(inv.id)}" ${isDecided ? 'disabled' : ''}>
+                            Propose Fee
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-decline="event:${escapeHtml(inv.id)}" ${inv.status === 'Declined' ? 'disabled' : ''}>
+                            ${inv.status === 'Declined' ? 'Declined' : 'Decline'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-view="event:${escapeHtml(inv.id)}">
+                            Event Brief
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    function renderBrandInvitations() {
+        updateInvitationBadges();
+        renderInvitationSummary('brand-inv-summary', state.brandInvitations, 'Active Campaigns');
+        const container = document.getElementById('brand-invitations-list');
+        if (!container) return;
+
+        const query = (document.getElementById('brand-inv-search')?.value || '').trim().toLowerCase();
+        const formatFilter = document.getElementById('brand-inv-format')?.value || 'All';
+
+        const filtered = state.brandInvitations.filter((inv) => {
+            const matchesStatus = brandInvFilter === 'All' || inv.status === brandInvFilter;
+            const matchesFormat = formatFilter === 'All' || inv.format === formatFilter;
+            const matchesQuery = !query ||
+                inv.campaignTitle.toLowerCase().includes(query) ||
+                inv.brandName.toLowerCase().includes(query) ||
+                inv.industry.toLowerCase().includes(query) ||
+                inv.deliverables.toLowerCase().includes(query);
+            return matchesStatus && matchesFormat && matchesQuery;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="ew-panel"><p>No brand promotion invitations match your current filter.</p></div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map((inv) => {
+            const badgeCls = getInvitationBadgeClass(inv.status);
+            const isDecided = inv.status === 'Accepted' || inv.status === 'Declined';
+            return `
+                <article class="ew-panel ew-inv-card">
+                    <div class="ew-inv-header">
+                        <div>
+                            <span class="ew-badge ${badgeCls}">${escapeHtml(inv.status)}</span>
+                            <h3 class="ew-inv-title">${escapeHtml(inv.campaignTitle)}</h3>
+                            <div class="ew-app-meta">${escapeHtml(inv.brandName)} • ${escapeHtml(inv.industry)}</div>
+                        </div>
+                        <span class="ew-app-meta">${escapeHtml(inv.responseDeadline)}</span>
+                    </div>
+                    <p style="margin: 0;">${escapeHtml(inv.brief)}</p>
+                    <div class="ew-opp-specs" style="margin-bottom: 4px;">
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Campaign Format</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.format)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Compensation</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.compensation)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Deliverables</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.deliverables)}</span>
+                        </div>
+                        <div class="ew-opp-spec">
+                            <span class="ew-opp-spec-label">Timeline &amp; Exclusivity</span>
+                            <span class="ew-opp-spec-val">${escapeHtml(inv.timeline)} (${escapeHtml(inv.exclusivity)})</span>
+                        </div>
+                    </div>
+                    <div class="ew-app-meta">${escapeHtml(inv.commissionNote)} • ${escapeHtml(inv.location)}</div>
+                    ${inv.counterFee ? `<div class="ew-inv-counter-note"><strong>Counter Offer Sent:</strong> ${escapeHtml(inv.counterFee)} — ${escapeHtml(inv.counterNote)}</div>` : ''}
+                    <div class="ew-inv-actions">
+                        <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-inv-accept="brand:${escapeHtml(inv.id)}" ${inv.status === 'Accepted' ? 'disabled' : ''}>
+                            ${inv.status === 'Accepted' ? 'Accepted' : 'Accept Campaign'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-negotiate="brand:${escapeHtml(inv.id)}" ${isDecided ? 'disabled' : ''}>
+                            Counter Offer
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-decline="brand:${escapeHtml(inv.id)}" ${inv.status === 'Declined' ? 'disabled' : ''}>
+                            ${inv.status === 'Declined' ? 'Declined' : 'Decline'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-inv-view="brand:${escapeHtml(inv.id)}">
+                            Campaign Brief
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    function findInvitation(ref) {
+        const [kind, id] = String(ref || '').split(':');
+        const list = kind === 'brand'
+            ? state.brandInvitations
+            : kind === 'audition'
+                ? state.auditionInvitations
+                : state.eventInvitations;
+        const item = list.find((entry) => entry.id === id);
+        return item ? { kind, item } : null;
+    }
+
+    function respondToInvitation(ref, newStatus) {
+        const found = findInvitation(ref);
+        if (!found) return;
+        const { kind, item } = found;
+        item.status = newStatus;
+        if (newStatus === 'Accepted') {
+            if (kind === 'event' || kind === 'audition') item.rsvpDeadline = 'Confirmed';
+            else item.responseDeadline = 'Confirmed';
+        }
+        const label = kind === 'event'
+            ? item.eventTitle
+            : kind === 'audition'
+                ? item.projectTitle
+                : item.campaignTitle;
+        const kindLabel = kind === 'event' ? 'Event' : kind === 'audition' ? 'Audition' : 'Brand';
+        state.notifications.unshift({
+            id: `n-${Date.now()}`,
+            text: `${kindLabel} invitation "${label}" marked as ${newStatus}.`,
+            time: 'Just now',
+            unread: true
+        });
+        saveState();
+        renderNotifications();
+        renderAuditionInvitations();
+        renderEventInvitations();
+        renderBrandInvitations();
+        showToast(`${newStatus}: ${label}`);
+    }
+
     function renderWishlist() {
         const container = document.getElementById('wishlist-list');
         if (!container) return;
@@ -660,18 +1224,95 @@
         `).join('');
     }
 
+    function getConnectionStatus(person) {
+        if (person.status) return person.status;
+        return person.connected ? 'mutual' : 'not_connected';
+    }
+
     function renderNetwork() {
         const container = document.getElementById('network-list');
         if (!container) return;
-        container.innerHTML = state.network.map((person) => `
-            <article class="ew-panel">
-                <h3>${escapeHtml(person.name)}</h3>
-                <p>${escapeHtml(person.role)}</p>
-                <button type="button" class="ew-btn ${person.connected ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-toggle-connect="${escapeHtml(person.id)}">
-                    ${person.connected ? 'Connected' : 'Connect'}
-                </button>
-            </article>
-        `).join('');
+
+        const mutualCount = state.network.filter((p) => getConnectionStatus(p) === 'mutual').length;
+        const pendingOutCount = state.network.filter((p) => getConnectionStatus(p) === 'pending_outgoing').length;
+        const pendingInCount = state.network.filter((p) => getConnectionStatus(p) === 'pending_incoming').length;
+
+        const summaryBadge = document.getElementById('network-connections-summary');
+        if (summaryBadge) {
+            summaryBadge.textContent = `${mutualCount} Mutually Connected`;
+        }
+
+        const summaryStrip = document.getElementById('network-summary-strip');
+        if (summaryStrip) {
+            summaryStrip.innerHTML = `
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">${state.network.length}</div>
+                    <div class="ew-inv-stat-label">Total People</div>
+                </div>
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">${mutualCount}</div>
+                    <div class="ew-inv-stat-label">Mutually Approved</div>
+                </div>
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">${pendingOutCount + pendingInCount}</div>
+                    <div class="ew-inv-stat-label">Pending Approval</div>
+                </div>
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">${mutualCount}</div>
+                    <div class="ew-inv-stat-label">Chat Unlocked</div>
+                </div>
+            `;
+        }
+
+        container.innerHTML = state.network.map((person) => {
+            const status = getConnectionStatus(person);
+            let badgeClass = 'closed';
+            let badgeText = 'Not Connected';
+            let actionsHtml = '';
+
+            if (status === 'mutual') {
+                badgeClass = 'accepted';
+                badgeText = 'Mutually Connected';
+                actionsHtml = `
+                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-open-chat="${escapeHtml(person.id)}">Chat</button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-toggle-connect="${escapeHtml(person.id)}">Disconnect</button>
+                `;
+            } else if (status === 'pending_outgoing') {
+                badgeClass = 'pending';
+                badgeText = 'Pending Their Approval';
+                actionsHtml = `
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" disabled title="Chat unlocks after both ends approve">Chat Locked</button>
+                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-approve-peer="${escapeHtml(person.id)}">Approve (Peer)</button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-toggle-connect="${escapeHtml(person.id)}">Cancel</button>
+                `;
+            } else if (status === 'pending_incoming') {
+                badgeClass = 'negotiating';
+                badgeText = 'Incoming Request';
+                actionsHtml = `
+                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-approve-incoming="${escapeHtml(person.id)}">Approve Connection</button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-decline-incoming="${escapeHtml(person.id)}">Decline</button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" disabled title="Approve connection to unlock chat">Chat Locked</button>
+                `;
+            } else {
+                actionsHtml = `
+                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-toggle-connect="${escapeHtml(person.id)}">Connect</button>
+                `;
+            }
+
+            return `
+                <article class="ew-panel ew-card-clickable" data-open-profile="network:${escapeHtml(person.id)}">
+                    <div class="ew-section-head" style="margin-bottom: 8px;">
+                        <span class="ew-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <h3>${escapeHtml(person.name)}</h3>
+                    <p>${escapeHtml(person.role)}</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        ${actionsHtml}
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="network:${escapeHtml(person.id)}">View Profile</button>
+                    </div>
+                </article>
+            `;
+        }).join('');
     }
 
     function renderTeammateSuggestions() {
@@ -697,7 +1338,7 @@
         }
 
         container.innerHTML = filtered.map((tm) => `
-            <article class="ew-panel">
+            <article class="ew-panel ew-card-clickable" data-open-profile="teammate:${escapeHtml(tm.id)}">
                 <div class="ew-suggestion-meta">
                     <span class="ew-reason-tag ${escapeHtml(tm.reasonType)}">${escapeHtml(tm.reasonLabel)}</span>
                     <span class="ew-badge closed">${escapeHtml(tm.profession)}</span>
@@ -707,9 +1348,12 @@
                 <div class="ew-app-meta" style="margin-bottom: 14px;">
                     ${escapeHtml(tm.city)} • Interests: ${escapeHtml(tm.interests)}
                 </div>
-                <button type="button" class="ew-btn ${tm.added ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-add-teammate="${escapeHtml(tm.id)}" ${tm.added ? 'disabled' : ''}>
-                    ${tm.added ? 'Added to Network' : 'Add Teammate'}
-                </button>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="ew-btn ${tm.added ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-add-teammate="${escapeHtml(tm.id)}" ${tm.added ? 'disabled' : ''}>
+                        ${tm.added ? 'Added to Network' : 'Add Teammate'}
+                    </button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="teammate:${escapeHtml(tm.id)}">View Profile</button>
+                </div>
             </article>
         `).join('');
     }
@@ -1111,7 +1755,7 @@
             const isFollowing = state.followedCategoryIds.includes(cat.id);
             const displayCount = cat.followers + (isFollowing ? 1 : 0);
             return `
-                <article class="ew-category-card ${isFollowing ? 'following' : ''}">
+                <article class="ew-category-card ew-card-clickable ${isFollowing ? 'following' : ''}" data-open-profile="category:${escapeHtml(cat.id)}">
                     <div>
                         <h3>${escapeHtml(cat.name)}</h3>
                         <p>${escapeHtml(cat.description)}</p>
@@ -1163,7 +1807,7 @@
             const fallbackActor = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
             const photoSrc = actor.photoUrl || (fallbackActor ? fallbackActor.photoUrl : '');
             return `
-            <article class="ew-actor-card">
+            <article class="ew-actor-card ew-card-clickable" data-open-profile="actor:${escapeHtml(actor.id)}">
                 <div class="ew-actor-left">
                     <img class="ew-actor-avatar ew-photo-clickable" src="${escapeHtml(photoSrc)}" alt="${escapeHtml(actor.name)}" title="Click to enlarge">
                     <div>
@@ -1174,9 +1818,12 @@
                         <div class="ew-app-meta">${escapeHtml(actor.category)} • ${escapeHtml(actor.city)} • ${escapeHtml(actor.credits)}</div>
                     </div>
                 </div>
-                <button type="button" class="ew-btn ${actor.following ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-toggle-follow-actor="${escapeHtml(actor.id)}">
-                    ${actor.following ? 'Following' : 'Follow'}
-                </button>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="ew-btn ${actor.following ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-toggle-follow-actor="${escapeHtml(actor.id)}">
+                        ${actor.following ? 'Following' : 'Follow'}
+                    </button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="actor:${escapeHtml(actor.id)}">View Profile</button>
+                </div>
             </article>
         `;
         }).join('');
@@ -1266,11 +1913,78 @@
         if (connectBtn) {
             const person = state.network.find((n) => n.id === connectBtn.dataset.toggleConnect);
             if (person) {
-                person.connected = !person.connected;
+                const status = getConnectionStatus(person);
+                if (status === 'not_connected') {
+                    person.status = 'pending_outgoing';
+                    person.connected = false;
+                    showToast(`Connection request sent to ${person.name}. Waiting for their approval.`);
+                } else {
+                    person.status = 'not_connected';
+                    person.connected = false;
+                    showToast(status === 'mutual' ? `Disconnected from ${person.name}` : `Cancelled request to ${person.name}`);
+                }
                 saveState();
                 renderNetwork();
-                showToast(person.connected ? `Connected with ${person.name}` : `Disconnected from ${person.name}`);
             }
+            return;
+        }
+
+        const approvePeerBtn = e.target.closest('[data-approve-peer]');
+        if (approvePeerBtn) {
+            const person = state.network.find((n) => n.id === approvePeerBtn.dataset.approvePeer);
+            if (person) {
+                person.status = 'mutual';
+                person.connected = true;
+                state.notifications.unshift({
+                    id: `n-${Date.now()}`,
+                    text: `${person.name} approved your connection request. Chat is now unlocked!`,
+                    time: 'Just now',
+                    unread: true
+                });
+                saveState();
+                renderNotifications();
+                renderNetwork();
+                showToast(`${person.name} approved! You can now chat.`);
+            }
+            return;
+        }
+
+        const approveIncomingBtn = e.target.closest('[data-approve-incoming]');
+        if (approveIncomingBtn) {
+            const person = state.network.find((n) => n.id === approveIncomingBtn.dataset.approveIncoming);
+            if (person) {
+                person.status = 'mutual';
+                person.connected = true;
+                state.notifications.unshift({
+                    id: `n-${Date.now()}`,
+                    text: `You approved ${person.name}'s connection request. Chat is now unlocked!`,
+                    time: 'Just now',
+                    unread: true
+                });
+                saveState();
+                renderNotifications();
+                renderNetwork();
+                showToast(`Mutually connected with ${person.name}! Chat unlocked.`);
+            }
+            return;
+        }
+
+        const declineIncomingBtn = e.target.closest('[data-decline-incoming]');
+        if (declineIncomingBtn) {
+            const person = state.network.find((n) => n.id === declineIncomingBtn.dataset.declineIncoming);
+            if (person) {
+                person.status = 'not_connected';
+                person.connected = false;
+                saveState();
+                renderNetwork();
+                showToast(`Declined connection request from ${person.name}`);
+            }
+            return;
+        }
+
+        const chatBtn = e.target.closest('[data-open-chat]');
+        if (chatBtn) {
+            openChatModal(chatBtn.dataset.openChat);
             return;
         }
 
@@ -1359,6 +2073,60 @@
             return;
         }
 
+        const auditionInvChip = e.target.closest('.ew-chip[data-audition-inv-filter]');
+        if (auditionInvChip) {
+            auditionInvFilter = auditionInvChip.dataset.auditionInvFilter;
+            document.querySelectorAll('.ew-chip[data-audition-inv-filter]').forEach((c) => {
+                c.classList.toggle('active', c === auditionInvChip);
+            });
+            renderAuditionInvitations();
+            return;
+        }
+
+        const eventInvChip = e.target.closest('.ew-chip[data-event-inv-filter]');
+        if (eventInvChip) {
+            eventInvFilter = eventInvChip.dataset.eventInvFilter;
+            document.querySelectorAll('.ew-chip[data-event-inv-filter]').forEach((c) => {
+                c.classList.toggle('active', c === eventInvChip);
+            });
+            renderEventInvitations();
+            return;
+        }
+
+        const brandInvChip = e.target.closest('.ew-chip[data-brand-inv-filter]');
+        if (brandInvChip) {
+            brandInvFilter = brandInvChip.dataset.brandInvFilter;
+            document.querySelectorAll('.ew-chip[data-brand-inv-filter]').forEach((c) => {
+                c.classList.toggle('active', c === brandInvChip);
+            });
+            renderBrandInvitations();
+            return;
+        }
+
+        const invAcceptBtn = e.target.closest('[data-inv-accept]');
+        if (invAcceptBtn) {
+            respondToInvitation(invAcceptBtn.dataset.invAccept, 'Accepted');
+            return;
+        }
+
+        const invDeclineBtn = e.target.closest('[data-inv-decline]');
+        if (invDeclineBtn) {
+            respondToInvitation(invDeclineBtn.dataset.invDecline, 'Declined');
+            return;
+        }
+
+        const invNegotiateBtn = e.target.closest('[data-inv-negotiate]');
+        if (invNegotiateBtn) {
+            openInvitationModal(invNegotiateBtn.dataset.invNegotiate, true);
+            return;
+        }
+
+        const invViewBtn = e.target.closest('[data-inv-view]');
+        if (invViewBtn) {
+            openInvitationModal(invViewBtn.dataset.invView, false);
+            return;
+        }
+
         const addTeammateBtn = e.target.closest('[data-add-teammate]');
         if (addTeammateBtn) {
             const tm = state.teammateSuggestions.find((t) => t.id === addTeammateBtn.dataset.addTeammate);
@@ -1368,12 +2136,13 @@
                     id: `net-${Date.now()}`,
                     name: tm.name,
                     role: `${tm.profession} • ${tm.city}`,
-                    connected: true
+                    connected: false,
+                    status: 'pending_outgoing'
                 });
                 saveState();
                 renderNetwork();
                 renderTeammateSuggestions();
-                showToast(`Added ${tm.name} to your network`);
+                showToast(`Connection request sent to ${tm.name}. Waiting for mutual approval.`);
             }
             return;
         }
@@ -1423,6 +2192,12 @@
     document.getElementById('opp-search')?.addEventListener('input', renderOpportunities);
     document.getElementById('opp-category')?.addEventListener('change', renderOpportunities);
     document.getElementById('opp-advanced-filter')?.addEventListener('change', renderOpportunities);
+    document.getElementById('audition-inv-search')?.addEventListener('input', renderAuditionInvitations);
+    document.getElementById('audition-inv-mode')?.addEventListener('change', renderAuditionInvitations);
+    document.getElementById('event-inv-search')?.addEventListener('input', renderEventInvitations);
+    document.getElementById('event-inv-type')?.addEventListener('change', renderEventInvitations);
+    document.getElementById('brand-inv-search')?.addEventListener('input', renderBrandInvitations);
+    document.getElementById('brand-inv-format')?.addEventListener('change', renderBrandInvitations);
     document.getElementById('category-search')?.addEventListener('input', renderCategories);
     document.getElementById('actor-search-input')?.addEventListener('input', renderActorSearch);
     document.getElementById('actor-plan-filter')?.addEventListener('change', renderActorSearch);
@@ -1588,8 +2363,334 @@
     });
 
     photoModalClose?.addEventListener('click', closePhotoModal);
+
+    // Person / Actor Profile Details Modal
+    const personModal = document.getElementById('ew-person-modal');
+    const personAvatar = document.getElementById('ew-person-modal-avatar');
+    const personName = document.getElementById('ew-person-modal-name');
+    const personRole = document.getElementById('ew-person-modal-role');
+    const personBody = document.getElementById('ew-person-modal-body');
+    const personClose = document.getElementById('ew-person-modal-close');
+
+    function closePersonModal() {
+        if (personModal) personModal.hidden = true;
+    }
+
+    function openPersonModal(ref) {
+        if (!personModal || !ref) return;
+        const [kind, id] = ref.split(':');
+        let title = '';
+        let subtitle = '';
+        let avatar = '';
+        let bodyHtml = '';
+
+        if (kind === 'network') {
+            const p = state.network.find((x) => x.id === id);
+            if (!p) return;
+            const initials = p.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+            title = p.name;
+            subtitle = p.role;
+            avatar = makeActorAvatar(initials, '#1f2937', '#b45309');
+            bodyHtml = `
+                <div><strong>Connection Status:</strong> ${p.connected ? 'Connected' : 'Not Connected'}</div>
+                <div><strong>Collaboration Focus:</strong> Casting calls, production coordination, and talent referrals.</div>
+                <div><strong>Location &amp; Availability:</strong> Active on Entertainment World • Open to project inquiries.</div>
+            `;
+        } else if (kind === 'teammate') {
+            const tm = state.teammateSuggestions.find((x) => x.id === id);
+            if (!tm) return;
+            const initials = tm.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+            title = tm.name;
+            subtitle = `${tm.profession} • ${tm.city}`;
+            avatar = makeActorAvatar(initials, '#312e81', '#db2777');
+            bodyHtml = `
+                <div><strong>Match Reason:</strong> ${escapeHtml(tm.reasonLabel)}</div>
+                <div><strong>Profile Summary:</strong> ${escapeHtml(tm.detail)}</div>
+                <div><strong>Shared Interests:</strong> ${escapeHtml(tm.interests)}</div>
+                <div><strong>Network Status:</strong> ${tm.added ? 'Added to Your Connections' : 'Suggested Teammate'}</div>
+            `;
+        } else if (kind === 'actor') {
+            const actor = state.otherActors.find((x) => x.id === id);
+            if (!actor) return;
+            const fallback = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
+            title = actor.name;
+            subtitle = `${actor.category} • ${actor.city}`;
+            avatar = actor.photoUrl || (fallback ? fallback.photoUrl : '');
+            bodyHtml = `
+                <div><strong>Plan Tier:</strong> ${actor.planId === 'pro' ? 'Pro Elite (₹399)' : actor.planId === 'premium' ? 'Premium (₹199)' : 'Basic (Free)'}</div>
+                <div><strong>Credits &amp; Portfolio:</strong> ${escapeHtml(actor.credits)}</div>
+                <div><strong>City:</strong> ${escapeHtml(actor.city)}</div>
+                <div><strong>Follow Status:</strong> ${actor.following ? 'Following' : 'Not Following'}</div>
+            `;
+        } else if (kind === 'category') {
+            const cat = state.categories.find((c) => c.id === id);
+            if (!cat) return;
+            const initials = cat.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+            title = cat.name;
+            subtitle = `${cat.followers.toLocaleString('en-IN')} followers • Category Talent`;
+            avatar = makeActorAvatar(initials, '#0f766e', '#1d4ed8');
+            const sampleTalent = state.otherActors.slice(0, 3).map((a) => `
+                <div class="ew-app-card" style="padding: 10px 12px;">
+                    <div>
+                        <strong>${escapeHtml(a.name)}</strong>
+                        <div class="ew-app-meta">${escapeHtml(a.category)} • ${escapeHtml(a.city)}</div>
+                    </div>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="actor:${escapeHtml(a.id)}">View Profile</button>
+                </div>
+            `).join('');
+            bodyHtml = `
+                <div>${escapeHtml(cat.description)}</div>
+                <div><strong>Featured Profiles in ${escapeHtml(cat.name)}:</strong></div>
+                <div class="ew-card-stack">${sampleTalent}</div>
+            `;
+        }
+
+        if (personAvatar) personAvatar.src = avatar;
+        if (personName) personName.textContent = title;
+        if (personRole) personRole.textContent = subtitle;
+        if (personBody) personBody.innerHTML = bodyHtml;
+        personModal.hidden = false;
+    }
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('button:not([data-open-profile]), a, input, select')) return;
+        const trigger = e.target.closest('[data-open-profile]');
+        if (trigger) {
+            openPersonModal(trigger.dataset.openProfile);
+            return;
+        }
+        if (e.target === personModal) {
+            closePersonModal();
+        }
+    });
+
+    const invModal = document.getElementById('ew-inv-modal');
+    const invModalClose = document.getElementById('ew-inv-modal-close');
+    const invModalBadge = document.getElementById('ew-inv-modal-badge');
+    const invModalTitle = document.getElementById('ew-inv-modal-title');
+    const invModalSubtitle = document.getElementById('ew-inv-modal-subtitle');
+    const invModalBody = document.getElementById('ew-inv-modal-body');
+    const invNegotiateForm = document.getElementById('ew-inv-negotiate-form');
+    const invCounterFeeInput = document.getElementById('ew-inv-counter-fee');
+    const invCounterNoteInput = document.getElementById('ew-inv-counter-note');
+    const invCancelNegotiate = document.getElementById('ew-inv-cancel-negotiate');
+    const invModalActions = document.getElementById('ew-inv-modal-actions');
+
+    function closeInvitationModal() {
+        if (invModal) invModal.hidden = true;
+        if (invNegotiateForm) invNegotiateForm.hidden = true;
+        activeInvModal = null;
+    }
+
+    function openInvitationModal(ref, startNegotiate = false) {
+        const found = findInvitation(ref);
+        if (!found || !invModal) return;
+        const { kind, item } = found;
+        activeInvModal = ref;
+
+        const badgeCls = getInvitationBadgeClass(item.status);
+        invModalBadge.className = `ew-badge ${badgeCls}`;
+        invModalBadge.textContent = kind === 'audition' && item.status === 'Negotiating' ? 'Reschedule Requested' : item.status;
+
+        if (kind === 'audition') {
+            invModalTitle.textContent = item.projectTitle;
+            invModalSubtitle.textContent = `${item.castingHouse} • ${item.auditionMode}`;
+            invModalBody.innerHTML = `
+                <p style="margin:0;">${escapeHtml(item.scriptNote)}</p>
+                <div class="ew-opp-specs" style="margin-bottom:0;">
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Role</span><span class="ew-opp-spec-val">${escapeHtml(item.roleName)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Compensation</span><span class="ew-opp-spec-val">${escapeHtml(item.compensation)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Audition Slot</span><span class="ew-opp-spec-val">${escapeHtml(item.slotDate)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Location / Mode</span><span class="ew-opp-spec-val">${escapeHtml(item.location)}</span></div>
+                </div>
+                ${item.counterFee ? `<div class="ew-inv-counter-note"><strong>Your Reschedule / Note:</strong> ${escapeHtml(item.counterFee)} — ${escapeHtml(item.counterNote)}</div>` : ''}
+            `;
+        } else if (kind === 'event') {
+            invModalTitle.textContent = item.eventTitle;
+            invModalSubtitle.textContent = `${item.organizer} • ${item.eventType}`;
+            invModalBody.innerHTML = `
+                <p style="margin:0;">${escapeHtml(item.notes)}</p>
+                <div class="ew-opp-specs" style="margin-bottom:0;">
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Invited Role</span><span class="ew-opp-spec-val">${escapeHtml(item.role)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Appearance Fee</span><span class="ew-opp-spec-val">${escapeHtml(item.fee)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Date &amp; Time</span><span class="ew-opp-spec-val">${escapeHtml(item.date)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Venue</span><span class="ew-opp-spec-val">${escapeHtml(item.venue)}, ${escapeHtml(item.city)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Dress Code</span><span class="ew-opp-spec-val">${escapeHtml(item.dressCode)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Travel &amp; Stay</span><span class="ew-opp-spec-val">${escapeHtml(item.travelCovered)}</span></div>
+                </div>
+                ${item.counterFee ? `<div class="ew-inv-counter-note"><strong>Your Counter Offer:</strong> ${escapeHtml(item.counterFee)} — ${escapeHtml(item.counterNote)}</div>` : ''}
+            `;
+        } else {
+            invModalTitle.textContent = item.campaignTitle;
+            invModalSubtitle.textContent = `${item.brandName} • ${item.industry}`;
+            invModalBody.innerHTML = `
+                <p style="margin:0;">${escapeHtml(item.brief)}</p>
+                <div class="ew-opp-specs" style="margin-bottom:0;">
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Format</span><span class="ew-opp-spec-val">${escapeHtml(item.format)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Compensation</span><span class="ew-opp-spec-val">${escapeHtml(item.compensation)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Deliverables</span><span class="ew-opp-spec-val">${escapeHtml(item.deliverables)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Timeline</span><span class="ew-opp-spec-val">${escapeHtml(item.timeline)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Exclusivity</span><span class="ew-opp-spec-val">${escapeHtml(item.exclusivity)}</span></div>
+                    <div class="ew-opp-spec"><span class="ew-opp-spec-label">Location &amp; Terms</span><span class="ew-opp-spec-val">${escapeHtml(item.location)} (${escapeHtml(item.commissionNote)})</span></div>
+                </div>
+                ${item.counterFee ? `<div class="ew-inv-counter-note"><strong>Your Counter Offer:</strong> ${escapeHtml(item.counterFee)} — ${escapeHtml(item.counterNote)}</div>` : ''}
+            `;
+        }
+
+        const isDecided = item.status === 'Accepted' || item.status === 'Declined';
+        invNegotiateForm.hidden = !startNegotiate;
+        if (startNegotiate) {
+            invCounterFeeInput.value = item.counterFee || (kind === 'event' ? item.fee : kind === 'audition' ? item.slotDate : item.compensation);
+            invCounterNoteInput.value = item.counterNote || '';
+        }
+
+        invModalActions.innerHTML = `
+            <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" id="ew-inv-modal-accept" ${item.status === 'Accepted' ? 'disabled' : ''}>
+                ${item.status === 'Accepted' ? 'Accepted' : kind === 'audition' ? 'Confirm Slot' : 'Accept'}
+            </button>
+            <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" id="ew-inv-modal-negotiate" ${isDecided ? 'disabled' : ''}>
+                ${kind === 'audition' ? 'Request Reschedule' : 'Propose Counter Offer'}
+            </button>
+            <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" id="ew-inv-modal-decline" ${item.status === 'Declined' ? 'disabled' : ''}>
+                ${item.status === 'Declined' ? 'Declined' : 'Decline'}
+            </button>
+        `;
+
+        document.getElementById('ew-inv-modal-accept')?.addEventListener('click', () => {
+            respondToInvitation(ref, 'Accepted');
+            closeInvitationModal();
+        });
+        document.getElementById('ew-inv-modal-decline')?.addEventListener('click', () => {
+            respondToInvitation(ref, 'Declined');
+            closeInvitationModal();
+        });
+        document.getElementById('ew-inv-modal-negotiate')?.addEventListener('click', () => {
+            invNegotiateForm.hidden = false;
+            invCounterFeeInput.value = item.counterFee || (kind === 'event' ? item.fee : kind === 'audition' ? item.slotDate : item.compensation);
+            invCounterNoteInput.value = item.counterNote || '';
+            invCounterFeeInput.focus();
+        });
+
+        invModal.hidden = false;
+    }
+
+    invNegotiateForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!activeInvModal) return;
+        const found = findInvitation(activeInvModal);
+        if (!found) return;
+        const feeVal = invCounterFeeInput.value.trim();
+        const noteVal = invCounterNoteInput.value.trim();
+        if (!feeVal || !noteVal) return;
+
+        found.item.counterFee = feeVal;
+        found.item.counterNote = noteVal;
+        found.item.status = 'Negotiating';
+        const title = found.kind === 'event'
+            ? found.item.eventTitle
+            : found.kind === 'audition'
+                ? found.item.projectTitle
+                : found.item.campaignTitle;
+        state.notifications.unshift({
+            id: `n-${Date.now()}`,
+            text: `${found.kind === 'audition' ? 'Reschedule request' : 'Counter offer'} (${feeVal}) sent for "${title}".`,
+            time: 'Just now',
+            unread: true
+        });
+        saveState();
+        renderNotifications();
+        renderAuditionInvitations();
+        renderEventInvitations();
+        renderBrandInvitations();
+        closeInvitationModal();
+        showToast(`${found.kind === 'audition' ? 'Reschedule request' : 'Counter offer'} sent for "${title}"`);
+    });
+
+    invCancelNegotiate?.addEventListener('click', () => {
+        if (invNegotiateForm) invNegotiateForm.hidden = true;
+    });
+
+    invModalClose?.addEventListener('click', closeInvitationModal);
+    invModal?.addEventListener('click', (e) => {
+        if (e.target === invModal) closeInvitationModal();
+    });
+
+    const chatModal = document.getElementById('ew-chat-modal');
+    const chatClose = document.getElementById('ew-chat-modal-close');
+    const chatNameEl = document.getElementById('ew-chat-name');
+    const chatRoleEl = document.getElementById('ew-chat-role');
+    const chatMessagesEl = document.getElementById('ew-chat-messages');
+    const chatForm = document.getElementById('ew-chat-form');
+    const chatInput = document.getElementById('ew-chat-input');
+    let activeChatPersonId = null;
+
+    function closeChatModal() {
+        if (chatModal) chatModal.hidden = true;
+        activeChatPersonId = null;
+    }
+
+    function renderChatMessages(personId) {
+        if (!chatMessagesEl) return;
+        if (!state.networkChats) state.networkChats = {};
+        const messages = state.networkChats[personId] || [];
+        if (messages.length === 0) {
+            chatMessagesEl.innerHTML = `<div class="ew-app-meta" style="text-align:center; margin:auto;">Both ends approved! Start your conversation below.</div>`;
+            return;
+        }
+        chatMessagesEl.innerHTML = messages.map((m) => `
+            <div class="ew-chat-bubble ${m.sender === 'me' ? 'me' : 'peer'}">
+                <div>${escapeHtml(m.text)}</div>
+                <span class="ew-chat-time">${escapeHtml(m.time)}</span>
+            </div>
+        `).join('');
+        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+
+    function openChatModal(personId) {
+        const person = state.network.find((n) => n.id === personId);
+        if (!person) return;
+        if (getConnectionStatus(person) !== 'mutual') {
+            showToast('Chat unlocks only after both ends approve the connection.');
+            return;
+        }
+        activeChatPersonId = person.id;
+        if (chatNameEl) chatNameEl.textContent = person.name;
+        if (chatRoleEl) chatRoleEl.textContent = person.role;
+        renderChatMessages(person.id);
+        if (chatModal) chatModal.hidden = false;
+        chatInput?.focus();
+    }
+
+    chatForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!activeChatPersonId || !chatInput) return;
+        const text = chatInput.value.trim();
+        if (!text) return;
+        if (!state.networkChats) state.networkChats = {};
+        if (!state.networkChats[activeChatPersonId]) state.networkChats[activeChatPersonId] = [];
+        state.networkChats[activeChatPersonId].push({
+            sender: 'me',
+            text,
+            time: 'Just now'
+        });
+        saveState();
+        chatInput.value = '';
+        renderChatMessages(activeChatPersonId);
+    });
+
+    chatClose?.addEventListener('click', closeChatModal);
+    chatModal?.addEventListener('click', (e) => {
+        if (e.target === chatModal) closeChatModal();
+    });
+
+    personClose?.addEventListener('click', closePersonModal);
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closePhotoModal();
+        if (e.key === 'Escape') {
+            closePhotoModal();
+            closePersonModal();
+            closeInvitationModal();
+            closeChatModal();
+        }
     });
 
     // Initial render
@@ -1597,6 +2698,9 @@
     renderRecentApplications();
     renderAllApplications();
     renderOpportunities();
+    renderAuditionInvitations();
+    renderEventInvitations();
+    renderBrandInvitations();
     renderWishlist();
     renderNetwork();
     renderTeammateSuggestions();

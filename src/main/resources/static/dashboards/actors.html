@@ -17,8 +17,26 @@
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
-            <span class="ew-brand">ENTERTAINMENT WORLD</span>
+            <div class="ew-brand-lockup">
+                <span class="ew-brand-logo" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </span>
+                <div class="ew-brand-stack">
+                    <span class="ew-brand">Entertainment World</span>
+                    <span class="ew-brand-sub">PROFESSIONAL DASHBOARD</span>
+                </div>
+            </div>
         </div>
+
+        <nav class="ew-topbar-nav" aria-label="Quick navigation">
+            <button type="button" class="ew-topbar-link" data-goto-view="opportunities">Opportunities</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="audition-invitations">Audition Invites</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="event-invitations">Event Invites</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="brand-invitations">Brand Invites</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="plans">Plans</button>
+        </nav>
 
         <div class="ew-topbar-right">
             <button type="button" id="notif-btn" class="ew-icon-btn" aria-label="Notifications">
@@ -39,6 +57,8 @@
                 </span>
                 <span id="topbar-user-name" class="ew-avatar-name">Professional</span>
             </button>
+
+            <button type="button" class="ew-topbar-signout" onclick="document.getElementById('signout-btn')?.click()">Sign Out</button>
 
             <!-- Notifications Popover -->
             <div id="notif-popover" class="ew-popover" hidden>
@@ -68,146 +88,45 @@
     <div class="ew-shell">
         <div id="ew-sidebar-backdrop" class="ew-sidebar-backdrop"></div>
 
-        <!-- Left Sidebar -->
-        <aside id="ew-sidebar" class="ew-sidebar" aria-label="Professional navigation">
-            <h2 class="ew-sidebar-title">PROFESSIONAL MENU</h2>
-            <nav class="ew-nav">
-                <button type="button" class="ew-nav-item active" data-view="dashboard">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                    </svg>
-                    <span>Dashboard</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="profile">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span>My Profile</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="opportunities">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <span>Opportunities</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="applications">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                        <line x1="8" y1="12" x2="16" y2="12"></line>
-                        <line x1="8" y1="16" x2="14" y2="16"></line>
-                    </svg>
-                    <span>My Applications</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="wishlist">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <span>My Wishlist</span>
-                    <span id="wishlist-nav-badge" class="ew-nav-badge">2</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="network">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span>My Network</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="categories">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                    </svg>
-                    <span>Search for Actors</span>
-                    <span id="categories-nav-badge" class="ew-nav-badge">3</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="career">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                    </svg>
-                    <span>My Career</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="plans">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <span>Plans &amp; Billing</span>
-                    <span id="plan-nav-badge" class="ew-nav-badge">Free</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="support">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    <span>Support</span>
-                    <span id="support-nav-badge" class="ew-nav-badge">1</span>
-                </button>
-
-                <button type="button" class="ew-nav-item" data-view="settings">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    <span>Settings</span>
-                </button>
-            </nav>
-
-            <div class="ew-sidebar-footer">
-                <span id="professional-category" class="ew-category-pill">Professional</span>
-                <div id="acting-start-age"></div>
-            </div>
-        </aside>
-
-        <!-- Main Workspace -->
+        <!-- Main Workspace (Left / Center Column) -->
         <main class="ew-main">
             <!-- 1. Dashboard Overview -->
             <section class="ew-view active" data-view-panel="dashboard">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Welcome back!</h1>
-                        <p class="ew-page-subtitle">Your professional dashboard</p>
-                    </div>
-                    <button type="button" id="header-plan-pill" class="ew-plan-pill" data-goto-view="plans">
+                <!-- Warm Pass Banner (Reference Top Strip) -->
+                <div class="ew-pass-banner">
+                    <button type="button" id="header-plan-pill" class="ew-pass-pill" data-goto-view="plans">
                         <span class="ew-plan-dot"></span>
                         <span id="header-plan-label">Plan: Basic (Free)</span>
                     </button>
+                    <span class="ew-pass-meta">Professional Portal • Entertainment World</span>
                 </div>
 
-                <div class="ew-kpi-grid">
-                    <article class="ew-kpi-card">
-                        <div id="kpi-applications" class="ew-kpi-value">12</div>
-                        <div class="ew-kpi-label">Applications</div>
-                    </article>
-                    <article class="ew-kpi-card">
-                        <div id="kpi-shortlisted" class="ew-kpi-value">4</div>
-                        <div class="ew-kpi-label">Shortlisted</div>
-                    </article>
-                    <article class="ew-kpi-card">
-                        <div id="kpi-auditions" class="ew-kpi-value">3</div>
-                        <div class="ew-kpi-label">Auditions</div>
-                    </article>
-                    <article class="ew-kpi-card">
-                        <div id="kpi-earnings" class="ew-kpi-value">₹25K</div>
-                        <div class="ew-kpi-label">Earnings</div>
-                    </article>
+                <!-- Hero Profile Card (Reference Main Profile Header Card) -->
+                <div class="ew-hero-card">
+                    <div class="ew-hero-left">
+                        <div class="ew-hero-avatar-box">
+                            <img id="hero-avatar-img" class="ew-hero-avatar" alt="Profile photo" hidden>
+                            <span id="hero-avatar-fallback" class="ew-hero-avatar-fallback">EW</span>
+                        </div>
+                        <div class="ew-hero-info">
+                            <div class="ew-hero-title-row">
+                                <h1 id="hero-user-name">Welcome back!</h1>
+                                <span class="ew-verified-tick" title="Verified Professional">✓</span>
+                                <span class="ew-verified-pill">Verified Professional</span>
+                            </div>
+                            <p class="ew-hero-sub">Your professional dashboard • Entertainment World</p>
+                            <div class="ew-hero-stats">
+                                <span><strong id="kpi-applications">12</strong> Applications</span>
+                                <span><strong id="kpi-shortlisted">4</strong> Shortlisted</span>
+                                <span><strong id="kpi-auditions">3</strong> Auditions</span>
+                                <span><strong id="kpi-earnings">₹25K</strong> Earnings</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ew-hero-actions">
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-goto-view="profile">EDIT PROFILE</button>
+                        <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-goto-view="opportunities">+ Find Opportunities</button>
+                    </div>
                 </div>
 
                 <div id="dashboard-plan-usage" class="ew-usage-strip">
@@ -243,6 +162,33 @@
                                 <path d="M18 14l4-4-2-2-4 4v2h2z"></path>
                             </svg>
                             <span>Edit Profile</span>
+                            <span class="ew-action-arrow">→</span>
+                        </button>
+                        <button type="button" class="ew-action-tile" data-goto-view="audition-invitations">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                            </svg>
+                            <span>Audition Invitations</span>
+                            <span class="ew-action-arrow">→</span>
+                        </button>
+                        <button type="button" class="ew-action-tile" data-goto-view="event-invitations">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span>Event Invitations</span>
+                            <span class="ew-action-arrow">→</span>
+                        </button>
+                        <button type="button" class="ew-action-tile" data-goto-view="brand-invitations">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                            <span>Brand Invitations</span>
                             <span class="ew-action-arrow">→</span>
                         </button>
                     </div>
@@ -430,6 +376,109 @@
                 <div id="opportunities-list" class="ew-grid-2"></div>
             </section>
 
+            <!-- 3.0 Audition Invitations -->
+            <section class="ew-view" data-view-panel="audition-invitations">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Audition Invitations</h1>
+                        <p class="ew-page-subtitle">Confirm casting slots, submit self-tapes, or request reschedules from casting directors</p>
+                    </div>
+                    <span id="audition-inv-header-meta" class="ew-meta-note">3 Pending Auditions</span>
+                </div>
+
+                <div id="audition-inv-summary" class="ew-inv-summary-strip"></div>
+
+                <div class="ew-toolbar">
+                    <input id="audition-inv-search" class="ew-input ew-search-input" type="search" placeholder="Search project, casting studio, role, or location...">
+                    <select id="audition-inv-mode" class="ew-select">
+                        <option value="All">All Modes</option>
+                        <option value="In-Person">In-Person</option>
+                        <option value="Self-Tape">Self-Tape</option>
+                        <option value="Live Video">Live Video</option>
+                    </select>
+                </div>
+
+                <div class="ew-chip-row">
+                    <button type="button" class="ew-chip active" data-audition-inv-filter="All">All</button>
+                    <button type="button" class="ew-chip" data-audition-inv-filter="Pending">Pending</button>
+                    <button type="button" class="ew-chip" data-audition-inv-filter="Accepted">Accepted</button>
+                    <button type="button" class="ew-chip" data-audition-inv-filter="Negotiating">Reschedule Requested</button>
+                    <button type="button" class="ew-chip" data-audition-inv-filter="Declined">Declined</button>
+                </div>
+
+                <div id="audition-invitations-list" class="ew-grid-2"></div>
+            </section>
+
+            <!-- 3a. Event Management Invitations -->
+            <section class="ew-view" data-view-panel="event-invitations">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Event Management Invitations</h1>
+                        <p class="ew-page-subtitle">Review invitations from event organizers for award nights, premieres, live shows, and VIP appearances</p>
+                    </div>
+                    <span id="event-inv-header-meta" class="ew-meta-note">3 Pending RSVPs</span>
+                </div>
+
+                <div id="event-inv-summary" class="ew-inv-summary-strip"></div>
+
+                <div class="ew-toolbar">
+                    <input id="event-inv-search" class="ew-input ew-search-input" type="search" placeholder="Search event name, organizer, venue, or city...">
+                    <select id="event-inv-type" class="ew-select">
+                        <option value="All">All Event Types</option>
+                        <option value="Award Show">Award Show</option>
+                        <option value="Film Premiere">Film Premiere</option>
+                        <option value="Music Festival">Music Festival</option>
+                        <option value="Corporate Gala">Corporate Gala</option>
+                        <option value="Wedding / Private">Wedding / Private</option>
+                    </select>
+                </div>
+
+                <div class="ew-chip-row">
+                    <button type="button" class="ew-chip active" data-event-inv-filter="All">All</button>
+                    <button type="button" class="ew-chip" data-event-inv-filter="Pending">Pending</button>
+                    <button type="button" class="ew-chip" data-event-inv-filter="Accepted">Accepted</button>
+                    <button type="button" class="ew-chip" data-event-inv-filter="Negotiating">Negotiating</button>
+                    <button type="button" class="ew-chip" data-event-inv-filter="Declined">Declined</button>
+                </div>
+
+                <div id="event-invitations-list" class="ew-grid-2"></div>
+            </section>
+
+            <!-- 3b. Brand Promotion Invitations -->
+            <section class="ew-view" data-view-panel="brand-invitations">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Brand Promotion Invitations</h1>
+                        <p class="ew-page-subtitle">Manage direct sponsorship, endorsement, and promotional campaign invitations from brands</p>
+                    </div>
+                    <span id="brand-inv-header-meta" class="ew-meta-note">3 Pending Offers</span>
+                </div>
+
+                <div id="brand-inv-summary" class="ew-inv-summary-strip"></div>
+
+                <div class="ew-toolbar">
+                    <input id="brand-inv-search" class="ew-input ew-search-input" type="search" placeholder="Search brand, campaign, industry, or deliverables...">
+                    <select id="brand-inv-format" class="ew-select">
+                        <option value="All">All Formats</option>
+                        <option value="Reels & Stories">Reels &amp; Stories</option>
+                        <option value="Product Launch">Product Launch</option>
+                        <option value="Store Appearance">Store Appearance</option>
+                        <option value="TV / Digital Ad">TV / Digital Ad</option>
+                        <option value="Long-Term Ambassador">Long-Term Ambassador</option>
+                    </select>
+                </div>
+
+                <div class="ew-chip-row">
+                    <button type="button" class="ew-chip active" data-brand-inv-filter="All">All</button>
+                    <button type="button" class="ew-chip" data-brand-inv-filter="Pending">Pending</button>
+                    <button type="button" class="ew-chip" data-brand-inv-filter="Accepted">Accepted</button>
+                    <button type="button" class="ew-chip" data-brand-inv-filter="Negotiating">Negotiating</button>
+                    <button type="button" class="ew-chip" data-brand-inv-filter="Declined">Declined</button>
+                </div>
+
+                <div id="brand-invitations-list" class="ew-grid-2"></div>
+            </section>
+
             <!-- 4. My Applications -->
             <section class="ew-view" data-view-panel="applications">
                 <div class="ew-page-header">
@@ -468,7 +517,11 @@
                 </div>
 
                 <div class="ew-section">
-                    <h2 class="ew-section-title">Your Connections</h2>
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Your Connections</h2>
+                        <span id="network-connections-summary" class="ew-meta-note">2 Mutually Connected</span>
+                    </div>
+                    <div id="network-summary-strip" class="ew-inv-summary-strip"></div>
                     <div id="network-list" class="ew-grid-2"></div>
                 </div>
 
@@ -682,6 +735,144 @@
                 </div>
             </section>
         </main>
+
+        <!-- Right Floating Navigation Card (Reference Layout) -->
+        <aside id="ew-sidebar" class="ew-sidebar" aria-label="Professional navigation">
+            <h2 class="ew-sidebar-title">PROFESSIONAL MENU</h2>
+            <nav class="ew-nav">
+                <button type="button" class="ew-nav-item active" data-view="dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="profile">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>My Profile</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="opportunities">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>Opportunities</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="audition-invitations">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                    <span>Audition Invitations</span>
+                    <span id="audition-inv-nav-badge" class="ew-nav-badge">3</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="event-invitations">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Event Invitations</span>
+                    <span id="event-inv-nav-badge" class="ew-nav-badge">3</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="brand-invitations">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>Brand Invitations</span>
+                    <span id="brand-inv-nav-badge" class="ew-nav-badge">3</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="applications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                        <line x1="8" y1="16" x2="14" y2="16"></line>
+                    </svg>
+                    <span>My Applications</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="wishlist">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>My Wishlist</span>
+                    <span id="wishlist-nav-badge" class="ew-nav-badge">2</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="network">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>My Network</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="categories">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    <span>Search for Actors</span>
+                    <span id="categories-nav-badge" class="ew-nav-badge">3</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="career">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    <span>My Career</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="plans">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    <span>Plans &amp; Billing</span>
+                    <span id="plan-nav-badge" class="ew-nav-badge">Free</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="support">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Support</span>
+                    <span id="support-nav-badge" class="ew-nav-badge">1</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
+            <div class="ew-sidebar-footer">
+                <span id="professional-category" class="ew-category-pill">Professional</span>
+                <div id="acting-start-age"></div>
+            </div>
+        </aside>
     </div>
 
     <div id="ew-toast" class="ew-toast" hidden></div>
@@ -692,6 +883,68 @@
             <button type="button" id="ew-photo-modal-close" class="ew-photo-modal-close" aria-label="Close photo preview">&times;</button>
             <img id="ew-photo-modal-img" class="ew-photo-modal-img" alt="Enlarged profile photo">
             <div id="ew-photo-modal-caption" class="ew-photo-modal-caption"></div>
+        </div>
+    </div>
+
+    <!-- Person / Actor Profile Details Modal -->
+    <div id="ew-person-modal" class="ew-photo-modal" role="dialog" aria-modal="true" aria-label="Profile details" hidden>
+        <div class="ew-person-modal-card">
+            <button type="button" id="ew-person-modal-close" class="ew-person-modal-close" aria-label="Close profile details">&times;</button>
+            <div class="ew-person-modal-head">
+                <img id="ew-person-modal-avatar" class="ew-person-modal-avatar" alt="Profile photo">
+                <div>
+                    <h3 id="ew-person-modal-name"></h3>
+                    <div id="ew-person-modal-role" class="ew-app-meta"></div>
+                </div>
+            </div>
+            <div id="ew-person-modal-body" class="ew-person-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Event & Brand Invitation Detail / Counter-Offer Modal -->
+    <div id="ew-inv-modal" class="ew-photo-modal" role="dialog" aria-modal="true" aria-label="Invitation details" hidden>
+        <div class="ew-person-modal-card">
+            <button type="button" id="ew-inv-modal-close" class="ew-person-modal-close" aria-label="Close invitation details">&times;</button>
+            <div style="margin-bottom: 12px;">
+                <span id="ew-inv-modal-badge" class="ew-badge pending">Pending</span>
+                <h3 id="ew-inv-modal-title" style="margin: 8px 0 2px;"></h3>
+                <div id="ew-inv-modal-subtitle" class="ew-app-meta"></div>
+            </div>
+            <div id="ew-inv-modal-body" class="ew-person-modal-body"></div>
+            <form id="ew-inv-negotiate-form" class="ew-form-grid" style="margin-top: 14px;" hidden>
+                <div class="ew-field">
+                    <label for="ew-inv-counter-fee">Proposed Fee / Rate</label>
+                    <input id="ew-inv-counter-fee" class="ew-input" type="text" placeholder="e.g., ₹95,000" required>
+                </div>
+                <div class="ew-field">
+                    <label for="ew-inv-counter-note">Message to Organizer / Brand</label>
+                    <input id="ew-inv-counter-note" class="ew-input" type="text" placeholder="e.g., Includes travel or 1 extra reel" required>
+                </div>
+                <div class="ew-field full" style="flex-direction: row; justify-content: flex-end; gap: 8px;">
+                    <button type="button" id="ew-inv-cancel-negotiate" class="ew-btn ew-btn-outline ew-btn-sm">Cancel</button>
+                    <button type="submit" class="ew-btn ew-btn-primary ew-btn-sm">Send Counter Offer</button>
+                </div>
+            </form>
+            <div id="ew-inv-modal-actions" class="ew-inv-modal-actions"></div>
+        </div>
+    </div>
+
+    <!-- Mutual Connection Chat Modal -->
+    <div id="ew-chat-modal" class="ew-photo-modal" role="dialog" aria-modal="true" aria-label="Connection chat" hidden>
+        <div class="ew-person-modal-card ew-chat-modal-card">
+            <button type="button" id="ew-chat-modal-close" class="ew-person-modal-close" aria-label="Close chat">&times;</button>
+            <div class="ew-chat-head">
+                <div>
+                    <h3 id="ew-chat-name" style="margin: 0 0 2px;"></h3>
+                    <div id="ew-chat-role" class="ew-app-meta"></div>
+                </div>
+                <span class="ew-badge accepted">Mutually Approved • Chat Active</span>
+            </div>
+            <div id="ew-chat-messages" class="ew-chat-messages"></div>
+            <form id="ew-chat-form" class="ew-chat-form">
+                <input id="ew-chat-input" class="ew-input" type="text" placeholder="Write a message..." required autocomplete="off">
+                <button type="submit" class="ew-btn ew-btn-primary ew-btn-sm">Send</button>
+            </form>
         </div>
     </div>
 

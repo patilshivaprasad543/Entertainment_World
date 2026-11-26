@@ -37,7 +37,7 @@
                 </div>
                 <div class="ew-user-menu-actions">
                     <button type="button" class="ew-menu-action" data-goto-view="overview">Dashboard Overview</button>
-                    <button type="button" class="ew-menu-action" data-goto-view="system-config">System Configuration</button>
+                    <button type="button" class="ew-menu-action" data-goto-view="settings">Settings &amp; Security</button>
                     <button type="button" id="signout-btn" class="ew-menu-action danger">Sign Out</button>
                 </div>
             </div>
@@ -47,82 +47,46 @@
     <div class="ew-shell">
         <div id="ew-sidebar-backdrop" class="ew-sidebar-backdrop"></div>
 
-        <!-- Super Admin Sidebar -->
+        <!-- Streamlined Super Admin Sidebar -->
         <aside id="ew-sidebar" class="ew-sidebar" aria-label="Super Admin navigation">
             <h2 class="ew-sidebar-title">SUPER ADMIN PANEL</h2>
             <nav class="ew-nav">
                 <button type="button" class="ew-nav-item active" data-view="overview">
                     <span>Dashboard Overview</span>
-                </button>
-
-                <div class="ew-sidebar-group">PLATFORM MANAGEMENT</div>
-                <button type="button" class="ew-nav-item" data-view="user-management">
-                    <span>User Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="professional-management">
-                    <span>Professional Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="casting-management">
-                    <span>Casting Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="production-management">
-                    <span>Production Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="brand-management">
-                    <span>Brand Promotion Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="influencer-management">
-                    <span>Influencer Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="event-management">
-                    <span>Event Management</span>
-                </button>
-
-                <div class="ew-sidebar-group">BUSINESS MANAGEMENT</div>
-                <button type="button" class="ew-nav-item" data-view="subscription-management">
-                    <span>Subscription Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="payment-management">
-                    <span>Payment Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="revenue-analytics">
-                    <span>Revenue &amp; Analytics</span>
-                </button>
-
-                <div class="ew-sidebar-group">ADMINISTRATION</div>
-                <button type="button" class="ew-nav-item" data-view="content-management">
-                    <span>Content Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="communication-management">
-                    <span>Communication Management</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="reviews-complaints">
-                    <span>Reviews &amp; Complaints</span>
-                    <span id="admin-complaints-badge" class="ew-nav-badge">0</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="security-access">
-                    <span>Security &amp; Access Control</span>
                     <span id="pending-verif-badge" class="ew-nav-badge">0</span>
                 </button>
-                <button type="button" class="ew-nav-item" data-view="system-config">
-                    <span>System Configuration</span>
+                <button type="button" class="ew-nav-item" data-view="users">
+                    <span>Users &amp; Partners</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="plans">
+                    <span>Plans &amp; Revenue</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="complaints">
+                    <span>Complaints &amp; Support</span>
+                    <span id="admin-complaints-badge" class="ew-nav-badge">0</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="announcements">
+                    <span>Announcements</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="settings">
+                    <span>Settings &amp; Security</span>
                 </button>
             </nav>
 
             <div class="ew-sidebar-footer">
                 <span class="ew-category-pill">Super Admin</span>
-                <div>Full Platform Control</div>
+                <div>Core Platform Control</div>
             </div>
         </aside>
 
         <!-- Main Workspace -->
         <main class="ew-main">
-            <!-- 1. Dashboard Overview -->
+            <!-- 1. Dashboard Overview & Document Verification Queue -->
             <section class="ew-view active" data-view-panel="overview">
                 <div class="ew-page-header">
                     <div>
                         <h1>Dashboard Overview</h1>
-                        <p class="ew-page-subtitle">Super Admin Control Center — live verification queue &amp; platform metrics</p>
+                        <p class="ew-page-subtitle">Live document verification queue &amp; key platform metrics</p>
                     </div>
                     <button type="button" id="refresh-verifications" class="ew-btn ew-btn-primary ew-btn-sm">Refresh Queue</button>
                 </div>
@@ -160,16 +124,16 @@
                 </section>
             </section>
 
-            <!-- 2. User Management -->
-            <section class="ew-view" data-view-panel="user-management">
+            <!-- 2. Users & Partners -->
+            <section class="ew-view" data-view-panel="users">
                 <div class="ew-page-header">
                     <div>
-                        <h1>User Management</h1>
-                        <p class="ew-page-subtitle">Search and manage all registered accounts across Entertainment World</p>
+                        <h1>Users &amp; Partners</h1>
+                        <p class="ew-page-subtitle">Manage Professionals, Casting, Vendors, Brands, and Event Management accounts</p>
                     </div>
                 </div>
                 <div class="ew-toolbar">
-                    <input id="admin-user-search" class="ew-input ew-search-input" type="search" placeholder="Search users by name or email...">
+                    <input id="admin-user-search" class="ew-input ew-search-input" type="search" placeholder="Search by name or email...">
                     <select id="admin-user-role-filter" class="ew-select">
                         <option value="ALL">All Roles</option>
                         <option value="ACTOR">Professionals</option>
@@ -182,78 +146,12 @@
                 <div id="admin-users-list" class="ew-card-stack"></div>
             </section>
 
-            <!-- 3. Professional Management -->
-            <section class="ew-view" data-view-panel="professional-management">
+            <!-- 3. Plans & Revenue -->
+            <section class="ew-view" data-view-panel="plans">
                 <div class="ew-page-header">
                     <div>
-                        <h1>Professional Management</h1>
-                        <p class="ew-page-subtitle">Verify talent seals, categories, and active actor/crew profiles</p>
-                    </div>
-                </div>
-                <div id="admin-professionals-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 4. Casting Management -->
-            <section class="ew-view" data-view-panel="casting-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Casting Management</h1>
-                        <p class="ew-page-subtitle">Approve casting studios and monitor active casting calls</p>
-                    </div>
-                </div>
-                <div id="admin-casting-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 5. Production Management -->
-            <section class="ew-view" data-view-panel="production-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Production Management</h1>
-                        <p class="ew-page-subtitle">Oversee film, web-series, and commercial production houses</p>
-                    </div>
-                </div>
-                <div id="admin-production-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 6. Brand Promotion Management -->
-            <section class="ew-view" data-view-panel="brand-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Brand Promotion Management</h1>
-                        <p class="ew-page-subtitle">Review brand authorizations and sponsored campaign listings</p>
-                    </div>
-                </div>
-                <div id="admin-brand-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 7. Influencer Management -->
-            <section class="ew-view" data-view-panel="influencer-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Influencer Management</h1>
-                        <p class="ew-page-subtitle">Track creator tiers, media kits, and brand collaboration approvals</p>
-                    </div>
-                </div>
-                <div id="admin-influencer-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 8. Event Management -->
-            <section class="ew-view" data-view-panel="event-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Event Management</h1>
-                        <p class="ew-page-subtitle">Manage event agencies, festival permits, and vendor clearances</p>
-                    </div>
-                </div>
-                <div id="admin-event-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 9. Subscription Management -->
-            <section class="ew-view" data-view-panel="subscription-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Subscription Management</h1>
-                        <p class="ew-page-subtitle">Monitor Basic (Free), Premium (₹199/mo), and Pro Elite (₹399/mo) tiers</p>
+                        <h1>Plans &amp; Revenue</h1>
+                        <p class="ew-page-subtitle">Subscription tiers and recent payment settlements</p>
                     </div>
                 </div>
                 <div class="ew-plans-grid">
@@ -268,68 +166,35 @@
                         <span class="ew-badge review">Most Popular</span>
                     </article>
                     <article class="ew-panel">
-                        <h3>Pro Elite Plan (₹399/mo)</h3>
+                        <h3>Pro Plan (₹399/mo)</h3>
                         <p><strong>216</strong> active professionals • ₹86,184 / month</p>
                         <span class="ew-badge shortlisted">Top Revenue</span>
                     </article>
                 </div>
+
+                <div class="ew-section" style="margin-top: 24px;">
+                    <h2 class="ew-section-title">Recent Settlements</h2>
+                    <div id="admin-payments-list" class="ew-card-stack"></div>
+                </div>
             </section>
 
-            <!-- 10. Payment Management -->
-            <section class="ew-view" data-view-panel="payment-management">
+            <!-- 4. Complaints & Support -->
+            <section class="ew-view" data-view-panel="complaints">
                 <div class="ew-page-header">
                     <div>
-                        <h1>Payment Management</h1>
-                        <p class="ew-page-subtitle">Review subscription settlements, talent payouts, and pending invoices</p>
+                        <h1>Complaints &amp; Support</h1>
+                        <p class="ew-page-subtitle">Review and resolve complaints raised by users across the platform</p>
                     </div>
                 </div>
-                <div id="admin-payments-list" class="ew-card-stack"></div>
+                <div id="admin-complaints-list" class="ew-card-stack"></div>
             </section>
 
-            <!-- 11. Revenue & Analytics -->
-            <section class="ew-view" data-view-panel="revenue-analytics">
+            <!-- 5. Announcements -->
+            <section class="ew-view" data-view-panel="announcements">
                 <div class="ew-page-header">
                     <div>
-                        <h1>Revenue &amp; Analytics</h1>
-                        <p class="ew-page-subtitle">Platform financial performance and verification SLA metrics</p>
-                    </div>
-                </div>
-                <div class="ew-grid-3">
-                    <article class="ew-panel">
-                        <h3>Monthly Recurring Revenue</h3>
-                        <p><strong>₹1,42,700</strong> (+18.4% vs last month)</p>
-                        <span class="ew-badge shortlisted">Growing</span>
-                    </article>
-                    <article class="ew-panel">
-                        <h3>Verification Turnaround</h3>
-                        <p>Average partner review time: <strong>4.2 hours</strong></p>
-                        <span class="ew-badge audition">Within SLA</span>
-                    </article>
-                    <article class="ew-panel">
-                        <h3>Top Revenue Segment</h3>
-                        <p><strong>Pro Elite (₹399)</strong> contributes 60.4% of MRR</p>
-                        <span class="ew-badge review">High Retention</span>
-                    </article>
-                </div>
-            </section>
-
-            <!-- 12. Content Management -->
-            <section class="ew-view" data-view-panel="content-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Content Management</h1>
-                        <p class="ew-page-subtitle">Moderate featured showreels, spotlight banners, and casting highlights</p>
-                    </div>
-                </div>
-                <div id="admin-content-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 13. Communication Management -->
-            <section class="ew-view" data-view-panel="communication-management">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Communication Management</h1>
-                        <p class="ew-page-subtitle">Broadcast platform announcements to professionals and partner organizations</p>
+                        <h1>Announcements</h1>
+                        <p class="ew-page-subtitle">Send platform-wide updates to professionals and partner organizations</p>
                     </div>
                 </div>
                 <div class="ew-panel">
@@ -352,30 +217,19 @@
                             <textarea id="broadcast-message" class="ew-textarea" rows="3" placeholder="Write announcement details..." required></textarea>
                         </div>
                         <div class="ew-field full" style="flex-direction: row; justify-content: flex-end;">
-                            <button type="submit" class="ew-btn ew-btn-primary">Send Broadcast</button>
+                            <button type="submit" class="ew-btn ew-btn-primary">Send Announcement</button>
                         </div>
                     </form>
                 </div>
                 <div id="admin-broadcast-history" class="ew-card-stack" style="margin-top: 16px;"></div>
             </section>
 
-            <!-- 14. Reviews & Complaints -->
-            <section class="ew-view" data-view-panel="reviews-complaints">
+            <!-- 6. Settings & Security -->
+            <section class="ew-view" data-view-panel="settings">
                 <div class="ew-page-header">
                     <div>
-                        <h1>Reviews &amp; Complaints</h1>
-                        <p class="ew-page-subtitle">Investigate and resolve complaints raised across the platform</p>
-                    </div>
-                </div>
-                <div id="admin-complaints-list" class="ew-card-stack"></div>
-            </section>
-
-            <!-- 15. Security & Access Control -->
-            <section class="ew-view" data-view-panel="security-access">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Security &amp; Access Control</h1>
-                        <p class="ew-page-subtitle">Enforce document-approval login gates and role permissions</p>
+                        <h1>Settings &amp; Security</h1>
+                        <p class="ew-page-subtitle">Manage document-approval gates, notifications, and maintenance mode</p>
                     </div>
                 </div>
                 <div class="ew-panel">
@@ -388,32 +242,6 @@
                     </div>
                     <div class="ew-toggle-row">
                         <div>
-                            <strong>Strict Admin Predefined Access</strong>
-                            <div class="ew-app-meta">Restrict Super Admin sign-in to predefined administrator credentials</div>
-                        </div>
-                        <input id="sec-predefined-admin" type="checkbox" checked>
-                    </div>
-                    <div class="ew-toggle-row">
-                        <div>
-                            <strong>Session Idle Timeout</strong>
-                            <div class="ew-app-meta">Automatically require re-authentication after 30 minutes of inactivity</div>
-                        </div>
-                        <input id="sec-idle-timeout" type="checkbox" checked>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 16. System Configuration -->
-            <section class="ew-view" data-view-panel="system-config">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>System Configuration</h1>
-                        <p class="ew-page-subtitle">Configure global platform preferences, alerts, and maintenance mode</p>
-                    </div>
-                </div>
-                <div class="ew-panel">
-                    <div class="ew-toggle-row">
-                        <div>
                             <strong>Email Notification Dispatch</strong>
                             <div class="ew-app-meta">Send automated approval/rejection emails via SMTP</div>
                         </div>
@@ -421,15 +249,8 @@
                     </div>
                     <div class="ew-toggle-row">
                         <div>
-                            <strong>Public Talent Directory</strong>
-                            <div class="ew-app-meta">Allow verified casting agencies to browse professional profiles</div>
-                        </div>
-                        <input id="cfg-public-directory" type="checkbox" checked>
-                    </div>
-                    <div class="ew-toggle-row">
-                        <div>
                             <strong>Maintenance Mode Banner</strong>
-                            <div class="ew-app-meta">Display scheduled maintenance banner across all login portals</div>
+                            <div class="ew-app-meta">Display scheduled maintenance notice across all login portals</div>
                         </div>
                         <input id="cfg-maintenance" type="checkbox">
                     </div>
