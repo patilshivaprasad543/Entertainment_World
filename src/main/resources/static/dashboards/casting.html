@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casting Productions Dashboard — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body data-role="CASTING" data-login="/casting-login.html">
+    <main class="dashboard-page">
+        <header class="dashboard-topbar">
+            <div>
+                <span class="module-tag">Studios</span>
+                <h1>Casting Productions Dashboard</h1>
+            </div>
+            <div class="dashboard-user">
+                <div class="user-meta">
+                    <strong id="user-name"></strong>
+                    <span id="user-email"></span>
+                </div>
+                <button type="button" id="signout-btn" class="signout-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            <article class="dash-widget">
+                <h3>Active Casting Calls</h3>
+                <p>Publish new roles for films, series, commercials, and stage shows.</p>
+            </article>
+            <article class="dash-widget">
+                <h3>Talent Shortlist</h3>
+                <p>Review actor submissions, audition tapes, and schedule callbacks.</p>
+            </article>
+            <article class="dash-widget">
+                <h3>Production Crew &amp; Vendors</h3>
+                <p>Coordinate studio bookings and equipment vendors for upcoming shoots.</p>
+            </article>
+        </section>
+    </main>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

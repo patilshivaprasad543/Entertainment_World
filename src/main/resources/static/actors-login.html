@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professionals Login — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body data-role="ACTOR" data-endpoint="/api/auth/actors" data-mode="professional">
+    <main class="auth-page">
+        <section class="auth-card" aria-labelledby="module-title">
+            <a href="/index.html" class="back-link">&larr; All Modules</a>
+            <header class="brand-header">
+                <div class="brand-badge" aria-hidden="true">PR</div>
+                <h1 id="module-title">Professionals Portal</h1>
+                <p class="brand-subtitle">Actors, Actresses, Influencers &amp; Creative Talent</p>
+            </header>
+
+            <div class="tab-bar" role="tablist" aria-label="Professionals authentication">
+                <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
+                <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Sign Up</button>
+            </div>
+
+            <div id="status-banner" class="status-banner" role="alert" hidden></div>
+
+            <form id="panel-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
+                <div class="field-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="actor@entertainmentworld.com" autocomplete="email" required>
+                </div>
+                <div class="field-group">
+                    <label for="login-password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
+                        <button type="button" class="toggle-password" data-target="login-password" aria-label="Show password">Show</button>
+                    </div>
+                </div>
+                <span class="demo-hint">Demo: <code>actor@entertainmentworld.com</code> / <code>actor123</code></span>
+                <button type="submit" class="submit-btn" id="login-submit">Sign In</button>
+                <p class="terms-note">
+                    By signing in, you agree to Entertainment World's
+                    <button type="button" class="terms-link" data-open-terms>Terms &amp; Conditions</button>.
+                </p>
+            </form>
+
+            <form id="panel-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-category">Professional Category</label>
+                        <select id="register-category" required>
+                            <option value="">-- Select Category --</option>
+                            <option value="Actor">Actor</option>
+                            <option value="Actress">Actress</option>
+                            <option value="Influencer">Influencer</option>
+                            <option value="Child Artist">Child Artist</option>
+                            <option value="Model">Model</option>
+                            <option value="Voice Artist / Dubbing">Voice Artist / Dubbing</option>
+                            <option value="Dancer / Choreographer">Dancer / Choreographer</option>
+                            <option value="Singer / Musician">Singer / Musician</option>
+                            <option value="Comedian">Comedian</option>
+                            <option value="Anchor / Host">Anchor / Host</option>
+                            <option value="Stunt Performer">Stunt Performer</option>
+                            <option value="Director / Filmmaker">Director / Filmmaker</option>
+                            <option value="Scriptwriter / Lyricist">Scriptwriter / Lyricist</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-start-age">Acting Started Age</label>
+                        <input type="number" id="register-start-age" min="1" max="100" placeholder="e.g. 16" required>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="register-name">Full / Stage Name</label>
+                    <input type="text" id="register-name" placeholder="Alex Rivera" autocomplete="name" required>
+                </div>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-dob">Date of Birth</label>
+                        <input type="date" id="register-dob" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-gender">Gender</label>
+                        <select id="register-gender" required>
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Non-Binary">Non-Binary</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="register-experience">Experience Category</label>
+                    <select id="register-experience" required>
+                        <option value="">-- Select Experience Level --</option>
+                        <option value="Fresher (0-1 years)">Fresher (0-1 years)</option>
+                        <option value="Intermediate (1-3 years)">Intermediate (1-3 years)</option>
+                        <option value="Experienced (3-7 years)">Experienced (3-7 years)</option>
+                        <option value="Senior / Veteran (7+ years)">Senior / Veteran (7+ years)</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-phone">Phone Number</label>
+                        <input type="tel" id="register-phone" placeholder="+91 9876543210" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-city">City</label>
+                        <input type="text" id="register-city" placeholder="Mumbai" required>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="register-photo">Upload Profile Photo (JPG, PNG, WEBP)</label>
+                    <input type="file" id="register-photo" accept=".jpg,.jpeg,.png,.webp" required>
+                    <img id="photo-preview" class="photo-preview" alt="Profile preview" hidden>
+                </div>
+                <div class="field-group">
+                    <label for="register-bio">Portfolio Link / Short Bio</label>
+                    <textarea id="register-bio" rows="2" placeholder="Experience, skills, or portfolio URL"></textarea>
+                </div>
+                <div class="field-group">
+                    <label for="register-password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
+                        <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="register-confirm">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
+                        <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
+                    </div>
+                </div>
+                <div class="terms-row">
+                    <input type="checkbox" id="register-terms" required>
+                    <label for="register-terms">
+                        I agree to the <button type="button" class="terms-link" data-open-terms>Terms &amp; Conditions</button> and confirm that my portfolio details and photo are accurate.
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn" id="register-submit">Create Professional Profile</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Terms & Conditions Modal -->
+    <div id="terms-modal" class="terms-modal" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title" hidden>
+        <div class="terms-modal-card">
+            <div class="terms-modal-header">
+                <h2 id="terms-modal-title">Professional Portal — Terms &amp; Conditions</h2>
+                <button type="button" id="terms-modal-close" class="terms-modal-close" aria-label="Close Terms and Conditions">&times;</button>
+            </div>
+            <div class="terms-modal-body">
+                <p><strong>1. Profile Authenticity:</strong> Professionals must provide accurate stage/legal names, age, contact details, and genuine portfolio/showreel links and photos.</p>
+                <p><strong>2. Auditions &amp; Conduct:</strong> All interactions with casting directors, production houses, brands, and fellow talent must remain professional and respectful.</p>
+                <p><strong>3. Subscription Plans:</strong> Basic (Free), Premium (₹199/month), and Pro Elite (₹399/month) plans grant corresponding application quotas and visibility perks.</p>
+                <p><strong>4. Privacy &amp; Media Usage:</strong> Uploaded profile photos and showreels are displayed to verified casting partners and network connections on Entertainment World.</p>
+                <p><strong>5. Account Governance:</strong> Entertainment World reserves the right to suspend accounts that submit misleading credentials or violate community guidelines.</p>
+            </div>
+            <button type="button" id="terms-modal-accept" class="submit-btn">I Understand</button>
+        </div>
+    </div>
+
+    <script src="/js/module-auth.js"></script>
+</body>
+</html>

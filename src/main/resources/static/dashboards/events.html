@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management Dashboard — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body data-role="EVENT_MANAGEMENT" data-login="/events-login.html">
+    <main class="dashboard-page">
+        <header class="dashboard-topbar">
+            <div>
+                <span class="module-tag">Shows &amp; Premieres</span>
+                <h1>Event Management Dashboard</h1>
+            </div>
+            <div class="dashboard-user">
+                <div class="user-meta">
+                    <strong id="user-name"></strong>
+                    <span id="user-email"></span>
+                </div>
+                <button type="button" id="signout-btn" class="signout-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            <article class="dash-widget">
+                <h3>Upcoming Shows &amp; Premieres</h3>
+                <p>Plan award nights, film premieres, concerts, and red-carpet events.</p>
+            </article>
+            <article class="dash-widget">
+                <h3>Vendor &amp; Artist Coordination</h3>
+                <p>Book stage vendors, lighting crews, and celebrity appearances.</p>
+            </article>
+            <article class="dash-widget">
+                <h3>Ticketing &amp; Venue Schedules</h3>
+                <p>Manage venue bookings, seating plans, and event timelines.</p>
+            </article>
+        </section>
+    </main>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

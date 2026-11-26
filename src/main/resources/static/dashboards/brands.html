@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Promotions Dashboard — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body data-role="BRAND" data-login="/brands-login.html">
+    <main class="dashboard-page">
+        <header class="dashboard-topbar">
+            <div>
+                <span class="module-tag">Marketing</span>
+                <h1>Brand Promotions Dashboard</h1>
+            </div>
+            <div class="dashboard-user">
+                <div class="user-meta">
+                    <strong id="user-name"></strong>
+                    <span id="user-email"></span>
+                </div>
+                <button type="button" id="signout-btn" class="signout-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            <article class="dash-widget">
+                <h3>Campaigns &amp; Sponsorships</h3>
+                <p>Launch product placements, event sponsorships, and promotional tie-ins.</p>
+            </article>
+            <article class="dash-widget">
+                <h3>Talent Collaborations</h3>
+                <p>Partner with professional actors and creators for brand endorsements.</p>
+            </article>
+            <article class="dash-widget">
+                <h3>Reach &amp; ROI</h3>
+                <p>Track campaign impressions, engagement, and conversion metrics.</p>
+            </article>
+        </section>
+    </main>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

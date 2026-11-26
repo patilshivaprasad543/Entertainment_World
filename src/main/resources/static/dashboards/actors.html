@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Dashboard — Entertainment World</title>
+    <link rel="stylesheet" href="/css/professional-dashboard.css">
+</head>
+<body data-role="ACTOR" data-login="/actors-login.html">
+    <!-- Top Header -->
+    <header class="ew-topbar">
+        <div class="ew-topbar-left">
+            <button type="button" id="ew-menu-toggle" class="ew-menu-toggle" aria-label="Toggle navigation">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <span class="ew-brand">ENTERTAINMENT WORLD</span>
+        </div>
+
+        <div class="ew-topbar-right">
+            <button type="button" id="notif-btn" class="ew-icon-btn" aria-label="Notifications">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span id="notif-dot" class="ew-notif-dot"></span>
+            </button>
+
+            <button type="button" id="user-menu-btn" class="ew-avatar-btn" aria-label="User menu">
+                <img id="topbar-avatar-img" class="ew-avatar-img ew-photo-clickable" alt="Profile photo" hidden>
+                <span id="topbar-avatar-fallback" class="ew-avatar-fallback">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </span>
+                <span id="topbar-user-name" class="ew-avatar-name">Professional</span>
+            </button>
+
+            <!-- Notifications Popover -->
+            <div id="notif-popover" class="ew-popover" hidden>
+                <div class="ew-popover-header">
+                    <span>Notifications</span>
+                    <button type="button" id="mark-notifs-read" class="ew-link-btn">Mark all read</button>
+                </div>
+                <div id="notif-list" class="ew-notif-list"></div>
+            </div>
+
+            <!-- User Menu Popover -->
+            <div id="user-menu-popover" class="ew-popover" hidden>
+                <div class="ew-user-menu-head">
+                    <img id="profile-photo" class="ew-avatar-img ew-photo-clickable" alt="Profile photo" hidden style="margin-bottom: 8px;">
+                    <strong id="user-name">Professional</strong>
+                    <span id="user-email"></span>
+                </div>
+                <div class="ew-user-menu-actions">
+                    <button type="button" class="ew-menu-action" data-goto-view="profile">My Profile</button>
+                    <button type="button" class="ew-menu-action" data-goto-view="settings">Settings</button>
+                    <button type="button" id="signout-btn" class="ew-menu-action danger">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="ew-shell">
+        <div id="ew-sidebar-backdrop" class="ew-sidebar-backdrop"></div>
+
+        <!-- Left Sidebar -->
+        <aside id="ew-sidebar" class="ew-sidebar" aria-label="Professional navigation">
+            <h2 class="ew-sidebar-title">PROFESSIONAL MENU</h2>
+            <nav class="ew-nav">
+                <button type="button" class="ew-nav-item active" data-view="dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="profile">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>My Profile</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="opportunities">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>Opportunities</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="applications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                        <line x1="8" y1="16" x2="14" y2="16"></line>
+                    </svg>
+                    <span>My Applications</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="wishlist">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>My Wishlist</span>
+                    <span id="wishlist-nav-badge" class="ew-nav-badge">2</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="network">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>My Network</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="categories">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    <span>Search for Actors</span>
+                    <span id="categories-nav-badge" class="ew-nav-badge">3</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="career">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    <span>My Career</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="plans">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    <span>Plans &amp; Billing</span>
+                    <span id="plan-nav-badge" class="ew-nav-badge">Free</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="support">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Support</span>
+                    <span id="support-nav-badge" class="ew-nav-badge">1</span>
+                </button>
+
+                <button type="button" class="ew-nav-item" data-view="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
+            <div class="ew-sidebar-footer">
+                <span id="professional-category" class="ew-category-pill">Professional</span>
+                <div id="acting-start-age"></div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="ew-main">
+            <!-- 1. Dashboard Overview -->
+            <section class="ew-view active" data-view-panel="dashboard">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Welcome back!</h1>
+                        <p class="ew-page-subtitle">Your professional dashboard</p>
+                    </div>
+                    <button type="button" id="header-plan-pill" class="ew-plan-pill" data-goto-view="plans">
+                        <span class="ew-plan-dot"></span>
+                        <span id="header-plan-label">Plan: Basic (Free)</span>
+                    </button>
+                </div>
+
+                <div class="ew-kpi-grid">
+                    <article class="ew-kpi-card">
+                        <div id="kpi-applications" class="ew-kpi-value">12</div>
+                        <div class="ew-kpi-label">Applications</div>
+                    </article>
+                    <article class="ew-kpi-card">
+                        <div id="kpi-shortlisted" class="ew-kpi-value">4</div>
+                        <div class="ew-kpi-label">Shortlisted</div>
+                    </article>
+                    <article class="ew-kpi-card">
+                        <div id="kpi-auditions" class="ew-kpi-value">3</div>
+                        <div class="ew-kpi-label">Auditions</div>
+                    </article>
+                    <article class="ew-kpi-card">
+                        <div id="kpi-earnings" class="ew-kpi-value">₹25K</div>
+                        <div class="ew-kpi-label">Earnings</div>
+                    </article>
+                </div>
+
+                <div id="dashboard-plan-usage" class="ew-usage-strip">
+                    <div class="ew-usage-item">
+                        <span class="ew-usage-label">Video Uploads</span>
+                        <span id="usage-videos" class="ew-usage-value">1 / 1 Used</span>
+                    </div>
+                    <div class="ew-usage-item">
+                        <span class="ew-usage-label">Monthly Applications</span>
+                        <span id="usage-apps" class="ew-usage-value">4 / 5 Used</span>
+                    </div>
+                    <div class="ew-usage-item">
+                        <span class="ew-usage-label">Active Tier Perks</span>
+                        <span id="usage-perks" class="ew-usage-value">Standard Profile</span>
+                    </div>
+                </div>
+
+                <section class="ew-section">
+                    <h2 class="ew-section-title">Quick actions</h2>
+                    <div class="ew-quick-actions">
+                        <button type="button" class="ew-action-tile" data-goto-view="opportunities">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <span>Find Opportunities</span>
+                            <span class="ew-action-arrow">→</span>
+                        </button>
+                        <button type="button" class="ew-action-tile" data-goto-view="profile">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <path d="M18 14l4-4-2-2-4 4v2h2z"></path>
+                            </svg>
+                            <span>Edit Profile</span>
+                            <span class="ew-action-arrow">→</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="ew-section">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Recent applications</h2>
+                        <button type="button" class="ew-link-btn" data-goto-view="applications">View all</button>
+                    </div>
+                    <div id="recent-applications-list" class="ew-card-stack"></div>
+                </section>
+
+                <section class="ew-section">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Membership plans</h2>
+                        <button type="button" class="ew-link-btn" data-goto-view="plans">Compare all features</button>
+                    </div>
+                    <div id="dashboard-plans-preview" class="ew-plans-grid"></div>
+                </section>
+            </section>
+
+            <!-- 2. My Profile -->
+            <section class="ew-view" data-view-panel="profile">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>My Profile</h1>
+                        <p class="ew-page-subtitle">Manage your portfolio, showreel link, and booking availability</p>
+                    </div>
+                </div>
+                <div class="ew-panel">
+                    <div class="ew-profile-photo-bar">
+                        <img id="profile-view-photo" class="ew-profile-large-avatar ew-photo-clickable" alt="Profile photo" title="Click to enlarge" hidden>
+                        <span id="profile-view-photo-fallback" class="ew-profile-avatar-placeholder">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <div class="ew-profile-photo-meta">
+                            <h3><span id="profile-view-name">Professional</span> <span id="profile-plan-badge" class="ew-plan-badge-inline free">Basic (Free)</span></h3>
+                            <p id="profile-view-category">Actor / Performer</p>
+                            <label class="ew-file-upload-label" for="profile-photo-upload">
+                                Change Profile Photo
+                                <input id="profile-photo-upload" type="file" accept=".jpg,.jpeg,.png,.webp" hidden>
+                            </label>
+                        </div>
+                    </div>
+
+                    <form id="profile-form" class="ew-form-grid">
+                        <div class="ew-field">
+                            <label for="profile-full-name">Full Name</label>
+                            <input id="profile-full-name" class="ew-input" type="text" required>
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-email">Email</label>
+                            <input id="profile-email" class="ew-input" type="email" disabled>
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-category-input">Primary Category</label>
+                            <input id="profile-category-input" class="ew-input" type="text">
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-phone">Phone Number</label>
+                            <input id="profile-phone" class="ew-input" type="text">
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-city">Base City</label>
+                            <input id="profile-city" class="ew-input" type="text">
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-dob">Date of Birth</label>
+                            <input id="profile-dob" class="ew-input" type="date">
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-gender">Gender</label>
+                            <select id="profile-gender" class="ew-select">
+                                <option value="">-- Select Gender --</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Non-Binary">Non-Binary</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-experience">Experience Category</label>
+                            <select id="profile-experience" class="ew-select">
+                                <option value="">-- Select Experience Level --</option>
+                                <option value="Fresher (0-1 years)">Fresher (0-1 years)</option>
+                                <option value="Intermediate (1-3 years)">Intermediate (1-3 years)</option>
+                                <option value="Experienced (3-7 years)">Experienced (3-7 years)</option>
+                                <option value="Senior / Veteran (7+ years)">Senior / Veteran (7+ years)</option>
+                            </select>
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-availability">Booking Availability</label>
+                            <select id="profile-availability" class="ew-select">
+                                <option value="Available immediately">Available immediately</option>
+                                <option value="Available next month">Available next month</option>
+                                <option value="Weekends only">Weekends only</option>
+                                <option value="Currently booked">Currently booked</option>
+                            </select>
+                        </div>
+                        <div class="ew-field full">
+                            <label for="profile-showreel">Showreel / Portfolio URL</label>
+                            <input id="profile-showreel" class="ew-input" type="url">
+                        </div>
+                        <div class="ew-field full">
+                            <label for="profile-bio">Professional Bio</label>
+                            <textarea id="profile-bio" class="ew-textarea" rows="3"></textarea>
+                        </div>
+                        <div class="ew-field full" style="flex-direction: row; justify-content: flex-end;">
+                            <button type="submit" class="ew-btn ew-btn-primary">Save Profile Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="ew-panel ew-video-section">
+                    <div class="ew-section-head">
+                        <div>
+                            <h3 style="margin-bottom: 2px;">My Videos &amp; Showreels</h3>
+                            <p style="margin: 0;">Upload acting reels, monologues, or audition clips based on your active plan.</p>
+                        </div>
+                        <span id="video-quota-pill" class="ew-meta-note">1 / 1 Videos</span>
+                    </div>
+
+                    <div id="profile-video-limit-alert" class="ew-plan-banner" style="margin-top: 16px; margin-bottom: 16px;" hidden>
+                        <div>
+                            <h3>Video Upload Limit Reached</h3>
+                            <p id="profile-video-limit-text">Your current plan limit has been reached. Upgrade to upload more videos.</p>
+                        </div>
+                        <button type="button" class="ew-btn ew-btn-gold ew-btn-sm" data-goto-view="plans">Upgrade Plan</button>
+                    </div>
+
+                    <form id="profile-video-form" class="ew-form-grid" style="margin-top: 16px;">
+                        <div class="ew-field">
+                            <label for="profile-video-title">Video Title</label>
+                            <input id="profile-video-title" class="ew-input" type="text" placeholder="e.g., Dramatic Monologue 2026" required>
+                        </div>
+                        <div class="ew-field">
+                            <label for="profile-video-category">Video Type</label>
+                            <select id="profile-video-category" class="ew-select">
+                                <option value="Showreel">Showreel</option>
+                                <option value="Audition Clip">Audition Clip</option>
+                                <option value="Monologue">Monologue</option>
+                                <option value="Behind the Scenes">Behind the Scenes</option>
+                            </select>
+                        </div>
+                        <div class="ew-field full">
+                            <label for="profile-video-file">Select Video File (MP4, WEBM, MOV)</label>
+                            <input id="profile-video-file" class="ew-input" type="file" accept="video/*" required>
+                        </div>
+                        <div class="ew-field full" style="flex-direction: row; justify-content: flex-end;">
+                            <button type="submit" id="profile-video-submit" class="ew-btn ew-btn-primary">Upload Video</button>
+                        </div>
+                    </form>
+
+                    <div id="profile-videos-grid" class="ew-video-grid"></div>
+                </div>
+            </section>
+
+            <!-- 3. Opportunities -->
+            <section class="ew-view" data-view-panel="opportunities">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Opportunities</h1>
+                        <p class="ew-page-subtitle">Discover casting calls, production gigs, and brand collaborations</p>
+                    </div>
+                </div>
+                <div class="ew-toolbar">
+                    <input id="opp-search" class="ew-input ew-search-input" type="search" placeholder="Search roles, weddings, events, or brands...">
+                    <select id="opp-category" class="ew-select">
+                        <option value="All">All Categories</option>
+                        <option value="Acting">Acting / Movies</option>
+                        <option value="Production">Production</option>
+                        <option value="Brand Collab">Brand Collab</option>
+                        <option value="Hosting">Events &amp; Hosting</option>
+                    </select>
+                    <select id="opp-advanced-filter" class="ew-select" title="Advanced Job & Event Filters (Premium ₹199+)">
+                        <option value="All">Advanced Filter: All Budgets</option>
+                        <option value="high">High Budget (₹50K+)</option>
+                        <option value="remote">Remote / Pan-India</option>
+                    </select>
+                </div>
+                <div id="opportunities-list" class="ew-grid-2"></div>
+            </section>
+
+            <!-- 4. My Applications -->
+            <section class="ew-view" data-view-panel="applications">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>My Applications</h1>
+                        <p class="ew-page-subtitle">Track every role and production you have applied to</p>
+                    </div>
+                </div>
+                <div class="ew-chip-row">
+                    <button type="button" class="ew-chip active" data-app-filter="All">All</button>
+                    <button type="button" class="ew-chip" data-app-filter="Under Review">Under Review</button>
+                    <button type="button" class="ew-chip" data-app-filter="Shortlisted">Shortlisted</button>
+                    <button type="button" class="ew-chip" data-app-filter="Audition Scheduled">Audition Scheduled</button>
+                </div>
+                <div id="all-applications-list" class="ew-card-stack"></div>
+            </section>
+
+            <!-- 5. My Wishlist -->
+            <section class="ew-view" data-view-panel="wishlist">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>My Wishlist</h1>
+                        <p class="ew-page-subtitle">Saved opportunities you want to apply for later</p>
+                    </div>
+                </div>
+                <div id="wishlist-list" class="ew-card-stack"></div>
+            </section>
+
+            <!-- 6. My Network -->
+            <section class="ew-view" data-view-panel="network">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>My Network</h1>
+                        <p class="ew-page-subtitle">Connect with casting directors, producers, and discover teammate suggestions</p>
+                    </div>
+                </div>
+
+                <div class="ew-section">
+                    <h2 class="ew-section-title">Your Connections</h2>
+                    <div id="network-list" class="ew-grid-2"></div>
+                </div>
+
+                <div class="ew-suggestion-section">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Teammate Suggestions</h2>
+                        <span id="teammate-suggestions-count" class="ew-app-meta"></span>
+                    </div>
+
+                    <div class="ew-toolbar" style="align-items: center; justify-content: space-between;">
+                        <div class="ew-chip-row" style="margin-bottom: 0;">
+                            <button type="button" class="ew-chip active" data-teammate-filter="all">All</button>
+                            <button type="button" class="ew-chip" data-teammate-filter="profession">Profession-wise</button>
+                            <button type="button" class="ew-chip" data-teammate-filter="friends">Previous Friends</button>
+                            <button type="button" class="ew-chip" data-teammate-filter="interests">Shared Interests</button>
+                        </div>
+
+                        <select id="teammate-profession-filter" class="ew-select">
+                            <option value="All">All Professions</option>
+                            <option value="Actor">Actor</option>
+                            <option value="Director">Director</option>
+                            <option value="Cinematographer">Cinematographer</option>
+                            <option value="Video Editor">Video Editor</option>
+                            <option value="Voiceover Artist">Voiceover Artist</option>
+                            <option value="Producer">Producer</option>
+                        </select>
+                    </div>
+
+                    <div id="teammate-suggestions-list" class="ew-grid-2"></div>
+                </div>
+            </section>
+
+            <!-- 7. Search for Actors (Follow / Unfollow Categories) -->
+            <section class="ew-view" data-view-panel="categories">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Search for Actors</h1>
+                        <p class="ew-page-subtitle">Follow or unfollow actor and industry categories to personalize your feed</p>
+                    </div>
+                    <span id="categories-following-summary" class="ew-meta-note">Following 3 categories</span>
+                </div>
+                <div class="ew-toolbar">
+                    <input id="category-search" class="ew-input ew-search-input" type="search" placeholder="Search categories (e.g., Actors, Directors, Editors)...">
+                    <div class="ew-chip-row" style="margin-bottom: 0;">
+                        <button type="button" class="ew-chip active" data-cat-filter="all">All</button>
+                        <button type="button" class="ew-chip" data-cat-filter="following">Following</button>
+                    </div>
+                </div>
+                <div id="categories-grid" class="ew-grid-3"></div>
+            </section>
+
+            <!-- 7. My Career -->
+            <section class="ew-view" data-view-panel="career">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>My Career &amp; Pro Tools</h1>
+                        <p class="ew-page-subtitle">AI Portfolio Builder, Analytics, Audition Practice, and Influencer Business Tools</p>
+                    </div>
+                </div>
+                <div id="career-plan-tools" class="ew-grid-3"></div>
+            </section>
+
+            <!-- 8. Plans & Billing -->
+            <section class="ew-view" data-view-panel="plans">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Plans &amp; Billing</h1>
+                        <p class="ew-page-subtitle">Choose the membership tier that fits your career stage</p>
+                    </div>
+                    <span id="plans-active-status" class="ew-meta-note">Active: Basic (Free)</span>
+                </div>
+
+                <div id="plans-banner" class="ew-plan-banner">
+                    <div>
+                        <h3 id="plans-banner-title">You are on the Basic Plan (Free)</h3>
+                        <p id="plans-banner-subtitle">Upgrade to Premium (₹199/mo) or Pro Elite (₹399/mo) for unlimited applications and priority casting visibility.</p>
+                    </div>
+                </div>
+
+                <div id="plans-full-grid" class="ew-plans-grid"></div>
+
+                <div class="ew-actor-search-section">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Feature Comparison by Role</h2>
+                        <div class="ew-chip-row" style="margin-bottom: 0;">
+                            <button type="button" class="ew-chip active" data-compare-track="professional">Entertainment Professional</button>
+                            <button type="button" class="ew-chip" data-compare-track="influencer">Influencer</button>
+                        </div>
+                    </div>
+                    <div class="ew-table-wrap">
+                        <table class="ew-compare-table">
+                            <thead>
+                                <tr>
+                                    <th>Features</th>
+                                    <th>Free</th>
+                                    <th>Premium ₹199</th>
+                                    <th>Pro ₹399</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plan-compare-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div id="plan-compare-note" class="ew-plan-note"></div>
+                </div>
+
+                <div class="ew-actor-search-section">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Search Other Actors &amp; Talent</h2>
+                        <span id="actor-search-count" class="ew-app-meta"></span>
+                    </div>
+                    <div class="ew-toolbar">
+                        <input id="actor-search-input" class="ew-input ew-search-input" type="search" placeholder="Search actors by name, city, or specialty...">
+                        <select id="actor-plan-filter" class="ew-select">
+                            <option value="all">All Plans</option>
+                            <option value="pro">Pro Elite (₹399)</option>
+                            <option value="premium">Premium (₹199)</option>
+                            <option value="free">Basic (Free)</option>
+                        </select>
+                    </div>
+                    <div id="actor-search-results" class="ew-card-stack"></div>
+                </div>
+            </section>
+
+            <!-- 10. Support & Complaints -->
+            <section class="ew-view" data-view-panel="support">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Support &amp; Complaints</h1>
+                        <p class="ew-page-subtitle">Raise complaints about the website, payments, casting calls, or other issues</p>
+                    </div>
+                    <span id="support-tier-badge" class="ew-meta-note">Standard Support (24h SLA)</span>
+                </div>
+
+                <div class="ew-grid-2" style="align-items: start;">
+                    <div class="ew-panel">
+                        <h3>Raise a Complaint</h3>
+                        <p>Our support team reviews every ticket within 24 hours.</p>
+                        <form id="complaint-form" class="ew-form-grid">
+                            <div class="ew-field">
+                                <label for="complaint-category">Issue Category</label>
+                                <select id="complaint-category" class="ew-select" required>
+                                    <option value="Website Bug / Issue">Website Bug / Issue</option>
+                                    <option value="Payment & Plans">Payment &amp; Plans</option>
+                                    <option value="Casting / Opportunity Dispute">Casting / Opportunity Dispute</option>
+                                    <option value="Account & Profile">Account &amp; Profile</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="ew-field">
+                                <label for="complaint-priority">Priority</label>
+                                <select id="complaint-priority" class="ew-select" required>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Low">Low</option>
+                                </select>
+                            </div>
+                            <div class="ew-field full">
+                                <label for="complaint-subject">Subject</label>
+                                <input id="complaint-subject" class="ew-input" type="text" placeholder="Brief summary of your complaint" required>
+                            </div>
+                            <div class="ew-field full">
+                                <label for="complaint-description">Description</label>
+                                <textarea id="complaint-description" class="ew-textarea" rows="4" placeholder="Describe what happened, including any page or project details..." required></textarea>
+                            </div>
+                            <div class="ew-field full" style="flex-direction: row; justify-content: flex-end;">
+                                <button type="submit" class="ew-btn ew-btn-primary">Submit Complaint</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div>
+                        <div class="ew-section-head">
+                            <h2 class="ew-section-title">My Complaints</h2>
+                            <span id="complaints-count-label" class="ew-app-meta"></span>
+                        </div>
+                        <div id="complaints-list" class="ew-card-stack"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. Settings -->
+            <section class="ew-view" data-view-panel="settings">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Settings</h1>
+                        <p class="ew-page-subtitle">Manage notifications and profile visibility</p>
+                    </div>
+                </div>
+                <div class="ew-panel">
+                    <div class="ew-toggle-row">
+                        <div>
+                            <strong>Email Opportunity Alerts</strong>
+                            <div class="ew-app-meta">Receive daily digests of matching casting calls</div>
+                        </div>
+                        <input id="setting-email-alerts" type="checkbox">
+                    </div>
+                    <div class="ew-toggle-row">
+                        <div>
+                            <strong>Audition Reminders</strong>
+                            <div class="ew-app-meta">Get reminders 24 hours before scheduled auditions</div>
+                        </div>
+                        <input id="setting-audition-reminders" type="checkbox">
+                    </div>
+                    <div class="ew-toggle-row">
+                        <div>
+                            <strong>Public Talent Profile</strong>
+                            <div class="ew-app-meta">Allow verified casting directors to discover your profile</div>
+                        </div>
+                        <input id="setting-public-profile" type="checkbox">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="ew-toast" class="ew-toast" hidden></div>
+
+    <!-- Profile Photo Lightbox Modal -->
+    <div id="ew-photo-modal" class="ew-photo-modal" role="dialog" aria-modal="true" aria-label="Enlarged profile photo" hidden>
+        <div class="ew-photo-modal-card">
+            <button type="button" id="ew-photo-modal-close" class="ew-photo-modal-close" aria-label="Close photo preview">&times;</button>
+            <img id="ew-photo-modal-img" class="ew-photo-modal-img" alt="Enlarged profile photo">
+            <div id="ew-photo-modal-caption" class="ew-photo-modal-caption"></div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/professional-dashboard.js"></script>
+</body>
+</html>
