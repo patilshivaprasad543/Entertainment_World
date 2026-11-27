@@ -4,109 +4,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brand Promotions Login — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css?v=4">
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body data-role="BRAND" data-endpoint="/api/auth/brands" data-mode="document-verification">
-    <nav class="ew-navbar">
-        <a href="/index.html" class="ew-brand">
-            <span class="ew-logo-box">★</span>
-            <span class="ew-brand-text">
-                <strong>Entertainment World</strong>
-                <span>FIND STARDOM. FIND STARS.</span>
-            </span>
-        </a>
-        <div class="ew-nav-links">
-            <a href="/index.html">All Modules</a>
-            <a href="/pricing.html">Pricing</a>
-        </div>
-        <div class="ew-nav-actions">
-            <a href="/admin-login.html" class="ew-btn-outline">Super Admin</a>
-            <a href="/actors-login.html" class="ew-btn-primary">Join Free</a>
-        </div>
-    </nav>
-    <main class="auth-page">
-        <section class="auth-card" aria-labelledby="module-title">
-            <a href="/index.html" class="back-link">&larr; All Modules</a>
-            <header class="brand-header">
-                <div class="brand-badge" aria-hidden="true">BP</div>
-                <h1 id="module-title">Brand Promotions</h1>
-                <p class="brand-subtitle">Sponsorships, campaigns &amp; media placements</p>
-            </header>
+    <main class="pro-auth-shell">
+        <!-- Left Cinema Showcase Panel (Matches Vendor & Professional Login Portals) -->
+        <aside class="pro-showcase" aria-label="Brand Promotions portal overview">
+            <div class="pro-showcase-bg" aria-hidden="true"></div>
+            <div class="pro-showcase-inner">
+                <div class="pro-showcase-top">
+                    <a href="/index.html" class="pro-back-pill">&larr; All Modules</a>
+                    <div class="pro-brand-lockup">
+                        <span class="pro-brand-logo" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </span>
+                        <div>
+                            <span class="pro-brand-name">Entertainment World</span>
+                            <span class="pro-brand-sub">BRAND PROMOTIONS PORTAL</span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="tab-bar" role="tablist" aria-label="Brand Promotions authentication">
-                <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
-                <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Register &amp; Verify</button>
+                <div class="pro-showcase-copy">
+                    <span class="pro-eyebrow">CREATOR MARKETPLACE &amp; BRAND CAMPAIGNS</span>
+                    <h1>Launch your <em>campaigns</em> with verified talent.</h1>
+                    <p>Discover actors, models, and influencers, post campaign briefs, manage escrow payouts, and track GST-compliant invoices in one unified workspace.</p>
+
+                    <div class="pro-highlights">
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">01</span>
+                            <div>
+                                <strong>Discover &amp; Shortlist Creators</strong>
+                                <span>Filter verified talent by city, language, budget, and engagement</span>
+                            </div>
+                        </div>
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">02</span>
+                            <div>
+                                <strong>Campaign Briefs, Squads &amp; Direct Chat</strong>
+                                <span>Build influencer squads and collaborate with creators directly</span>
+                            </div>
+                        </div>
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">03</span>
+                            <div>
+                                <strong>Escrow, GST Invoices &amp; Analytics</strong>
+                                <span>Automate GST/TDS calculations and track campaign ROI in real time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" id="open-video-tour" class="pro-tour-card">
+                    <img src="/images/tour/tour-step2.jpg" alt="Brand Promotions Video Tour preview" class="pro-tour-thumb">
+                    <div class="pro-tour-card-text">
+                        <span class="pro-tour-badge">VIDEO TOUR • 0:28</span>
+                        <strong>Watch Brand Portal Tour</strong>
+                        <span>See how Brands &amp; Creators collaborate</span>
+                    </div>
+                    <span class="pro-tour-play" aria-hidden="true">&#9654;</span>
+                </button>
             </div>
+        </aside>
 
-            <div id="status-banner" class="status-banner" role="alert" hidden></div>
+        <!-- Right Auth Card (Warm Cream & Crimson/Gold Theme Matching Vendor Login) -->
+        <section class="pro-auth-pane">
+            <section class="auth-card pro-auth-card" aria-labelledby="module-title">
+                <header class="pro-card-header">
+                    <span class="pro-portal-pill">Brands &bull; Agencies &bull; D2C Marketers</span>
+                    <h2 id="module-title">Sign in to your workspace</h2>
+                    <p>Access your Brand Promotions Dashboard or register your brand.</p>
+                </header>
 
-            <form id="panel-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
-                <div class="field-group">
-                    <label for="login-email">Brand Email</label>
-                    <input type="email" id="login-email" placeholder="brand@entertainmentworld.com" autocomplete="email" required>
+                <div class="tab-bar" role="tablist" aria-label="Brand Promotions authentication">
+                    <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
+                    <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Sign Up</button>
                 </div>
-                <div class="field-group">
-                    <label for="login-password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
-                        <button type="button" class="toggle-password" data-target="login-password" aria-label="Show password">Show</button>
-                    </div>
-                </div>
-                <span class="demo-hint">Demo: <code>brand@entertainmentworld.com</code> / <code>brand123</code></span>
-                <button type="submit" class="submit-btn" id="login-submit">Sign In as Brand</button>
-            </form>
 
-            <form id="panel-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
-                <div class="field-group">
-                    <label for="register-name">Brand Manager / Contact Name</label>
-                    <input type="text" id="register-name" placeholder="Full Name" autocomplete="name" required>
-                </div>
-                <div class="field-group">
-                    <label for="register-org">Brand / Agency Name</label>
-                    <input type="text" id="register-org" placeholder="Nova Brand House" autocomplete="organization" required>
-                </div>
-                <div class="field-group">
-                    <label for="register-email">Brand Email</label>
-                    <input type="email" id="register-email" placeholder="marketing@brand.com" autocomplete="email" required>
-                </div>
-                <div class="field-row">
+                <div id="status-banner" class="status-banner" role="alert" hidden></div>
+
+                <form id="panel-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
                     <div class="field-group">
-                        <label for="register-doc-type">Document Type</label>
-                        <select id="register-doc-type" required>
-                            <option value="">-- Select --</option>
-                            <option value="Brand Authorization Letter">Brand Authorization Letter</option>
-                            <option value="Company Incorporation">Company Incorporation</option>
-                            <option value="GST / Tax Certificate">GST / Tax Certificate</option>
-                        </select>
+                        <label for="login-email">Brand Email</label>
+                        <input type="email" id="login-email" placeholder="brand@entertainmentworld.com" autocomplete="email" required>
                     </div>
                     <div class="field-group">
-                        <label for="register-doc-number">Document Number</label>
-                        <input type="text" id="register-doc-number" placeholder="BRN-2026-001" required>
+                        <label for="login-password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
+                            <button type="button" class="toggle-password" data-target="login-password" aria-label="Show password">Show</button>
+                        </div>
                     </div>
-                </div>
-                <div class="field-group">
-                    <label for="register-doc-file">Upload Verification Document (PDF / Image)</label>
-                    <input type="file" id="register-doc-file" accept=".pdf,.png,.jpg,.jpeg" required>
-                </div>
-                <div class="field-group">
-                    <label for="register-password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
-                        <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
+                    <span class="demo-hint">Demo: <code>brand@entertainmentworld.com</code> / <code>brand123</code></span>
+                    <button type="submit" class="submit-btn" id="login-submit">Sign In to Brand Dashboard</button>
+                </form>
+
+                <form id="panel-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
+                    <p style="margin: 0 0 4px; font-size: 0.78rem; color: #9ca3af;">Fields marked with <span style="color: #e11d48; font-weight: 700;">*</span> are mandatory.</p>
+                    <div class="field-group">
+                        <label for="register-name">Brand Manager / Contact Name <span style="color: #e11d48;">*</span></label>
+                        <input type="text" id="register-name" placeholder="Full Name" autocomplete="name" required>
                     </div>
-                </div>
-                <div class="field-group">
-                    <label for="register-confirm">Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
-                        <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
+                    <div class="field-group">
+                        <label for="register-org">Brand / Agency Name <span style="color: #e11d48;">*</span></label>
+                        <input type="text" id="register-org" placeholder="Nova Brand House" autocomplete="organization" required>
                     </div>
-                </div>
-                <span class="demo-hint">Login is enabled after Admin verifies your submitted document.</span>
-                <button type="submit" class="submit-btn" id="register-submit">Submit for Admin Verification</button>
-            </form>
+                    <div class="field-group">
+                        <label for="register-email">Brand Email <span style="color: #e11d48;">*</span></label>
+                        <input type="email" id="register-email" placeholder="team@brand.com" autocomplete="email" required>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-doc-type">Document Type <span style="color: #e11d48;">*</span></label>
+                            <select id="register-doc-type" required>
+                                <option value="">-- Select --</option>
+                                <option value="Brand Incorporation">Brand Incorporation</option>
+                                <option value="GST / Tax Certificate">GST / Tax Certificate</option>
+                                <option value="Agency Authorization Letter">Agency Authorization Letter</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-doc-number">Document Number <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-doc-number" placeholder="BRND-2026-001" required>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-doc-file">Upload Verification Document (PDF / Image) <span style="color: #e11d48;">*</span></label>
+                        <input type="file" id="register-doc-file" accept=".pdf,.png,.jpg,.jpeg" required>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-password">Password <span style="color: #e11d48;">*</span></label>
+                            <div class="password-wrapper">
+                                <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-confirm">Confirm Password <span style="color: #e11d48;">*</span></label>
+                            <div class="password-wrapper">
+                                <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="demo-hint">Login is enabled after Admin verifies your submitted document.</span>
+                    <button type="submit" class="submit-btn" id="register-submit">Submit for Admin Verification</button>
+                </form>
+            </section>
         </section>
     </main>
-    <script src="/js/module-auth.js"></script>
+
+    <!-- Brand Promotions Video Tour Modal -->
+    <div id="tour-modal" class="terms-modal" role="dialog" aria-modal="true" aria-labelledby="tour-modal-title" hidden>
+        <div class="terms-modal-card tour-modal-card">
+            <div class="terms-modal-header">
+                <div>
+                    <span class="tour-eyebrow">INTERACTIVE WALKTHROUGH</span>
+                    <h2 id="tour-modal-title">Brand Promotions Video Tour</h2>
+                </div>
+                <button type="button" id="tour-modal-close" class="terms-modal-close" aria-label="Close Video Tour">&times;</button>
+            </div>
+
+            <div class="tour-player-stage">
+                <div class="tour-stage-top">
+                    <span id="tour-chapter-pill" class="tour-chapter-pill">Chapter 1 of 4</span>
+                    <span id="tour-time-label" class="tour-time-label">00:00 / 00:28</span>
+                </div>
+                <div class="tour-video-wrap">
+                    <canvas id="tour-canvas" width="1280" height="720" hidden></canvas>
+                    <video id="tour-video" class="tour-video" autoplay muted playsinline></video>
+                </div>
+                <div id="tour-progress-track" class="tour-progress-track" title="Click to seek">
+                    <div id="tour-progress-bar" class="tour-progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="tour-controls">
+                    <div class="tour-controls-left">
+                        <button type="button" id="tour-prev-btn" class="tour-ctrl-btn" aria-label="Previous chapter">&larr; Prev</button>
+                        <button type="button" id="tour-play-btn" class="tour-ctrl-btn primary">Pause</button>
+                        <button type="button" id="tour-next-btn" class="tour-ctrl-btn" aria-label="Next chapter">Next &rarr;</button>
+                        <button type="button" id="tour-sound-btn" class="tour-ctrl-btn" aria-label="Toggle voiceover sound" aria-pressed="true">Sound: On</button>
+                        <button type="button" id="tour-fullscreen-btn" class="tour-ctrl-btn" aria-label="Fullscreen video">Fullscreen</button>
+                    </div>
+                    <button type="button" id="tour-try-demo" class="tour-demo-btn">Fill Demo Login &amp; Sign In</button>
+                </div>
+            </div>
+
+            <div id="tour-chapters" class="tour-chapters"></div>
+        </div>
+    </div>
+
+    <script src="/js/module-auth.js?v=2"></script>
 </body>
 </html>

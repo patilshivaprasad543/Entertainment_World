@@ -1,155 +1,344 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brand Promotions Dashboard — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css?v=4">
-    <link rel="stylesheet" href="/css/vendor-portal.css?v=4">
-</head>
-<body data-role="BRAND" data-login="/brands-login.html">
-    <nav class="ew-navbar">
-        <a href="/index.html" class="ew-brand">
-            <div class="ew-logo-box" aria-hidden="true">&#9733;</div>
-            <div class="ew-brand-text">
-                <strong>Entertainment World</strong>
-                <span>Brands &amp; Ad Agency Dashboard</span>
-            </div>
-        </a>
-        <div class="ew-nav-links">
-            <a href="/index.html">Main Modules</a>
-            <a href="/pricing.html">Agency Passes</a>
-            <a href="#vendor-marketplace-section">Vendor Services</a>
-            <a href="#ew-subscription-root">My Subscription</a>
-        </div>
-        <div class="ew-nav-actions">
-            <div class="ew-user-chip">
-                <span id="user-name" style="font-weight:700;"></span>
-                <span class="ew-verified-tick" title="Verified">&#10003;</span>
-            </div>
-            <button type="button" id="signout-btn" class="ew-pill-btn ew-btn-crimson">Sign Out</button>
-        </div>
-    </nav>
-    <main class="dashboard-page">
-        <header class="dashboard-topbar">
-            <div>
-                <span class="module-tag">Brands &amp; Advertisement Agencies</span>
-                <h1>Brand Promotions Dashboard</h1>
-            </div>
-            <div class="dashboard-user">
-                <div class="user-meta">
-                    <span id="user-email"></span>
-                </div>
-            </div>
-        </header>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f7f5"><title>Brand &amp; Co. — Creator Marketplace</title>
+<style>
+:root {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #141219;
+    background: #faf7f2;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #faf7f2; color: #141219; }
 
-        <section class="dashboard-grid">
-            <article class="dash-widget">
-                <h3>Campaigns &amp; Sponsorships</h3>
-                <p>Launch product placements, event sponsorships, and promotional tie-ins.</p>
-            </article>
-            <article class="dash-widget">
-                <h3>Talent Collaborations</h3>
-                <p>Partner with professional actors and creators for brand endorsements.</p>
-            </article>
-            <article class="dash-widget">
-                <h3>Reach &amp; ROI</h3>
-                <p>Track campaign impressions, engagement, and conversion metrics.</p>
-            </article>
-        </section>
+/* Sign-In Screen */
+.signin-screen {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: radial-gradient(circle at top left, rgba(225, 29, 72, 0.08), transparent 45%), #faf7f2;
+}
+.signin-card {
+    width: min(100%, 460px);
+    background: #ffffff;
+    border: 1px solid #e8e2d9;
+    border-radius: 18px;
+    padding: 34px;
+    box-shadow: 0 12px 36px rgba(20, 20, 24, 0.08);
+}
+.signin-card h1 { font-size: 30px; letter-spacing: -0.03em; margin: 12px 0 8px; color: #141219; }
+.signin-card .field { margin-top: 16px; }
+.signin-card .button { width: 100%; margin-top: 18px; }
+.signin-brand { display: flex; align-items: center; gap: 12px; }
+.signin-message { min-height: 20px; margin-top: 12px; color: #be123c; font-size: 13px; font-weight: 600; }
 
-        <section id="vendor-marketplace-section" class="verification-section" data-mode="booking">
-            <div class="panel-header">
-                <h2>Vendor Collaboration &amp; Promotional Production Services</h2>
-                <button type="button" id="mkt-refresh-btn" class="signout-btn">Refresh</button>
-            </div>
-            <div id="mkt-banner" class="status-banner" role="alert" hidden></div>
+/* Right Floating Navigation Card (Matches Professional Dashboard) */
+.side {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    bottom: auto;
+    left: auto;
+    width: 260px;
+    max-height: calc(100vh - 48px);
+    background: #ffffff;
+    border: 1px solid #e8e2d9;
+    border-radius: 16px;
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: 0 4px 18px rgba(17, 24, 39, 0.06);
+}
+.side > .brand, .side > .muted, .side > .nav, .side > .plan-summary { flex-shrink: 0; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 0 8px; margin-bottom: 24px; }
+.mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #e11d48, #be123c);
+    color: #fbbf24;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 19px;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.28);
+}
+.muted { color: #6b7280; }
+.nav {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    color: #374151;
+    font-size: 13.5px;
+    font-weight: 600;
+    margin: 2px 0;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.nav:hover { background: #faf7f2; color: #e11d48; }
+.nav.active {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #be123c;
+    font-weight: 700;
+}
+.plan-summary {
+    margin-top: 18px;
+    background: #fef7e6;
+    border: 1px solid #fde68a;
+    border-radius: 14px;
+    padding: 14px;
+}
 
-            <div class="filter-bar">
-                <input type="text" id="mkt-search" placeholder="Search LED walls, photography, staging...">
-                <select id="mkt-category">
-                    <option value="">All Categories</option>
-                    <option value="LED Walls &amp; Displays">LED Walls &amp; Displays</option>
-                    <option value="Photography &amp; Videography">Photography &amp; Videography</option>
-                    <option value="Stage Equipment">Stage Equipment</option>
-                    <option value="Sound Systems">Sound Systems</option>
-                    <option value="Props &amp; Set Design">Props &amp; Set Design</option>
-                    <option value="Catering &amp; Event Supplies">Catering &amp; Event Supplies</option>
-                    <option value="Other Services">Other Services</option>
-                </select>
-                <input type="number" id="mkt-max-price" placeholder="Max Price/Day">
-                <input type="text" id="mkt-location" placeholder="Location / City">
-                <button type="button" id="mkt-filter-btn" class="btn-sm btn-primary">Filter</button>
-            </div>
+/* Main Workspace (Left / Center Column) */
+.content {
+    margin-left: auto;
+    margin-right: 304px;
+    padding: 24px 32px 60px;
+    max-width: 1120px;
+}
+.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: #141219;
+    color: #ffffff;
+    padding: 14px 20px;
+    border-radius: 14px;
+    margin-bottom: 26px;
+    box-shadow: 0 6px 20px rgba(20, 18, 25, 0.12);
+}
+.top .muted { color: #d4d1dc; }
+.user { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 650; }
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #e11d48;
+    color: #ffffff;
+    font-weight: 800;
+}
+.top .button.secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+}
+.top .button.secondary:hover { background: rgba(255, 255, 255, 0.12); }
 
-            <div id="mkt-services-grid" class="marketplace-grid"></div>
+.eyebrow { font-size: 10.5px; letter-spacing: 0.18em; font-weight: 800; color: #be123c; text-transform: uppercase; }
+.title { font-size: 32px; letter-spacing: -0.03em; font-weight: 800; margin: 6px 0; color: #141219; }
+.sub { color: #6b7280; font-size: 14px; line-height: 1.5; }
 
-            <div class="panel-card" style="margin-top:1.5rem;">
-                <div class="panel-header"><h3>Campaign Service Requests &amp; Settlements</h3></div>
-                <div class="table-wrap">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Booking</th>
-                                <th>Service</th>
-                                <th>Campaign Dates &amp; Venue</th>
-                                <th>Estimate</th>
-                                <th>Status</th>
-                                <th>Invoice &amp; Settlement</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mkt-bookings-tbody"></tbody>
-                    </table>
-                </div>
-            </div>
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+.plan, .card, .profile-card, .campaign-form {
+    background: #ffffff;
+    border: 1px solid #e8e2d9;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.06);
+}
+.plan.current {
+    border: 2px solid #e11d48;
+    box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.12);
+}
+.badge {
+    display: inline-block;
+    background: #fff1f2;
+    color: #be123c;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.price { font-size: 30px; font-weight: 800; margin: 18px 0 5px; color: #141219; }
+.price small { font-size: 13px; font-weight: 400; color: #6b7280; }
+.list { margin: 18px 0; padding: 0; list-style: none; }
+.list li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #f3f0ea; padding: 10px 0; font-size: 13px; }
+.list li span { color: #6b7280; }
 
-            <div class="panel-card">
-                <div class="panel-header"><h3>Campaign Vendor Notifications</h3></div>
-                <div id="mkt-notifications-list" class="verification-list"></div>
-            </div>
-        </section>
-        <div id="ew-subscription-root"></div>
-        <div id="ew-social-root"></div>
-    </main>
+.button {
+    border: 0;
+    border-radius: 10px;
+    background: #e11d48;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 11px 16px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.button:hover { background: #be123c; }
+.button:disabled { background: #f3f4f6; color: #9ca3af; cursor: default; }
+.button.secondary { background: #ffffff; color: #141219; border: 1px solid #e5ddd3; }
+.button.secondary:hover { background: #faf7f2; }
+.button.light { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+.plan .button { width: 100%; }
+.note { margin-top: 16px; font-size: 12px; color: #6b7280; }
 
-    <div id="mkt-book-modal" class="modal-backdrop" hidden>
-        <div class="modal-box">
-            <div class="panel-header">
-                <h3 id="mb-title">Request Campaign Service</h3>
-                <button type="button" id="mb-close" class="btn-sm btn-secondary">&times;</button>
-            </div>
-            <p id="mb-subtitle" class="brand-subtitle" style="margin-bottom:1rem;"></p>
-            <form id="mb-form" class="auth-form">
-                <input type="hidden" id="mb-service-id">
-                <div class="field-group">
-                    <label for="mb-qty">Required Quantity</label>
-                    <input type="number" id="mb-qty" min="1" required>
-                </div>
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="mb-start">Campaign Start Date</label>
-                        <input type="date" id="mb-start" required>
-                    </div>
-                    <div class="field-group">
-                        <label for="mb-end">Campaign End Date</label>
-                        <input type="date" id="mb-end" required>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label for="mb-location">Activation / Delivery Location</label>
-                    <input type="text" id="mb-location" placeholder="Mall, venue, or shoot city" required>
-                </div>
-                <div class="field-group">
-                    <label for="mb-notes">Campaign Requirements &amp; Deliverables</label>
-                    <textarea id="mb-notes" rows="2" placeholder="Branding specs, deliverables, setup SLA"></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Submit Campaign Request</button>
-            </form>
-        </div>
-    </div>
+.profile-card { max-width: 940px; margin-top: 22px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 7px; font-size: 13px; font-weight: 600; color: #374151; }
+.field input, .field select, .field textarea, .searchbar input, .searchbar select {
+    width: 100%;
+    border: 1px solid #e5ddd3;
+    border-radius: 10px;
+    padding: 11px 13px;
+    font: inherit;
+    font-weight: 400;
+    color: #141219;
+    background: #ffffff;
+}
+.field input:focus, .field select:focus, .field textarea:focus, .searchbar input:focus, .searchbar select:focus {
+    outline: none;
+    border-color: #e11d48;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.12);
+}
+.field textarea { min-height: 110px; resize: vertical; }
+.field.full { grid-column: 1 / -1; }
+.form-actions { display: flex; align-items: center; gap: 16px; margin-top: 20px; }
+.status { font-size: 13px; color: #047857; font-weight: 600; }
+.required-star { color: #e11d48; font-weight: 800; }
+.searchbar { display: grid; grid-template-columns: minmax(180px, 1.3fr) repeat(4, minmax(130px, 1fr)) auto; gap: 10px; margin: 20px 0; }
 
-    <script src="/js/dashboard.js"></script>
-    <script src="/js/marketplace-client.js"></script>
-    <script src="/js/subscription-widget.js"></script>
-</body>
-</html>
+.review-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.review-form label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 650; }
+.review-form select, .review-form textarea { border: 1px solid #e5ddd3; border-radius: 10px; padding: 10px; font: inherit; background: #ffffff; }
+.review-form textarea { min-height: 72px; resize: vertical; }
+.review-form .full { grid-column: 1 / -1; }
+.review-form .button { justify-self: start; }
+
+.team-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.team-choice { display: flex; align-items: flex-start; gap: 11px; background: #ffffff; border: 1px solid #e8e2d9; border-radius: 14px; padding: 14px; cursor: pointer; }
+.team-choice input { width: auto; margin-top: 4px; }
+.team-choice strong { display: block; }
+.team-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fef7e6; border: 1px solid #fde68a; border-radius: 14px; padding: 16px; margin-top: 18px; }
+
+.results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.card-top { display: flex; justify-content: space-between; gap: 16px; }
+.card h3 { margin: 0 0 5px; color: #141219; }
+.tag { display: inline-block; background: #fff1f2; color: #be123c; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 600; margin: 3px 4px 0 0; }
+.card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.card-actions .button { font-size: 12px; padding: 9px 12px; }
+.rate { font-weight: 750; color: #141219; }
+.campaign-form { max-width: 900px; margin-top: 22px; }
+.campaign-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
+
+.message-layout { max-width: 900px; }
+.chat-box { background: #ffffff; border: 1px solid #e8e2d9; border-radius: 16px; min-height: 200px; max-height: 420px; overflow: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.bubble { max-width: 78%; padding: 11px 14px; border-radius: 14px; background: #faf7f2; border: 1px solid #e8e2d9; font-size: 14px; line-height: 1.45; }
+.bubble.brand-msg { background: #e11d48; color: #ffffff; border-color: #e11d48; align-self: flex-end; }
+.bubble small { display: block; opacity: 0.75; font-size: 10px; margin-top: 5px; }
+.chat-form { display: flex; gap: 10px; margin-top: 12px; }
+.chat-form textarea { flex: 1; border: 1px solid #e5ddd3; border-radius: 10px; padding: 12px; font: inherit; resize: vertical; min-height: 48px; }
+.chat-picker { max-width: 360px; margin: 18px 0; }
+.chat-picker select { width: 100%; border: 1px solid #e5ddd3; border-radius: 10px; padding: 12px; background: #ffffff; font: inherit; }
+
+.empty { background: #ffffff; border: 1px dashed #d5cec4; border-radius: 16px; padding: 28px; text-align: center; color: #6b7280; }
+.mobile-nav { display: none; }
+[hidden] { display: none !important; }
+
+@media (max-width: 960px) {
+    .side { display: none; }
+    .content { margin: 0; padding: 20px 16px 90px; max-width: 100%; }
+    .plans, .results, .campaign-list, .team-choices { grid-template-columns: 1fr; }
+    .title { font-size: 28px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .field.full { grid-column: auto; }
+    .searchbar { grid-template-columns: 1fr; }
+    .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        inset-inline: 0;
+        background: #ffffff;
+        border-top: 1px solid #e8e2d9;
+        justify-content: flex-start;
+        gap: 18px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 12px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 30;
+    }
+    .mobile-nav span { flex: 0 0 auto; cursor: pointer; }
+    .top { margin-bottom: 20px; }
+    .chat-form { flex-direction: column; }
+}
+</style></head><body>
+<aside id="workspaceSide" class="side"><div class="brand"><div class="mark">B</div><div><b>brand &amp; co.</b><div class="muted" style="font-size:10px;letter-spacing:.14em">CREATOR MARKETPLACE</div></div></div>
+<div class="muted" style="font-size:10px;font-weight:800;letter-spacing:.18em;padding:0 12px;margin-bottom:8px">WORKSPACE</div>
+<div class="nav" data-page="subscription">✦ &nbsp;My subscription</div><div class="nav" data-page="company">⚙ &nbsp;Company details</div><div class="nav" data-page="talents">⌕ &nbsp;Discover talent</div><div class="nav" data-page="wishlist">♡ &nbsp;Wishlist</div><div class="nav" data-page="campaigns">▤ &nbsp;Project posts</div><div class="nav" data-page="team-builder">◈ &nbsp;Influencer team builder</div><div class="nav" data-page="team-seats">♙ &nbsp;Team seats</div><div class="nav" data-page="messages">▱ &nbsp;Messages</div><div class="nav" data-page="reviews">★ &nbsp;Creator reviews</div><div class="nav" data-page="requests">◷ &nbsp;Requests &amp; alerts</div><div class="nav" data-page="billing">₹ &nbsp;Payments &amp; invoices</div>
+<div class="plan-summary"><div class="muted" style="font-size:11px;font-weight:700">YOUR CURRENT PLAN</div><div id="currentPlan" style="font-weight:750;margin-top:5px">Premium</div><div class="muted" style="font-size:12px;margin-top:3px">Manage your plan below</div></div></aside>
+<main id="workspaceMain" class="content"><header class="top"><div><div class="muted" style="font-size:12px">Brand workspace / <span id="crumb">My subscription</span></div><div id="pageTitle" style="font-weight:700;margin-top:4px">My subscription</div></div><div class="user"><div class="avatar">AN</div><span><span id="brandLabel">Atelier North</span><small id="accountEmailLabel" class="muted" style="display:block;font-size:11px"></small></span><button id="signOut" class="button secondary" type="button" style="padding:9px 12px">Sign out</button></div></header>
+<section id="page-subscription"><div class="eyebrow">PLANS THAT SCALE WITH YOU</div><h1 class="title">Choose your plan</h1><p class="sub">Find the right tools for your creator partnerships. Switch plans as your brand grows.</p><div id="plans" class="plans"></div><p id="subscriptionMessage" class="note">Plan selection is in demo mode. Payment is not collected.</p></section>
+<section id="page-company" hidden><div class="eyebrow">YOUR BRAND PROFILE</div><h1 class="title">Company details</h1><p class="sub">Add the information creators need to understand and trust your company. Fields marked <span class="required-star">*</span> are required.</p>
+<form id="companyForm" class="profile-card"><div class="form-grid">
+<label class="field">Company / brand name <span class="required-star" aria-label="required">*</span><input name="brandName" required autocomplete="organization"></label><label class="field">Registered legal name<input name="legalEntityName" autocomplete="organization"></label>
+<label class="field">Company type <span class="required-star" aria-label="required">*</span><select name="companyType" required><option value="">Select type</option><option>Private Limited</option><option>Public Limited</option><option>LLP</option><option>Partnership</option><option>Sole Proprietorship</option><option>Other</option></select></label>
+<label class="field">Industry <span class="required-star" aria-label="required">*</span><select name="industryCategory" required><option value="">Select industry</option><option>Fashion &amp; Apparel</option><option>Beauty &amp; Personal Care</option><option>Food &amp; Beverage</option><option>Health &amp; Wellness</option><option>Travel &amp; Hospitality</option><option>Technology</option><option>Consumer Electronics</option><option>Home &amp; Lifestyle</option><option>Entertainment &amp; Media</option><option>Education</option><option>Finance</option><option>Automotive</option><option>Retail &amp; E-commerce</option><option>Sports &amp; Fitness</option><option>Other</option></select></label>
+<label class="field">Year established<input name="establishedYear" type="number" min="1800" max="2100"></label><label class="field">Company website<input name="websiteUrl" type="url" placeholder="https://example.com"></label>
+<label class="field">Instagram handle<input name="instagramHandle" placeholder="@yourbrand"></label><label class="field">Company logo URL<input name="logoUrl" type="url" placeholder="https://example.com/logo.png"><img id="companyLogoPreview" alt="Company logo preview" hidden style="max-width:180px;max-height:90px;object-fit:contain"></label><label class="field">Your designation<input name="contactDesignation" maxlength="120" placeholder="e.g. Marketing Director"></label><label class="field">Billing state<input name="billingState"></label>
+<label class="field full">About your company<textarea name="aboutCompany" maxlength="2000" placeholder="Tell creators what your company does and what makes your brand unique."></textarea></label>
+</div><div class="form-actions"><button id="editCompany" class="button light" type="button" hidden>Edit company details</button><button id="saveCompany" class="button" type="submit" hidden>Save company details</button><button id="goDiscover" class="button light" type="button" hidden>Find creators</button><span id="companyMessage" class="status" role="status"></span></div></form></section>
+<section id="page-talents" hidden><div class="eyebrow">CREATOR DIRECTORY</div><h1 class="title">Find the right talent</h1><p class="sub">Search creators and talent, save people to your wishlist, or start a collaboration conversation.</p>
+<form id="searchForm" class="searchbar"><input name="q" placeholder="Search by creator name"><select name="category" aria-label="Talent type"><option value="">All talent types</option><option>Influencer</option><option>Actor</option><option>Model</option><option>UGC Creator</option><option>Makeup Artist</option></select><select name="specialty" aria-label="Creator niche"><option value="">All creator niches</option><option>Food Influencer</option><option>Makeup Creator</option><option>Fashion Creator</option><option>Lifestyle Creator</option></select><select name="city" aria-label="Location"><option value="">All locations</option><option>Bengaluru</option><option>Mumbai</option><option>Delhi NCR</option><option>Chennai</option><option>Hyderabad</option><option>Pan-India</option></select><select name="language" aria-label="Language"><option value="">All languages</option><option>English</option><option>Hindi</option><option>Kannada</option><option>Tamil</option><option>Gujarati</option><option>Telugu</option></select><button class="button" type="submit">Search talent</button></form><div id="talentResults" class="results"></div></section>
+<section id="page-wishlist" hidden><div class="eyebrow">YOUR SHORTLIST</div><h1 class="title">Wishlist</h1><p class="sub">Keep promising creators together while you plan a campaign.</p><div id="wishlistResults" class="results"></div></section>
+<section id="page-campaigns" hidden><div class="eyebrow">UPCOMING WORK</div><h1 class="title">Project posts</h1><p class="sub">Post an upcoming ad, shoot, or collaboration brief for your creator projects.</p>
+<form id="campaignForm" class="campaign-form"><div class="form-grid"><label class="field">Project title<input name="title" required placeholder="Summer launch creator campaign"></label>
+<label class="field">Project type<select name="shootType"><option>Advertisement</option><option>Product launch</option><option>Photo shoot</option><option>Video campaign</option><option>Event appearance</option><option>UGC collaboration</option><option>Other collaboration</option></select></label>
+<label class="field">City / location<input name="shootCity" placeholder="City or remote"></label><label class="field">Budget per talent (₹)<input name="budgetPerTalent" type="number" min="0" step="500" required placeholder="25000"></label>
+<label class="field">Deliverables<input name="deliverables" placeholder="1 Reel, 3 Stories, 5 photos"></label><label class="field">Usage rights duration<input name="usageRightsDuration" placeholder="e.g. 3 months"></label>
+<label class="field full">Project brief<textarea name="brief" maxlength="4000" required placeholder="Describe the campaign, collaboration goals, target audience, timeline and how creators can participate."></textarea></label>
+<label class="field full" style="flex-direction:row;align-items:center"><input name="productShippingRequired" type="checkbox" style="width:auto"> Product needs to be shipped to the creator</label></div>
+<div class="form-actions"><button id="postCampaign" class="button" type="submit">Post upcoming project</button><button id="cancelCampaignEdit" class="button secondary" type="button" hidden>Cancel edit</button><span id="campaignMessage" class="status" role="status"></span></div></form>
+<h2 style="margin-top:30px">Your project posts</h2><div id="campaignResults" class="campaign-list"></div></section>
+<section id="page-team-builder" hidden><div class="eyebrow">CREATOR TEAM PLANNER</div><h1 class="title">Influencer Team Builder</h1><p class="sub">Group creators for one campaign and compare the combined estimated budget before you reach out.</p><div id="teamPlanNotice" class="empty" hidden>Team Builder is included with Pro. You can preview creator selections and the combined budget now; upgrade to Pro to save a team.<div style="margin-top:14px"><button id="teamUpgrade" class="button" type="button">View Pro plan</button></div></div><form id="teamForm" class="campaign-form"><div class="form-grid"><label class="field">Team name<input name="squadName" required maxlength="120" placeholder="Summer launch creator team"></label><label class="field">Link to project post<select id="teamCampaign" name="campaignId"><option value="">No linked project</option></select></label><div class="field full"><span>Select creators</span><div class="muted" style="font-size:12px;font-weight:400">Choose two or more creators to build a collaboration team.</div><div id="teamCreatorList" class="team-choices"></div></div></div><div class="team-summary"><div><b id="selectedTalentCount">0 creators selected</b><div class="muted" style="font-size:12px">Combined estimated base budget</div></div><strong id="teamTotal">₹0</strong></div><div class="form-actions"><button id="saveTeam" class="button" type="submit">Save creator team</button><span id="teamMessage" class="status" role="status"></span></div></form><h2 style="margin-top:30px">Your saved teams</h2><div id="squadResults" class="campaign-list"></div></section>
+<section id="page-team-seats" hidden><div class="eyebrow">WORKSPACE ACCESS</div><h1 class="title">Team seats</h1><p class="sub">Check how many people your plan allows in this brand workspace.</p><div class="team-summary"><div><b id="seatUsage">Loading seat usage...</b><div class="muted" style="font-size:12px">The brand owner uses one seat.</div></div><button id="seatPlanLink" class="button secondary" type="button">View subscription</button></div><article class="card" style="max-width:940px;margin-top:18px"><h2 style="margin-top:0">Steps to check seats</h2><ol style="line-height:1.8;padding-left:22px"><li>Open <b>Team seats</b> from the workspace sidebar (scroll the sidebar if it is clipped).</li><li>Read the seat counter: it includes the owner plus the teammate records below.</li><li>Open <b>My subscription</b> to compare the current plan limit. Premium allows up to 3 seats total.</li></ol><p class="note">Adding someone below saves their name and work email as a roster entry only. This demo does not send an invitation or create a separate login.</p></article><form id="teamSeatForm" class="profile-card"><h2 style="margin-top:0">Add a teammate record</h2><div class="form-grid"><label class="field">Full name<input name="fullName" required maxlength="120" placeholder="Teammate name"></label><label class="field">Work email<input name="email" type="email" required maxlength="255" placeholder="name@company.com"></label><label class="field">Designation<input name="designation" required maxlength="120" placeholder="e.g. Campaign Manager"></label></div><div class="form-actions"><button id="addTeamSeat" class="button" type="submit">Add teammate</button><span id="teamSeatMessage" class="status" role="status"></span></div></form><h2 style="margin-top:30px">Workspace roster</h2><div id="teamSeatResults" class="campaign-list"></div></section><section id="page-reviews" hidden><div class="eyebrow">PAST COLLABORATIONS</div><h1 class="title">Creator reviews</h1><p class="sub">Rate creators after a collaboration is marked complete. Your review helps brands and creators build trust.</p><div id="reviewResults" class="results"></div></section>
+<section id="page-requests" hidden><div class="eyebrow">REQUEST TRACKER</div><h1 class="title">Requests &amp; alerts</h1><p class="sub">Unanswered campaign requests are withdrawn after 15 days. You will get a reminder before expiry.</p><div id="requestResults" class="campaign-list"></div><h2 style="margin-top:30px">Notifications</h2><div id="notificationResults" class="campaign-list"></div></section>
+<section id="page-billing" hidden><div class="eyebrow">PAYMENT RECORDS</div><h1 class="title">Payments &amp; invoices</h1><p class="sub">Create an invoice and track its payment status. This demo records payments received elsewhere; it does not process cards or transfer funds.</p><form id="invoiceForm" class="profile-card"><div class="form-grid"><label class="field">Invoice amount before tax (₹)<input name="subtotal" type="number" min="1" step="0.01" required placeholder="25000"></label></div><div class="form-actions"><button class="button" type="submit">Create invoice</button><span id="invoiceMessage" class="status" role="status"></span></div></form><h2 style="margin-top:30px">Invoices</h2><div id="invoiceResults" class="campaign-list"></div></section>
+<section id="page-messages" hidden><div class="eyebrow">COLLABORATION INBOX</div><h1 class="title">Messages</h1><p class="sub">Discuss ad details, timelines, rates, and collaboration ideas with creators.</p>
+<div class="message-layout"><label class="field chat-picker">Choose a creator<select id="chatTalent"><option value="">Select a creator to open chat</option></select></label><div id="chatMessages" class="chat-box"><div class="empty">Choose a creator to start or view a collaboration conversation.</div></div>
+<form id="chatForm" class="chat-form"><textarea id="chatText" maxlength="4000" required placeholder="Write a message about your ad or collaboration idea…" disabled></textarea><button id="sendChat" class="button" type="submit" disabled>Send message</button></form><p id="chatMessage" class="status" role="status"></p></div></section></main>
+<nav class="mobile-nav"><span data-page="talents">⌕ Talent</span><span data-page="company">⚙ Company</span><span data-page="wishlist">♡ Wishlist</span><span data-page="campaigns">▤ Projects</span><span data-page="team-builder">◈ Teams</span><span data-page="team-seats">♙ Seats</span><span data-page="messages">▱ Messages</span><span data-page="reviews">★ Reviews</span><span data-page="requests">◷ Requests</span><span data-page="billing">₹ Billing</span></nav>
+<script>
+const API_ROOT='/api/v1/brand';let brandId=1;
+const plans=[{code:'FREE',name:'Free',price:0,highlight:'A simple way to get started',features:['Basic filters','1 active campaign','Locked','Views & applicants','1 seat','Locked']},{code:'PREMIUM_1499',name:'Premium',price:1499,highlight:'For brands ready to grow',features:['Advanced filters','5 active campaigns','Top 5 matches / campaign','ROI, reach & engagement','Up to 3 seats','Locked']},{code:'PRO_3999',name:'Pro',price:3999,highlight:'For teams building at scale',features:['Advanced filters','20 active campaigns','Unlimited matches','Benchmarks included','Up to 10 seats','Creator team builder']}];
+const featureNames=['Influencer search','Active campaigns','AI matching','Campaign analytics','Team seats','Influencer team builder'];const specialtiesByName={'Aanya Rao':'Food Influencer','Rohan Mehta':'Lifestyle Creator','Diya Kapoor':'Fashion Creator','Kavya Iyer':'Makeup Creator','Arjun Nair':'Makeup Creator','Meera Shah':'Food Influencer'};let current='PREMIUM_1499',allTalents=[],activeChatId='',editingCampaignId=null,teamTalents=[];
+const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),money=v=>'₹'+Number(v||0).toLocaleString('en-IN');
+async function api(path,options={}){const r=await fetch(API_ROOT+'/'+brandId+path,{headers:{'Content-Type':'application/json',...(options.headers||{})},...options});if(!r.ok){let reason='Request failed ('+r.status+')';try{const d=await r.json();reason=d.detail||d.message||d.error||reason}catch{}throw new Error(reason)}if(r.status===204)return null;return r.json()}
+function setPage(page){document.querySelectorAll('main section[id^="page-"]').forEach(s=>s.hidden=s.id!=='page-'+page);document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page===page));const labels={subscription:'My subscription',company:'Company details',talents:'Discover talent',wishlist:'Wishlist',campaigns:'Project posts',messages:'Messages',reviews:'Creator reviews',requests:'Requests & alerts',billing:'Payments & invoices','team-builder':'Influencer Team Builder','team-seats':'Team seats'};const title=labels[page]||labels.subscription;$('#crumb').textContent=title;$('#pageTitle').textContent=title;if(page==='company')loadCompany();if(page==='talents')searchTalents();if(page==='wishlist')loadWishlist();if(page==='campaigns')loadCampaigns();if(page==='messages')loadMessageContacts();if(page==='reviews')loadReviews();if(page==='requests')loadRequestsAndNotifications();if(page==='billing')loadInvoices();if(page==='team-builder')loadTeamBuilder();if(page==='team-seats')loadTeamSeats()}
+document.querySelectorAll('[data-page]').forEach(n=>n.addEventListener('click',()=>setPage(n.dataset.page)));
+function renderPlans(){const list=$('#plans');list.innerHTML=plans.map(p=>'<article class="plan '+(current===p.code?'current':'')+'"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-size:20px">'+p.name+'</h2>'+(current===p.code?'<span class="badge">CURRENT PLAN</span>':'')+'</div><div class="price">'+money(p.price)+' <small>/ month</small></div><div class="muted">'+p.highlight+'</div><ul class="list">'+featureNames.map((f,i)=>'<li><span>'+f+'</span><b>'+p.features[i]+'</b></li>').join('')+'</ul><button class="button" '+(current===p.code?'disabled':'')+' data-plan="'+p.code+'">'+(current===p.code?'Your current plan':'Choose '+p.name)+'</button></article>').join('');$('#currentPlan').textContent=(plans.find(p=>p.code===current)||plans[0]).name;list.querySelectorAll('[data-plan]').forEach(b=>b.onclick=async()=>{try{const p=await api('/subscription',{method:'PUT',body:JSON.stringify({planType:b.dataset.plan})});current=p.planType;renderPlans();$('#subscriptionMessage').textContent='Plan updated. Payment is not collected in demo mode.'}catch(e){$('#subscriptionMessage').textContent=e.message}})}
+function refreshCompanyLogo(){const input=$('#companyForm').elements.logoUrl,preview=$('#companyLogoPreview'),url=input.value.trim();preview.hidden=!url;if(url){preview.onerror=()=>{preview.hidden=true};preview.src=url}else preview.removeAttribute('src')};function setCompanyEditing(enabled){$('#companyForm').querySelectorAll('input,select,textarea').forEach(el=>el.disabled=!enabled);$('#editCompany').hidden=enabled;$('#saveCompany').hidden=!enabled}async function loadCompany(){try{const p=await api('/profile'),form=$('#companyForm');form.reset();Object.entries(p).forEach(([k,v])=>{const el=form.elements.namedItem(k);if(!el||v==null)return;if(el.tagName==='SELECT'&&![...el.options].some(o=>o.value===String(v))){const option=document.createElement('option');option.value=v;option.textContent=v;el.add(option)}el.value=v});refreshCompanyLogo();$('#brandLabel').textContent=p.brandName||'Your brand';$('#companyMessage').textContent='';$('#goDiscover').hidden=false;setCompanyEditing(![p.brandName,p.companyType,p.industryCategory].every(v=>String(v||'').trim()))}catch(e){$('#companyMessage').textContent='Could not load profile: '+e.message;setCompanyEditing(true)}}$('#companyForm').elements.logoUrl.addEventListener('input',refreshCompanyLogo);$('#editCompany').onclick=()=>{setCompanyEditing(true);$('#companyMessage').textContent='Edit your company information, then save your changes.'}
+$('#companyForm').addEventListener('submit',async e=>{e.preventDefault();const b=$('#saveCompany');b.disabled=true;b.textContent='Saving…';const data=Object.fromEntries(new FormData(e.currentTarget).entries());data.establishedYear=data.establishedYear?Number(data.establishedYear):null;try{const p=await api('/profile',{method:'PUT',body:JSON.stringify(data)});$('#brandLabel').textContent=p.brandName||data.brandName;$('#companyMessage').textContent='Company details saved.';$('#goDiscover').hidden=false;setCompanyEditing(false)}catch(err){$('#companyMessage').textContent='Could not save details: '+err.message}finally{b.disabled=false;b.textContent='Save company details'}});
+$('#goDiscover').onclick=()=>{setPage('talents');$('#searchForm [name=q]').focus()};
+function renderTalent(t){return '<article class="card"><div class="card-top"><div><h3>'+esc(t.fullName)+'</h3><div class="muted">'+esc(t.category)+' · '+esc(t.city||'Location not listed')+'</div></div><div class="rate">★ '+Number(t.averageRating||0).toFixed(1)+'</div></div><div style="margin-top:12px"><span class="tag">'+esc(t.specialty||'General creator')+'</span><span class="tag">'+esc(t.gender||'Talent')+'</span><span class="tag">'+(t.verified?'Verified':'Community profile')+'</span><span class="tag">'+esc(t.languages||'Languages not listed')+'</span></div><p class="sub" style="margin:13px 0 0">Base rate: <b>'+money(t.baseRate)+'</b> · Engagement '+Number(t.engagementRate||0).toFixed(1)+'%</p><div class="card-actions"><button class="button light" data-wishlist="'+t.id+'">♡ Add to wishlist</button><button class="button" data-message="'+t.id+'">Message about collaboration</button></div></article>'}
+function bindTalentActions(root){root.querySelectorAll('[data-wishlist]').forEach(b=>b.onclick=async()=>{try{await api('/wishlist',{method:'POST',body:JSON.stringify({talentId:Number(b.dataset.wishlist),folderName:'My shortlist'})});b.textContent='♥ Added to wishlist';b.disabled=true}catch(e){b.textContent=e.message.includes('already')?'♥ Already saved':'Could not save'}});root.querySelectorAll('[data-message]').forEach(b=>b.onclick=()=>openChat(b.dataset.message))}
+async function searchTalents(e){if(e)e.preventDefault();const f=new FormData($('#searchForm')),params=new URLSearchParams();if(f.get('q'))params.set('q',f.get('q'));if(f.get('category'))params.set('category',f.get('category'));if(f.get('specialty'))params.set('specialty',f.get('specialty'));const box=$('#talentResults');box.innerHTML='<div class="empty">Searching creators…</div>';try{allTalents=(await api('/talents?'+params.toString())).map(t=>Object.assign({},t,{specialty:t.specialty||specialtiesByName[t.fullName]||'General creator'}));if(f.get('specialty'))allTalents=allTalents.filter(t=>t.specialty.toLowerCase()===f.get('specialty').toLowerCase());if(f.get('city'))allTalents=allTalents.filter(t=>(t.city||'').toLowerCase().includes(f.get('city').toLowerCase()));if(f.get('language'))allTalents=allTalents.filter(t=>(t.languages||'').toLowerCase().includes(f.get('language').toLowerCase()));box.innerHTML=allTalents.length?allTalents.map(renderTalent).join(''):'<div class="empty">No talent matched these filters. Try another talent type or creator niche.</div>';bindTalentActions(box);await loadMessageContacts(false)}catch(err){box.innerHTML='<div class="empty">'+esc(err.message)+'</div>'}}
+$('#searchForm').addEventListener('submit',searchTalents);
+async function loadWishlist(){const box=$('#wishlistResults');box.innerHTML='<div class="empty">Loading your shortlist…</div>';try{const result=await Promise.all([api('/wishlist'),api('/talents')]),items=result[0],talents=result[1];allTalents=talents;const byId=new Map(talents.map(t=>[t.id,t]));box.innerHTML=items.length?items.map(i=>{const t=byId.get(i.talentId);if(!t)return '<article class="card"><p>Saved creator #'+i.talentId+'</p><button class="button secondary" data-remove="'+i.id+'">Remove</button></article>';return renderTalent(t).replace('</article>','<div class="card-actions"><button class="button secondary" data-remove="'+i.id+'">Remove from wishlist</button></div></article>')}).join(''):'<div class="empty">Your wishlist is empty. Search talent and add creators you want to revisit.</div>';bindTalentActions(box);box.querySelectorAll('[data-remove]').forEach(b=>b.onclick=async()=>{try{await api('/wishlist/'+b.dataset.remove,{method:'DELETE'});loadWishlist()}catch(e){$('#companyMessage').textContent=e.message}});await loadMessageContacts(false)}catch(e){box.innerHTML='<div class="empty">'+esc(e.message)+'</div>'}}
+async function openChat(id){activeChatId=String(id);setPage('messages');await loadMessageContacts();$('#chatTalent').value=activeChatId;await loadChat();$('#chatText').focus()}
+async function loadMessageContacts(){try{if(!allTalents.length)allTalents=await api('/talents');const select=$('#chatTalent'),previous=activeChatId||select.value;select.innerHTML='<option value="">Select a creator to open chat</option>'+allTalents.map(t=>'<option value="'+t.id+'">'+esc(t.fullName)+' · '+esc(t.category)+'</option>').join('');if(previous&&allTalents.some(t=>String(t.id)===String(previous)))select.value=previous;if(select.value){activeChatId=select.value;await loadChat()}else{$('#chatMessages').innerHTML='<div class="empty">Choose a creator to start or view a collaboration conversation.</div>';$('#chatText').disabled=true;$('#sendChat').disabled=true}}catch(e){$('#chatMessages').innerHTML='<div class="empty">'+esc(e.message)+'</div>'}}
+async function loadChat(){const id=$('#chatTalent').value;if(!id){$('#chatText').disabled=true;$('#sendChat').disabled=true;return}activeChatId=id;$('#chatText').disabled=false;$('#sendChat').disabled=false;try{const messages=await api('/chat/'+id),box=$('#chatMessages');box.innerHTML=messages.length?messages.map(m=>'<div class="bubble '+(m.senderType==='BRAND'?'brand-msg':'')+'">'+esc(m.message)+'<small>'+(m.senderType==='BRAND'?'You':'Creator')+' · '+esc((m.sentAt||'').replace('T',' ').slice(0,16))+'</small></div>').join(''):'<div class="empty">No messages yet. Start the conversation with your project details.</div>';box.scrollTop=box.scrollHeight}catch(e){$('#chatMessage').textContent=e.message}}
+$('#chatTalent').addEventListener('change',loadChat);
+$('#chatForm').addEventListener('submit',async e=>{e.preventDefault();const text=$('#chatText').value.trim(),id=$('#chatTalent').value;if(!text||!id)return;$('#sendChat').disabled=true;try{await api('/chat/'+id,{method:'POST',body:JSON.stringify({message:text})});$('#chatText').value='';$('#chatMessage').textContent='Message sent.';await loadChat()}catch(err){$('#chatMessage').textContent='Could not send message: '+err.message}finally{$('#sendChat').disabled=false}});
+async function loadCampaigns(){try{const items=await api('/campaigns'),box=$('#campaignResults');box.innerHTML=items.length?items.map(c=>'<article class="card"><div class="card-top"><div><h3>'+esc(c.title)+'</h3><div class="muted">'+esc(c.shootType||'Collaboration')+' · '+esc(c.shootCity||'Remote')+'</div></div><span class="badge">'+esc(c.status||'ACTIVE')+'</span></div><p class="sub">'+esc(c.brief)+'</p><div><span class="tag">'+esc(c.deliverables||'Deliverables to discuss')+'</span><span class="tag">'+money(c.budgetPerTalent)+' / talent</span>'+(c.usageRightsDuration?'<span class="tag">'+esc(c.usageRightsDuration)+' usage rights</span>':'')+'</div><p class="muted" style="font-size:12px">Posted '+esc((c.createdAt||'').replace('T',' ').slice(0,16))+'</p><div class="card-actions"><button class="button secondary" data-edit-campaign="'+c.id+'">Edit post</button></div></article>').join(''):'<div class="empty">No project posts yet. Use the form to post an upcoming ad or collaboration.</div>';const byId=new Map(items.map(c=>[String(c.id),c]));box.querySelectorAll('[data-edit-campaign]').forEach(b=>b.onclick=()=>beginCampaignEdit(byId.get(String(b.dataset.editCampaign))))}catch(e){$('#campaignResults').innerHTML='<div class="empty">'+esc(e.message)+'</div>'}}
+function beginCampaignEdit(c){if(!c)return;const f=$('#campaignForm');editingCampaignId=c.id;['title','shootType','shootCity','budgetPerTalent','deliverables','usageRightsDuration','brief'].forEach(k=>{f.elements[k].value=c[k]??''});f.elements.productShippingRequired.checked=Boolean(c.productShippingRequired);$('#postCampaign').textContent='Save project changes';$('#cancelCampaignEdit').hidden=false;$('#campaignMessage').textContent='Editing '+c.title+'.';f.scrollIntoView({behavior:'smooth',block:'center'})}function resetCampaignEdit(){editingCampaignId=null;$('#campaignForm').reset();$('#postCampaign').textContent='Post upcoming project';$('#cancelCampaignEdit').hidden=true}$('#cancelCampaignEdit').onclick=()=>{resetCampaignEdit();$('#campaignMessage').textContent='Edit cancelled.'};$('#campaignForm').addEventListener('submit',async e=>{e.preventDefault();const b=$('#postCampaign'),f=e.currentTarget,wasEditing=editingCampaignId!==null;b.disabled=true;b.textContent=wasEditing?'Saving…':'Posting…';const data=Object.fromEntries(new FormData(f).entries());data.budgetPerTalent=Number(data.budgetPerTalent||0);data.productShippingRequired=f.elements.productShippingRequired.checked;try{await api(wasEditing?'/campaigns/'+editingCampaignId:'/campaigns',{method:wasEditing?'PUT':'POST',body:JSON.stringify(data)});resetCampaignEdit();$('#campaignMessage').textContent=wasEditing?'Project post updated.':'Your upcoming project was posted.';await loadCampaigns()}catch(err){$('#campaignMessage').textContent='Could not '+(wasEditing?'save changes: ':'post the project: ')+err.message}finally{b.disabled=false;b.textContent=editingCampaignId!==null?'Save project changes':'Post upcoming project'}});
+async function loadRequestsAndNotifications(){const requestBox=$('#requestResults'),noticeBox=$('#notificationResults');requestBox.innerHTML='<div class="empty">Loading requests…</div>';noticeBox.innerHTML='<div class="empty">Loading notifications…</div>';try{const [requests,notifications,talents]=await Promise.all([api('/requests'),api('/notifications'),api('/talents')]);const names=new Map(talents.map(t=>[String(t.id),t.fullName]));requestBox.innerHTML=requests.length?requests.slice().sort((a,b)=>String(b.sentAt).localeCompare(String(a.sentAt))).map(r=>{const status=String(r.status||'').replaceAll('_',' ');const expiry=r.expiresAt?new Date(r.expiresAt):null;let timing='';if(r.status==='PENDING_RESPONSE'&&expiry&&!Number.isNaN(expiry.valueOf())){const ms=expiry-Date.now();timing=ms>0?' · Expires in '+Math.ceil(ms/86400000)+' day(s)':' · Withdrawal is being processed'}return '<article class="card"><div class="card-top"><div><h3>'+esc(names.get(String(r.talentId))||'Creator #'+r.talentId)+'</h3><div class="muted">Campaign request #'+r.id+'</div></div><span class="badge">'+esc(status)+'</span></div><p class="sub">Sent '+esc((r.sentAt||'').replace('T',' ').slice(0,16))+esc(timing)+'</p></article>'}).join(''):'<div class="empty">No campaign requests yet. Send a collaboration request to a creator to track it here.</div>';noticeBox.innerHTML=notifications.length?notifications.map(n=>'<article class="card"><div class="card-top"><div><h3>'+esc(String(n.type||'Notification').replaceAll('_',' '))+'</h3><p class="sub">'+esc(n.message)+'</p><div class="muted">'+esc((n.createdAt||'').replace('T',' ').slice(0,16))+'</div></div><span class="badge">'+(n.read?'Read':'New')+'</span></div>'+(n.read?'':'<div class="card-actions"><button class="button secondary" data-read="'+n.id+'">Mark as read</button></div>')+'</article>').join(''):'<div class="empty">No notifications yet. Request reminders and automatic withdrawals will appear here.</div>';noticeBox.querySelectorAll('[data-read]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/notifications/'+b.dataset.read+'/read',{method:'PATCH'});await loadRequestsAndNotifications()}catch(e){b.disabled=false;b.textContent='Could not mark as read'}})}catch(e){requestBox.innerHTML='<div class="empty">Could not load requests: '+esc(e.message)+'</div>';noticeBox.innerHTML='<div class="empty">Could not load notifications: '+esc(e.message)+'</div>'}}
+async function loadInvoices(){const box=$('#invoiceResults');box.innerHTML='<div class="empty">Loading invoices…</div>';try{const invoices=await api('/invoices');box.innerHTML=invoices.length?invoices.map(i=>'<article class="card"><div class="card-top"><div><h3>'+esc(i.invoiceNumber||'Invoice #'+i.id)+'</h3><div class="muted">Issued '+esc((i.createdAt||'').replace('T',' ').slice(0,16))+'</div></div><span class="badge">'+esc(i.status||'PENDING')+'</span></div><p class="sub">Subtotal '+money(i.subtotal)+' · GST '+money(i.gstAmount)+' · TDS '+money(i.tdsAmount)+'</p><p><b>Total due: '+money(i.totalAmount)+'</b></p>'+(i.status==='PAID'?'<p class="status">Payment recorded.</p>':'<div class="card-actions"><button class="button light" data-paid="'+i.id+'">Record payment received</button></div>')+'</article>').join(''):'<div class="empty">No invoices yet. Enter an amount above to create one.</div>';box.querySelectorAll('[data-paid]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/invoices/'+b.dataset.paid+'/paid',{method:'PATCH'});await loadInvoices()}catch(e){b.disabled=false;b.textContent='Could not record payment: '+e.message}})}catch(e){box.innerHTML='<div class="empty">Could not load invoices: '+esc(e.message)+'</div>'}}
+$('#invoiceForm').addEventListener('submit',async e=>{e.preventDefault();const message=$('#invoiceMessage'),btn=e.currentTarget.querySelector('button'),subtotal=Number(new FormData(e.currentTarget).get('subtotal'));btn.disabled=true;message.textContent='Creating invoice…';try{await api('/invoices',{method:'POST',body:JSON.stringify({subtotal})});e.currentTarget.reset();message.textContent='Invoice created.';await loadInvoices()}catch(err){message.textContent='Could not create invoice: '+err.message}finally{btn.disabled=false}});
+async function loadTeamBuilder(){const creatorBox=$('#teamCreatorList'),savedBox=$('#squadResults');creatorBox.innerHTML='<div class="empty">Loading creators…</div>';$('#teamMessage').textContent='';try{const [talents,campaigns]=await Promise.all([api('/talents'),api('/campaigns')]);teamTalents=talents;$('#teamCampaign').innerHTML='<option value="">No linked project</option>'+campaigns.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join('');creatorBox.innerHTML=talents.length?talents.map(t=>'<label class="team-choice"><input type="checkbox" name="talentIds" value="'+t.id+'" data-rate="'+Number(t.baseRate||0)+'"><span><strong>'+esc(t.fullName)+'</strong><span class="muted">'+esc(t.category)+' · '+esc(t.specialty||'Creator')+' · '+esc(t.city||'Location not listed')+'</span><span class="muted" style="display:block;font-size:12px;margin-top:5px">Estimated base rate '+money(t.baseRate)+'</span></span></label>').join(''):'<div class="empty">No creators are available right now.</div>';creatorBox.querySelectorAll('input[type="checkbox"]').forEach(input=>input.addEventListener('change',renderTeamBudget));renderTeamBudget();const pro=current==='PRO_3999';$('#teamPlanNotice').hidden=pro;$('#saveTeam').disabled=!pro;$('#saveTeam').textContent=pro?'Save creator team':'Pro plan required to save';if(pro){await loadSavedTeams()}else{savedBox.innerHTML='<div class="empty">Saved teams are available on the Pro plan.</div>'}}catch(e){creatorBox.innerHTML='<div class="empty">Could not load creators: '+esc(e.message)+'</div>';savedBox.innerHTML=''}}function renderTeamBudget(){const chosen=[...document.querySelectorAll('#teamCreatorList input[type="checkbox"]:checked')];const total=chosen.reduce((sum,input)=>sum+Number(input.dataset.rate||0),0);$('#selectedTalentCount').textContent=chosen.length+' '+(chosen.length===1?'creator':'creators')+' selected';$('#teamTotal').textContent=money(total)}async function loadSavedTeams(){const box=$('#squadResults');try{const squads=await api('/squads');box.innerHTML=squads.length?squads.map(s=>{const names=(s.talentIds||'').split(',').map(id=>teamTalents.find(t=>String(t.id)===id.trim())?.fullName).filter(Boolean);return '<article class="card"><div class="card-top"><div><h3>'+esc(s.squadName||'Creator team')+'</h3><div class="muted">'+(names.length?names.map(esc).join(' · '):'Creators selected')+'</div></div><strong>'+money(s.combinedBudget)+'</strong></div></article>'}).join(''):'<div class="empty">No teams saved yet. Select creators above to create your first campaign team.</div>'}catch(e){box.innerHTML='<div class="empty">Could not load saved teams: '+esc(e.message)+'</div>'}}$('#teamUpgrade').onclick=()=>setPage('subscription');$('#teamForm').addEventListener('submit',async e=>{e.preventDefault();if(current!=='PRO_3999')return;const form=e.currentTarget,chosen=[...form.querySelectorAll('input[name="talentIds"]:checked')],message=$('#teamMessage'),button=$('#saveTeam');if(chosen.length<2){message.textContent='Select at least two creators to build a team.';return}const campaignId=$('#teamCampaign').value;const body={squadName:form.elements.squadName.value.trim(),talentIds:chosen.map(input=>input.value).join(','),campaignId:campaignId?Number(campaignId):null};button.disabled=true;message.textContent='Saving team…';try{await api('/squads',{method:'POST',body:JSON.stringify(body)});message.textContent='Creator team saved.';form.reset();renderTeamBudget();await loadSavedTeams()}catch(err){message.textContent='Could not save team: '+err.message}finally{button.disabled=false}});
+const seatLimits={FREE:1,PREMIUM_1499:3,PRO_3999:10};
+async function loadTeamSeats(){const box=$('#teamSeatResults'),message=$('#teamSeatMessage'),form=$('#teamSeatForm'),limit=seatLimits[current]||1;message.textContent='';try{const [members,profile]=await Promise.all([api('/team-members'),api('/profile')]);const used=members.length+1,available=Math.max(0,limit-used);$('#seatUsage').textContent=used+' of '+limit+' seats used'+(available?' · '+available+' available':' · plan limit reached');box.innerHTML='<article class="card"><h3>Brand owner</h3><div class="muted">'+esc($('#brandLabel').textContent)+' · '+esc($('#accountEmailLabel').textContent||'Owner account')+'</div><div class="muted">'+esc(profile.contactDesignation||'Owner')+'</div><span class="tag">1 seat</span></article>'+(members.length?members.map(m=>'<article class="card"><div class="card-top"><div><h3>'+esc(m.fullName||'Teammate')+'</h3><div class="muted">'+esc(m.email||'No email')+'</div><div class="muted">'+esc(m.designation||'Designation not provided')+'</div></div><span class="tag">'+esc(m.role||'MEMBER')+'</span></div></article>').join(''):'<div class="empty">No teammate records yet.</div>');const canAdd=available>0;form.querySelectorAll('input').forEach(input=>input.disabled=!canAdd);$('#addTeamSeat').disabled=!canAdd;$('#addTeamSeat').textContent=canAdd?'Add teammate record':'No seats available';if(!canAdd)message.textContent='Your current plan has no available seats. The owner is counted as one seat.'}catch(e){box.innerHTML='<div class="empty">Could not load team seats: '+esc(e.message)+'</div>';$('#seatUsage').textContent='Seat usage unavailable'}}
+$('#seatPlanLink').onclick=()=>setPage('subscription');
+$('#teamSeatForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,button=$('#addTeamSeat'),message=$('#teamSeatMessage'),data=Object.fromEntries(new FormData(form).entries());button.disabled=true;message.textContent='Adding teammate record...';try{await api('/team-members',{method:'POST',body:JSON.stringify(data)});form.reset();await loadTeamSeats();message.textContent='Teammate record added.'}catch(err){message.textContent='Could not add teammate: '+err.message;button.disabled=false}});async function loadReviews(){const box=$('#reviewResults');box.innerHTML='<div class="empty">Loading completed collaborations…</div>';try{const [items,submitted,talents]=await Promise.all([api('/requests'),api('/reviews'),api('/talents')]);const byId=new Map(talents.map(t=>[String(t.id),t]));const reviewed=new Set(submitted.map(r=>String(r.hireRequestId)));const completed=items.filter(r=>String(r.status).toUpperCase()==='COMPLETED');box.innerHTML=completed.length?completed.map(r=>{const t=byId.get(String(r.talentId));const name=t?t.fullName:'Creator #'+r.talentId;return '<article class="card"><div class="card-top"><div><h3>'+esc(name)+'</h3><div class="muted">Completed collaboration · Request #'+r.id+'</div></div><div class="rate">'+(reviewed.has(String(r.id))?'✓ Reviewed':'Ready to review')+'</div></div>'+(reviewed.has(String(r.id))?'<p class="sub">Your review has been submitted for this completed collaboration.</p>':'<form class="review-form" data-review="'+r.id+'"><label>Overall rating<select name="overallRating" required><option value="">Choose 1–5</option><option value="5">5 — Excellent</option><option value="4">4 — Great</option><option value="3">3 — Good</option><option value="2">2 — Fair</option><option value="1">1 — Poor</option></select></label><label>Content quality<select name="qualityRating" required><option value="">Choose 1–5</option><option value="5">5 — Excellent</option><option value="4">4 — Great</option><option value="3">3 — Good</option><option value="2">2 — Fair</option><option value="1">1 — Poor</option></select></label><label>Punctuality<select name="punctualityRating" required><option value="">Choose 1–5</option><option value="5">5 — Excellent</option><option value="4">4 — Great</option><option value="3">3 — Good</option><option value="2">2 — Fair</option><option value="1">1 — Poor</option></select></label><label>Communication<select name="communicationRating" required><option value="">Choose 1–5</option><option value="5">5 — Excellent</option><option value="4">4 — Great</option><option value="3">3 — Good</option><option value="2">2 — Fair</option><option value="1">1 — Poor</option></select></label><label class="full">Review<textarea name="reviewComment" maxlength="2000" placeholder="Share details about working with this creator"></textarea></label><label class="full" style="flex-direction:row;align-items:center"><input type="checkbox" name="wouldHireAgain"> I would work with this creator again</label><button class="button" type="submit">Submit review</button><span class="status" role="status"></span></form>')+'</article>'}).join(''):'<div class="empty">No completed collaborations to review yet. Once a project is marked complete, you can leave a rating here.</div>';box.querySelectorAll('form[data-review]').forEach(form=>form.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('button'),status=form.querySelector('[role="status"]'),data=Object.fromEntries(new FormData(form).entries());data.hireRequestId=Number(form.dataset.review);['overallRating','qualityRating','punctualityRating','communicationRating'].forEach(k=>data[k]=Number(data[k]));data.wouldHireAgain=form.elements.wouldHireAgain.checked;btn.disabled=true;status.textContent='Submitting…';try{await api('/reviews',{method:'POST',body:JSON.stringify(data)});status.textContent='Review submitted. Thank you for sharing your experience.';await loadReviews()}catch(err){status.textContent='Could not submit review: '+err.message;btn.disabled=false}}))}catch(e){box.innerHTML='<div class="empty">Could not load completed collaborations: '+esc(e.message)+'</div>'}}
+async function initPortal(profile){brandId=Number(profile.brandId||1);current=profile.planType||'FREE';allTalents=[];activeChatId='';editingCampaignId=null;$('#brandLabel').textContent=profile.brandName||'Your Brand';$('#accountEmailLabel').textContent=profile.accountEmail||'';$('#workspaceSide').hidden=false;$('#workspaceMain').hidden=false;renderPlans();setPage('subscription');try{const overview=await api('/overview');if(overview.planType){current=overview.planType;renderPlans()}}catch{}}
+$('#signOut').addEventListener('click',()=>{sessionStorage.removeItem('ew_active_user');localStorage.removeItem('ew_active_user');window.location.href='/brands-login.html'});
+(async()=>{try{const raw=sessionStorage.getItem('ew_active_user')||localStorage.getItem('ew_active_user');const u=raw?JSON.parse(raw):null;if(u&&u.role==='BRAND'){const res=await fetch(API_ROOT+'/auth/sign-in',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:u.email||'brand@entertainmentworld.com',password:'brand-session'})});if(res.ok){await initPortal(await res.json());return}await initPortal({brandId:1,brandName:u.fullName||'Your Brand',accountEmail:u.email||'',planType:'FREE'});return}await initPortal({brandId:1,brandName:'Atelier North',accountEmail:'brand@entertainmentworld.com',planType:'FREE'})}catch{await initPortal({brandId:1,brandName:'Atelier North',accountEmail:'brand@entertainmentworld.com',planType:'FREE'})}})();
+</script></body></html>

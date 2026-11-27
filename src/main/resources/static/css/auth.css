@@ -1177,73 +1177,98 @@ body[data-mode="professional"] {
     color: #6b7280;
 }
 
-body[data-mode="professional"] .tab-bar {
+body[data-mode="professional"] .tab-bar,
+.pro-auth-card .tab-bar {
     background: #faf7f4;
     border: 1px solid #ece6de;
     padding: 4px;
     border-radius: 10px;
 }
 
-body[data-mode="professional"] .tab-btn {
+body[data-mode="professional"] .tab-btn,
+.pro-auth-card .tab-btn {
     color: #6b7280;
 }
 
-body[data-mode="professional"] .tab-btn.active {
+body[data-mode="professional"] .tab-btn.active,
+.pro-auth-card .tab-btn.active {
     background: #ffffff;
     color: #be123c;
     box-shadow: 0 2px 6px rgba(20, 20, 24, 0.06);
 }
 
-body[data-mode="professional"] .field-group label {
+body[data-mode="professional"] .field-group label,
+.pro-auth-card .field-group label {
     color: #374151;
 }
 
 body[data-mode="professional"] .field-group input,
 body[data-mode="professional"] .field-group select,
-body[data-mode="professional"] .field-group textarea {
+body[data-mode="professional"] .field-group textarea,
+.pro-auth-card .field-group input,
+.pro-auth-card .field-group select,
+.pro-auth-card .field-group textarea {
     background: #ffffff;
     border: 1px solid #e5ddd3;
     color: #141418;
 }
 
+body[data-mode="professional"] .field-group input::placeholder,
+body[data-mode="professional"] .field-group textarea::placeholder,
+.pro-auth-card .field-group input::placeholder,
+.pro-auth-card .field-group textarea::placeholder {
+    color: #9ca3af;
+}
+
 body[data-mode="professional"] .field-group input:focus,
 body[data-mode="professional"] .field-group select:focus,
-body[data-mode="professional"] .field-group textarea:focus {
+body[data-mode="professional"] .field-group textarea:focus,
+.pro-auth-card .field-group input:focus,
+.pro-auth-card .field-group select:focus,
+.pro-auth-card .field-group textarea:focus {
     border-color: #e11d48;
     box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.14);
 }
 
-body[data-mode="professional"] .toggle-password {
+body[data-mode="professional"] .toggle-password,
+.pro-auth-card .toggle-password {
     color: #6b7280;
 }
 
-body[data-mode="professional"] .demo-hint {
+body[data-mode="professional"] .demo-hint,
+.pro-auth-card .demo-hint {
     color: #6b7280;
 }
 
-body[data-mode="professional"] .demo-hint code {
+body[data-mode="professional"] .demo-hint code,
+.pro-auth-card .demo-hint code {
     background: #fff1f2;
     color: #be123c;
     padding: 2px 6px;
     border-radius: 5px;
 }
 
-body[data-mode="professional"] .submit-btn {
+body[data-mode="professional"] .submit-btn,
+.pro-auth-card .submit-btn {
     background: #e11d48;
     color: #ffffff;
     border-radius: 10px;
 }
 
-body[data-mode="professional"] .submit-btn:hover {
+body[data-mode="professional"] .submit-btn:hover,
+.pro-auth-card .submit-btn:hover {
     background: #be123c;
 }
 
 body[data-mode="professional"] .terms-note,
-body[data-mode="professional"] .terms-row label {
-    color: #6b7280;
+body[data-mode="professional"] .terms-row label,
+.pro-auth-card .terms-note,
+.pro-auth-card .terms-row label {
+    color: #4b5563;
 }
 
-body[data-mode="professional"] .terms-link {
+body[data-mode="professional"] .terms-link,
+.pro-auth-card .terms-link {
     color: #be123c;
 }
 

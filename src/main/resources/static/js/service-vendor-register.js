@@ -81,7 +81,9 @@
 
     const catSel = document.getElementById('cr-category');
     const box = document.getElementById('cat-specific-fields');
-    const banner = document.getElementById('cat-reg-banner');
+    const banner = document.getElementById('cat-reg-banner') || document.getElementById('status-banner');
+    const form = document.getElementById('cat-reg-form');
+    if (!catSel || !box || !banner || !form) return;
 
     function showBanner(msg, type = 'error') {
         banner.textContent = msg;
@@ -109,7 +111,7 @@
             + `</div>`;
     });
 
-    document.getElementById('cat-reg-form').addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         banner.hidden = true;
         const cat = catSel.value;

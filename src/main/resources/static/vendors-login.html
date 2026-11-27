@@ -4,196 +4,375 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendors Management Login — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css?v=4">
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body data-role="VENDOR" data-endpoint="/api/auth/vendors" data-mode="document-verification">
-    <nav class="ew-navbar">
-        <a href="/index.html" class="ew-brand">
-            <span class="ew-logo-box">★</span>
-            <span class="ew-brand-text">
-                <strong>Entertainment World</strong>
-                <span>FIND STARDOM. FIND STARS.</span>
-            </span>
-        </a>
-        <div class="ew-nav-links">
-            <a href="/index.html">All Modules</a>
-            <a href="/pricing.html">Pricing</a>
-        </div>
-        <div class="ew-nav-actions">
-            <a href="/admin-login.html" class="ew-btn-outline">Super Admin</a>
-            <a href="/actors-login.html" class="ew-btn-primary">Join Free</a>
-        </div>
-    </nav>
-    <main class="auth-page" style="max-width: 660px;">
-        <section class="auth-card" aria-labelledby="module-title">
-            <a href="/index.html" class="back-link">&larr; All Modules</a>
-            <header class="brand-header">
-                <div class="brand-badge" aria-hidden="true">VM</div>
-                <h1 id="module-title">Vendors Management</h1>
-                <p class="brand-subtitle">Equipment rentals, sound, lighting &amp; production supply</p>
-                <p style="margin-top:0.5rem;font-size:0.86rem;"><a href="/service-vendors-register.html" style="color:#be123c;font-weight:700;">Other Vendor Categories (Production, Editing, Audio, Lighting, Logistics, Marketing) &rarr; Register Here</a></p>
-            </header>
+    <main class="pro-auth-shell">
+        <!-- Left Cinema Showcase Panel (Matches Professional Login Portal) -->
+        <aside class="pro-showcase" aria-label="Vendors Management portal overview">
+            <div class="pro-showcase-bg" aria-hidden="true"></div>
+            <div class="pro-showcase-inner">
+                <div class="pro-showcase-top">
+                    <a href="/index.html" class="pro-back-pill">&larr; All Modules</a>
+                    <div class="pro-brand-lockup">
+                        <span class="pro-brand-logo" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </span>
+                        <div>
+                            <span class="pro-brand-name">Entertainment World</span>
+                            <span class="pro-brand-sub">VENDOR &amp; VENUE PORTAL</span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="tab-bar" role="tablist" aria-label="Vendors Management authentication">
-                <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
-                <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Register</button>
+                <div class="pro-showcase-copy">
+                    <span class="pro-eyebrow">VERIFIED VENUES &amp; PRODUCTION PARTNERS</span>
+                    <h1>Showcase your <em>venues</em> to every production.</h1>
+                    <p>Manage banquet halls, auditoriums, shooting locations, pricing, live availability, and confirmed bookings in one unified workspace.</p>
+
+                    <div class="pro-highlights">
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">01</span>
+                            <div>
+                                <strong>Venues, 360° Tours &amp; Multi-Location Control</strong>
+                                <span>Showcase halls, studios, and city branches with rich galleries</span>
+                            </div>
+                        </div>
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">02</span>
+                            <div>
+                                <strong>Live Availability &amp; Instant Quotations</strong>
+                                <span>Prevent overlapping dates and send itemized PDF quotes</span>
+                            </div>
+                        </div>
+                        <div class="pro-highlight-item">
+                            <span class="pro-hl-num">03</span>
+                            <div>
+                                <strong>Enquiries, Bookings &amp; Revenue Analytics</strong>
+                                <span>Track leads, team permissions, and monthly revenue in real time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" id="open-video-tour" class="pro-tour-card">
+                    <img src="/images/vendor-slide-1.jpg" alt="Platform Video Tour preview" class="pro-tour-thumb">
+                    <div class="pro-tour-card-text">
+                        <span class="pro-tour-badge">VIDEO TOUR • 0:28</span>
+                        <strong>Watch Vendor Dashboard Tour</strong>
+                        <span>See how Venues &amp; Productions work together</span>
+                    </div>
+                    <span class="pro-tour-play" aria-hidden="true">&#9654;</span>
+                </button>
             </div>
+        </aside>
 
-            <div id="status-banner" class="status-banner" role="alert" hidden></div>
+        <!-- Right Auth Card (Warm Cream & Crimson/Gold Theme Matching Professional Login) -->
+        <section class="pro-auth-pane">
+            <section class="auth-card pro-auth-card" aria-labelledby="module-title">
+                <header class="pro-card-header">
+                    <span class="pro-portal-pill">Venues &bull; Studios &bull; Event Locations</span>
+                    <h2 id="module-title">Sign in to your workspace</h2>
+                    <p>Access your Vendor &amp; Venue Dashboard or register your business.</p>
+                </header>
 
-            <form id="panel-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
-                <div class="field-group">
-                    <label for="login-email">Vendor Email</label>
-                    <input type="email" id="login-email" placeholder="vendor@entertainmentworld.com" autocomplete="email" required>
-                </div>
-                <div class="field-group">
-                    <label for="login-password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
-                        <button type="button" class="toggle-password" data-target="login-password" aria-label="Show password">Show</button>
-                    </div>
-                </div>
-                <span class="demo-hint">Demo: <code>vendor@entertainmentworld.com</code> / <code>vendor123</code></span>
-                <button type="submit" class="submit-btn" id="login-submit">Sign In to Vendors Management</button>
-            </form>
-
-            <form id="panel-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-name">Contact Person Name</label>
-                        <input type="text" id="register-name" placeholder="Full Name" autocomplete="name" required>
-                    </div>
-                    <div class="field-group">
-                        <label for="register-designation">Designation</label>
-                        <input type="text" id="register-designation" placeholder="e.g. Founder / Manager" required>
-                    </div>
+                <div class="tab-bar" role="tablist" aria-label="Vendors Management authentication">
+                    <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
+                    <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Sign Up</button>
                 </div>
 
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-org">Vendor Company Name</label>
-                        <input type="text" id="register-org" placeholder="Prime Stage Vendors Pvt Ltd" autocomplete="organization" required>
-                    </div>
-                    <div class="field-group">
-                        <label for="register-email">Business Email</label>
-                        <input type="email" id="register-email" placeholder="contact@company.com" autocomplete="email" required>
-                    </div>
-                </div>
+                <div id="status-banner" class="status-banner" role="alert" hidden></div>
 
-                <div class="field-row">
+                <form id="panel-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
                     <div class="field-group">
-                        <label for="register-phone">Phone Number</label>
-                        <input type="tel" id="register-phone" placeholder="+91 9876543210" required>
+                        <label for="login-email">Vendor Email</label>
+                        <input type="email" id="login-email" placeholder="vendor@entertainmentworld.com" autocomplete="email" required>
                     </div>
                     <div class="field-group">
-                        <label for="register-alt-phone">Alternate Phone Number</label>
-                        <input type="tel" id="register-alt-phone" placeholder="+91 9123456780">
+                        <label for="login-password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
+                            <button type="button" class="toggle-password" data-target="login-password" aria-label="Show password">Show</button>
+                        </div>
                     </div>
-                </div>
+                    <span class="demo-hint">Demo: <code>vendor@entertainmentworld.com</code> / <code>vendor123</code></span>
+                    <button type="submit" class="submit-btn" id="login-submit">Sign In to Vendor Dashboard</button>
+                    <p class="terms-note">
+                        Need Service Vendor registration?
+                        <button type="button" class="terms-link" data-open-service-vendor>Register as Service Vendor</button>
+                    </p>
+                </form>
 
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-years">Years in Business</label>
-                        <input type="number" id="register-years" min="0" placeholder="e.g. 5" required>
+                <form id="panel-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
+                    <p style="margin: 0 0 4px; font-size: 0.78rem; color: #9ca3af;">Fields marked with <span style="color: #e11d48; font-weight: 700;">*</span> are mandatory.</p>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-name">Contact Person Name <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-name" placeholder="Full Name" autocomplete="name" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-designation">Designation <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-designation" placeholder="e.g. Founder / Manager" required>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label for="register-venues">Number of Venues Managed</label>
-                        <input type="number" id="register-venues" min="0" placeholder="e.g. 20" required>
-                    </div>
-                </div>
 
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-country">Country</label>
-                        <input type="text" id="register-country" placeholder="India" required>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-org">Vendor Company Name <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-org" placeholder="Prime Stage Vendors Pvt Ltd" autocomplete="organization" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-email">Business Email <span style="color: #e11d48;">*</span></label>
+                            <input type="email" id="register-email" placeholder="contact@company.com" autocomplete="email" required>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label for="register-state">State</label>
-                        <input type="text" id="register-state" placeholder="Telangana" required>
-                    </div>
-                </div>
 
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-city">City</label>
-                        <input type="text" id="register-city" placeholder="Hyderabad" required>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-phone">Phone Number <span style="color: #e11d48;">*</span></label>
+                            <input type="tel" id="register-phone" placeholder="+91 9876543210" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-alt-phone">Alternate Phone</label>
+                            <input type="tel" id="register-alt-phone" placeholder="+91 9123456780">
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label for="register-pincode">Pincode</label>
-                        <input type="text" id="register-pincode" placeholder="500081" required>
-                    </div>
-                </div>
 
-                <div class="field-group">
-                    <label for="register-website">Business Website URL</label>
-                    <input type="url" id="register-website" placeholder="https://yourcompany.com">
-                </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-years">Years in Business <span style="color: #e11d48;">*</span></label>
+                            <input type="number" id="register-years" min="0" placeholder="e.g. 5" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-venues">Venues Managed <span style="color: #e11d48;">*</span></label>
+                            <input type="number" id="register-venues" min="0" placeholder="e.g. 20" required>
+                        </div>
+                    </div>
 
-                <div class="field-row">
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-country">Country <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-country" placeholder="India" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-state">State <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-state" placeholder="Telangana" required>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-city">City <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-city" placeholder="Hyderabad" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-pincode">Pincode <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-pincode" placeholder="500081" required>
+                        </div>
+                    </div>
+
                     <div class="field-group">
-                        <label for="register-logo-file">Logo Image Upload</label>
-                        <input type="file" id="register-logo-file" accept=".png,.jpg,.jpeg,.webp">
+                        <label for="register-website">Business Website URL</label>
+                        <input type="url" id="register-website" placeholder="https://yourcompany.com">
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-logo-file">Logo Image Upload</label>
+                            <input type="file" id="register-logo-file" accept=".png,.jpg,.jpeg,.webp">
+                        </div>
+                        <div class="field-group">
+                            <label for="register-cover-file">Cover Image Upload</label>
+                            <input type="file" id="register-cover-file" accept=".png,.jpg,.jpeg,.webp">
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-doc-type">Document Type <span style="color: #e11d48;">*</span></label>
+                            <select id="register-doc-type" required>
+                                <option value="">-- Select --</option>
+                                <option value="Business License">Business License</option>
+                                <option value="GST / Tax Certificate">GST / Tax Certificate</option>
+                                <option value="Equipment Ownership / Permit">Equipment Ownership / Permit</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-doc-number">Document Number <span style="color: #e11d48;">*</span></label>
+                            <input type="text" id="register-doc-number" placeholder="VND-2026-001" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="register-doc-file">Upload Verification Document (PDF / Image) <span style="color: #e11d48;">*</span></label>
+                        <input type="file" id="register-doc-file" accept=".pdf,.png,.jpg,.jpeg" required>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="register-password">Password <span style="color: #e11d48;">*</span></label>
+                            <div class="password-wrapper">
+                                <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="register-confirm">Confirm Password <span style="color: #e11d48;">*</span></label>
+                            <div class="password-wrapper">
+                                <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terms-row">
+                        <input type="checkbox" id="register-terms" required>
+                        <label for="register-terms">I agree to the Terms &amp; Conditions <span style="color: #e11d48;">*</span></label>
+                    </div>
+                    <div class="terms-row">
+                        <input type="checkbox" id="register-privacy" required>
+                        <label for="register-privacy">I agree to the Privacy Policy <span style="color: #e11d48;">*</span></label>
+                    </div>
+
+                    <span class="demo-hint">Register your vendor account to sign in immediately and manage your venues &amp; services.</span>
+                    <button type="submit" class="submit-btn" id="register-submit">Create Vendor Account</button>
+                </form>
+
+                <form id="cat-reg-form" class="auth-form" hidden novalidate>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                        <p style="margin: 0; font-size: 0.78rem; color: #9ca3af;">Fields marked with <span style="color: #e11d48; font-weight: 700;">*</span> are mandatory.</p>
+                        <button type="button" class="terms-link" data-open-venue-vendor style="font-size: 0.78rem;">&larr; Venue &amp; Studio Form</button>
                     </div>
                     <div class="field-group">
-                        <label for="register-cover-file">Cover Image Upload</label>
-                        <input type="file" id="register-cover-file" accept=".png,.jpg,.jpeg,.webp">
-                    </div>
-                </div>
-
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-doc-type">Document Type</label>
-                        <select id="register-doc-type" required>
-                            <option value="">-- Select --</option>
-                            <option value="Business License">Business License</option>
-                            <option value="GST / Tax Certificate">GST / Tax Certificate</option>
-                            <option value="Equipment Ownership / Permit">Equipment Ownership / Permit</option>
+                        <label for="cr-category">Vendor Type (Category) <span style="color: #e11d48;">*</span></label>
+                        <select id="cr-category" required>
+                            <option value="">-- Select Vendor Category --</option>
+                            <option value="Production &amp; Camera Services">1. Production &amp; Camera Services</option>
+                            <option value="Video Editing &amp; Post-Production">2. Video Editing &amp; Post-Production</option>
+                            <option value="Audio &amp; Music Production">3. Audio &amp; Music Production</option>
+                            <option value="Lighting &amp; Equipment Rental">4. Lighting &amp; Equipment Rental</option>
+                            <option value="Art, Set, Costume &amp; Makeup">5. Art, Set, Costume &amp; Makeup</option>
+                            <option value="Event &amp; Logistics Services">6. Event &amp; Logistics Services</option>
+                            <option value="Marketing &amp; Promotion Services">7. Marketing &amp; Promotion Services</option>
+                            <option value="Other Entertainment Services">8. Other Entertainment Services</option>
                         </select>
                     </div>
-                    <div class="field-group">
-                        <label for="register-doc-number">Document Number</label>
-                        <input type="text" id="register-doc-number" placeholder="VND-2026-001" required>
+                    <div class="field-row">
+                        <div class="field-group"><label for="cr-biz">Business / Company Name <span style="color: #e11d48;">*</span></label><input type="text" id="cr-biz" placeholder="Company Name" required></div>
+                        <div class="field-group"><label for="cr-person">Contact Person <span style="color: #e11d48;">*</span></label><input type="text" id="cr-person" placeholder="Full Name" required></div>
                     </div>
-                </div>
-
-                <div class="field-group">
-                    <label for="register-doc-file">Upload Verification Document (PDF / Image)</label>
-                    <input type="file" id="register-doc-file" accept=".pdf,.png,.jpg,.jpeg" required>
-                </div>
-
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="register-password">Password</label>
-                        <div class="password-wrapper">
-                            <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
-                            <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
-                        </div>
+                    <div class="field-row">
+                        <div class="field-group"><label for="cr-email">Email <span style="color: #e11d48;">*</span></label><input type="email" id="cr-email" placeholder="contact@company.com" required></div>
+                        <div class="field-group"><label for="cr-phone">Mobile Number <span style="color: #e11d48;">*</span></label><input type="tel" id="cr-phone" placeholder="+91 9876543210" required></div>
                     </div>
-                    <div class="field-group">
-                        <label for="register-confirm">Confirm Password</label>
-                        <div class="password-wrapper">
-                            <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
-                            <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
-                        </div>
+                    <div class="field-row">
+                        <div class="field-group"><label for="cr-pass">Password <span style="color: #e11d48;">*</span></label><input type="password" id="cr-pass" minlength="6" placeholder="Minimum 6 characters" required></div>
+                        <div class="field-group"><label for="cr-cpass">Confirm Password <span style="color: #e11d48;">*</span></label><input type="password" id="cr-cpass" minlength="6" placeholder="Re-enter password" required></div>
                     </div>
-                </div>
-
-                <div class="field-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="register-terms" required>
-                        <span>I agree to the Terms and Conditions</span>
-                    </label>
-                    <label class="checkbox-label" style="margin-top:0.35rem;">
-                        <input type="checkbox" id="register-privacy" required>
-                        <span>I agree to the Privacy Policy</span>
-                    </label>
-                </div>
-
-                <span class="demo-hint">Register your vendor account to sign in immediately and manage your services.</span>
-                <button type="submit" class="submit-btn" id="register-submit">Register Vendor Account</button>
-            </form>
+                    <div class="field-group"><label for="cr-logo">Business Logo (Image)</label><input type="file" id="cr-logo" accept="image/*"></div>
+                    <div class="field-row">
+                        <div class="field-group"><label for="cr-country">Country <span style="color: #e11d48;">*</span></label><input type="text" id="cr-country" value="India" required></div>
+                        <div class="field-group"><label for="cr-state">State <span style="color: #e11d48;">*</span></label><input type="text" id="cr-state" placeholder="Telangana" required></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group"><label for="cr-city">City <span style="color: #e11d48;">*</span></label><input type="text" id="cr-city" placeholder="Hyderabad" required></div>
+                        <div class="field-group"><label for="cr-area">Area / Locality <span style="color: #e11d48;">*</span></label><input type="text" id="cr-area" placeholder="Madhapur" required></div>
+                    </div>
+                    <div class="field-group"><label for="cr-addr">Complete Address <span style="color: #e11d48;">*</span></label><textarea id="cr-addr" rows="2" placeholder="Street, building, landmark" required></textarea></div>
+                    <div class="field-row">
+                        <div class="field-group"><label for="cr-pin">PIN Code <span style="color: #e11d48;">*</span></label><input type="text" id="cr-pin" placeholder="500081" required></div>
+                        <div class="field-group"><label for="cr-map">Google Maps Location URL <span style="color: #e11d48;">*</span></label><input type="url" id="cr-map" placeholder="https://maps.google.com/?q=..." required></div>
+                    </div>
+                    <div class="field-group"><label for="cr-about">About Business <span style="color: #e11d48;">*</span></label><textarea id="cr-about" rows="3" placeholder="Services, experience, and equipment highlights" required></textarea></div>
+                    <div id="cat-specific-fields" style="background:#faf7f4;border:1px solid #ece6de;border-radius:12px;padding:1rem;" hidden></div>
+                    <button type="submit" class="submit-btn" id="cr-submit">Register Service Vendor</button>
+                </form>
+            </section>
         </section>
     </main>
+
+    <!-- Vendor Dashboard Video Tour Modal -->
+    <div id="tour-modal" class="terms-modal" role="dialog" aria-modal="true" aria-labelledby="tour-modal-title" hidden>
+        <div class="terms-modal-card tour-modal-card">
+            <div class="terms-modal-header">
+                <div>
+                    <span class="tour-eyebrow">INTERACTIVE WALKTHROUGH</span>
+                    <h2 id="tour-modal-title">Vendor Dashboard Video Tour</h2>
+                </div>
+                <button type="button" id="tour-modal-close" class="terms-modal-close" aria-label="Close Video Tour">&times;</button>
+            </div>
+
+            <div class="tour-player-stage">
+                <div class="tour-stage-top">
+                    <span id="tour-chapter-pill" class="tour-chapter-pill">Chapter 1 of 4</span>
+                    <span id="tour-time-label" class="tour-time-label">00:00 / 00:28</span>
+                </div>
+                <div class="tour-video-wrap">
+                    <canvas id="tour-canvas" width="1280" height="720" hidden></canvas>
+                    <video id="tour-video" class="tour-video" autoplay muted playsinline></video>
+                </div>
+                <div id="tour-progress-track" class="tour-progress-track" title="Click to seek">
+                    <div id="tour-progress-bar" class="tour-progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="tour-controls">
+                    <div class="tour-controls-left">
+                        <button type="button" id="tour-prev-btn" class="tour-ctrl-btn" aria-label="Previous chapter">&larr; Prev</button>
+                        <button type="button" id="tour-play-btn" class="tour-ctrl-btn primary">Pause</button>
+                        <button type="button" id="tour-next-btn" class="tour-ctrl-btn" aria-label="Next chapter">Next &rarr;</button>
+                        <button type="button" id="tour-sound-btn" class="tour-ctrl-btn" aria-label="Toggle voiceover sound" aria-pressed="true">Sound: On</button>
+                        <button type="button" id="tour-fullscreen-btn" class="tour-ctrl-btn" aria-label="Fullscreen video">Fullscreen</button>
+                    </div>
+                    <button type="button" id="tour-try-demo" class="tour-demo-btn">Fill Demo Login &amp; Sign In</button>
+                </div>
+            </div>
+
+            <div id="tour-chapters" class="tour-chapters"></div>
+        </div>
+    </div>
+
     <script src="/js/module-auth.js?v=2"></script>
+    <script src="/js/service-vendor-register.js?v=2"></script>
+    <script>
+        (() => {
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            const venueForm = document.getElementById('panel-register');
+            const serviceForm = document.getElementById('cat-reg-form');
+            let regType = 'venue';
+
+            function applyRegType() {
+                if (tabRegister?.classList.contains('active')) {
+                    if (venueForm) venueForm.hidden = regType !== 'venue';
+                    if (serviceForm) serviceForm.hidden = regType !== 'service';
+                } else {
+                    if (serviceForm) serviceForm.hidden = true;
+                }
+            }
+
+            tabLogin?.addEventListener('click', () => setTimeout(applyRegType, 0));
+            tabRegister?.addEventListener('click', () => {
+                regType = 'venue';
+                setTimeout(applyRegType, 0);
+            });
+            document.querySelectorAll('[data-open-service-vendor]').forEach((el) => {
+                el.addEventListener('click', () => {
+                    regType = 'service';
+                    tabRegister?.click();
+                    setTimeout(() => {
+                        regType = 'service';
+                        applyRegType();
+                    }, 0);
+                });
+            });
+            document.querySelectorAll('[data-open-venue-vendor]').forEach((el) => {
+                el.addEventListener('click', () => {
+                    regType = 'venue';
+                    applyRegType();
+                });
+            });
+        })();
+    </script>
 </body>
 </html>

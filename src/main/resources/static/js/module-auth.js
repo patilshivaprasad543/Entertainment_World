@@ -418,7 +418,7 @@
     const tourFullscreenBtn = document.getElementById('tour-fullscreen-btn');
     const tourDemoBtn = document.getElementById('tour-try-demo');
 
-    const TOUR_CHAPTERS = [
+    const ACTOR_TOUR_CHAPTERS = [
         {
             tag: 'STEP 01 • DIGITAL PORTFOLIO',
             imageUrl: '/images/tour/tour-step1.jpg',
@@ -468,6 +468,112 @@
             ]
         }
     ];
+
+    const VENDOR_TOUR_CHAPTERS = [
+        {
+            tag: 'STEP 01 • VENUES & SERVICES',
+            imageUrl: '/images/vendor-slide-1.jpg',
+            title: 'Showcase Venues, Studios & Services',
+            subtitle: 'Register as a Venue & Studio Partner or Service Vendor. List banquet halls, auditoriums, shooting locations & rentals.',
+            narration: 'Step one: Showcase your venues, studios, and production services. List banquet halls, auditoriums, shooting locations, and equipment rentals in one verified profile.',
+            cards: [
+                { label: 'Venue Listings', desc: 'Halls, resorts & studios' },
+                { label: 'Service Categories', desc: 'Camera, audio, lighting & more' },
+                { label: 'Verified Badge', desc: 'Build trust with productions' }
+            ]
+        },
+        {
+            tag: 'STEP 02 • CALENDAR & 360° TOURS',
+            imageUrl: '/images/vendor-slide-2.jpg',
+            title: 'Live Availability Calendar & 360° Tours',
+            subtitle: 'Manage multi-city locations, block busy dates to prevent overlaps, and showcase panoramic 360° venue tours.',
+            narration: 'Step two: Manage your live availability calendar and three-sixty venue tours. Block busy dates to prevent overlaps and showcase panoramic tours across all city branches.',
+            cards: [
+                { label: 'Live Calendar', desc: 'Zero double-bookings' },
+                { label: '360° Venue Tour', desc: 'Interactive panoramic view' },
+                { label: 'Multi-Location', desc: 'Control all city branches' }
+            ]
+        },
+        {
+            tag: 'STEP 03 • QUOTATIONS & BOOKINGS',
+            imageUrl: '/images/vendor-slide-3.jpg',
+            title: 'Instant Quotations & Booking Control',
+            subtitle: 'Respond to enquiries, generate itemized PDF quotations, and track confirmed bookings & payments in real time.',
+            narration: 'Step three: Send instant itemized PDF quotations and manage bookings. Respond to enquiries fast and track confirmed schedules and payments in real time.',
+            cards: [
+                { label: 'PDF Quotations', desc: 'Itemized quotes in seconds' },
+                { label: 'Enquiry Inbox', desc: 'Accept or negotiate leads' },
+                { label: 'Booking Status', desc: 'Confirmed & pending tracking' }
+            ]
+        },
+        {
+            tag: 'STEP 04 • ANALYTICS & TEAM',
+            imageUrl: '/images/tour/tour-step4.jpg',
+            title: 'Team Permissions, Analytics & Plans',
+            subtitle: 'Assign staff roles, monitor monthly revenue charts, and scale your business with flexible subscription plans.',
+            narration: 'Step four: Scale with team permissions, booking analytics, and flexible subscription plans. Track monthly revenue and venue performance from one dashboard.',
+            cards: [
+                { label: 'Team Access', desc: 'Managers & booking staff' },
+                { label: 'Revenue Charts', desc: 'Monthly & venue insights' },
+                { label: 'Growth Plans', desc: 'Unlock unlimited listings' }
+            ]
+        }
+    ];
+
+    const BRAND_TOUR_CHAPTERS = [
+        {
+            tag: 'STEP 01 • DISCOVER CREATORS',
+            imageUrl: '/images/tour/tour-step2.jpg',
+            title: 'Discover & Shortlist Verified Creators',
+            subtitle: 'Search actors, models, and influencers by city, language, budget, and verified engagement metrics.',
+            narration: 'Step one: Discover and shortlist verified creators. Search actors, models, and influencers by city, language, budget, and verified engagement metrics.',
+            cards: [
+                { label: 'Smart Filters', desc: 'City, language & budget' },
+                { label: 'Wishlist Folders', desc: 'Organize campaign shortlists' },
+                { label: 'Verified Talent', desc: 'Trusted creator profiles' }
+            ]
+        },
+        {
+            tag: 'STEP 02 • CAMPAIGNS & SQUADS',
+            imageUrl: '/images/tour/tour-step1.jpg',
+            title: 'Post Campaign Briefs & Build Squads',
+            subtitle: 'Publish structured campaign briefs, manage deliverables, and group creators into Pro influencer squads.',
+            narration: 'Step two: Post campaign briefs and build influencer squads. Publish deliverables and group creators together with automatic combined budget estimates.',
+            cards: [
+                { label: 'Campaign Studio', desc: 'Briefs, deliverables & rights' },
+                { label: 'Team Builder', desc: 'Combine creators into squads' },
+                { label: 'Direct Chat', desc: 'Message shortlisted talent' }
+            ]
+        },
+        {
+            tag: 'STEP 03 • ESCROW & INVOICES',
+            imageUrl: '/images/tour/tour-step3.jpg',
+            title: 'Escrow Protection & GST Invoices',
+            subtitle: 'Review creator drafts, lock payments in escrow, and generate invoices with automatic 18% GST & 10% TDS.',
+            narration: 'Step three: Protect payouts with escrow and GST invoices. Review uploaded drafts and generate invoices with automatic GST and TDS calculations.',
+            cards: [
+                { label: 'Escrow Control', desc: 'Approve drafts before payout' },
+                { label: 'GST & TDS', desc: 'Automated invoice estimates' },
+                { label: 'Creator Reviews', desc: 'Rate completed collaborations' }
+            ]
+        },
+        {
+            tag: 'STEP 04 • TEAM & GROWTH PLANS',
+            imageUrl: '/images/tour/tour-step4.jpg',
+            title: 'Manage Team Seats & Scale Plans',
+            subtitle: 'Invite brand teammates and switch between Free, Premium, and Pro plans as your campaigns grow.',
+            narration: 'Step four: Invite your brand teammates and scale your workspace plans from Free to Premium and Pro as your campaigns grow.',
+            cards: [
+                { label: 'Team Seats', desc: 'Collaborate with your team' },
+                { label: 'Flexible Plans', desc: 'Free, Premium & Pro tiers' },
+                { label: 'Live Alerts', desc: 'Track requests & deadlines' }
+            ]
+        }
+    ];
+
+    const TOUR_CHAPTERS = role === 'VENDOR'
+        ? VENDOR_TOUR_CHAPTERS
+        : (role === 'BRAND' ? BRAND_TOUR_CHAPTERS : ACTOR_TOUR_CHAPTERS);
 
     const tourLoadedImages = TOUR_CHAPTERS.map((ch) => {
         const img = new Image();
@@ -590,7 +696,13 @@
         ctx.fillText('Entertainment World', 120, 68);
         ctx.fillStyle = '#d4a853';
         ctx.font = '700 12px system-ui, sans-serif';
-        ctx.fillText('PLATFORM VIDEO TOUR • TALENT & CASTING NETWORK', 120, 88);
+        ctx.fillText(
+            role === 'VENDOR'
+                ? 'PLATFORM VIDEO TOUR • VENDOR & VENUE NETWORK'
+                : (role === 'BRAND' ? 'PLATFORM VIDEO TOUR • BRAND PROMOTIONS NETWORK' : 'PLATFORM VIDEO TOUR • TALENT & CASTING NETWORK'),
+            120,
+            88
+        );
 
         // Step pill
         ctx.fillStyle = 'rgba(225, 29, 72, 0.18)';
@@ -835,8 +947,16 @@
         switchTab('login');
         const emailInput = document.getElementById('login-email');
         const passInput = document.getElementById('login-password');
-        if (emailInput) emailInput.value = 'actor@entertainmentworld.com';
-        if (passInput) passInput.value = 'actor123';
+        if (role === 'VENDOR') {
+            if (emailInput) emailInput.value = 'vendor@entertainmentworld.com';
+            if (passInput) passInput.value = 'vendor123';
+        } else if (role === 'BRAND') {
+            if (emailInput) emailInput.value = 'brand@entertainmentworld.com';
+            if (passInput) passInput.value = 'brand123';
+        } else {
+            if (emailInput) emailInput.value = 'actor@entertainmentworld.com';
+            if (passInput) passInput.value = 'actor123';
+        }
         loginForm?.requestSubmit();
     });
 
