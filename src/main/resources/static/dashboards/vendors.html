@@ -4,95 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor &amp; Venue Management Dashboard — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css?v=4">
-    <link rel="stylesheet" href="/css/vendor-portal.css?v=4">
+    <link rel="stylesheet" href="/css/professional-dashboard.css">
+    <link rel="stylesheet" href="/css/vendor-portal.css?v=5">
 </head>
-<body class="vendor-shell" data-role="VENDOR" data-login="/vendors-login.html" style="background: transparent;">
-    <nav class="ew-navbar">
-        <a href="/index.html" class="ew-brand">
-            <span class="ew-logo-box">★</span>
-            <span class="ew-brand-text">
-                <strong>Entertainment World</strong>
-                <span>VENDOR &amp; VENUE MANAGEMENT</span>
+<body data-role="VENDOR" data-login="/vendors-login.html">
+    <!-- Top Header (Matches Professional Dashboard) -->
+    <header class="ew-topbar">
+        <div class="ew-topbar-left">
+            <button type="button" id="mobile-menu-btn" class="ew-menu-toggle" aria-label="Toggle navigation">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="ew-brand-lockup">
+                <span class="ew-brand-logo" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </span>
+                <div class="ew-brand-stack">
+                    <span class="ew-brand">Entertainment World</span>
+                    <span class="ew-brand-sub">VENDOR &amp; VENUE DASHBOARD</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="ew-topbar-nav" aria-label="Vendor quick navigation">
+            <button type="button" class="ew-topbar-link" data-jump="venues">My Venues</button>
+            <button type="button" class="ew-topbar-link" data-jump="enquiries">Enquiries</button>
+            <button type="button" class="ew-topbar-link" data-jump="bookings">Bookings</button>
+            <button type="button" class="ew-topbar-link" data-jump="quotations">Quotations</button>
+            <button type="button" class="ew-topbar-link" data-jump="subscription">Plans</button>
+        </nav>
+
+        <div class="ew-topbar-right">
+            <span class="ew-avatar-btn" style="cursor: default;">
+                <span class="ew-avatar-fallback">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 21h18"></path>
+                        <path d="M5 21V7l8-4v18"></path>
+                        <path d="M19 21V11l-6-4"></path>
+                    </svg>
+                </span>
+                <span id="user-name" class="ew-avatar-name">Vendor</span>
             </span>
-        </a>
-        <div class="ew-nav-links">
-            <a href="/index.html">All Modules</a>
-            <a href="/pricing.html">Pricing</a>
-            <a href="#" data-jump="venues">My Venues</a>
-            <a href="#" data-jump="enquiries">Enquiries</a>
-            <a href="#" data-jump="bookings">Bookings</a>
-            <a href="#" data-jump="subscription">My Subscription</a>
+            <button type="button" class="ew-topbar-signout" onclick="document.getElementById('signout-btn')?.click()">Sign Out</button>
         </div>
-        <div class="ew-nav-actions">
-            <span class="ew-user-chip"><strong id="user-name"></strong> <span class="ew-verified-tick" title="Verified Vendor">✓</span></span>
-            <button type="button" class="ew-btn-signout" onclick="document.getElementById('signout-btn').click()">Sign Out</button>
-        </div>
-    </nav>
+    </header>
 
-    <div id="vendor-full-bg-slideshow" style="position:fixed;inset:0;z-index:-1;overflow:hidden;background:#141219;opacity:1;pointer-events:none;" aria-hidden="true">
-        <div id="vendor-bg-track" style="display:flex;height:100%;transition:transform 0.85s cubic-bezier(0.22,1,0.36,1);will-change:transform;"></div>
-    </div>
-    <div class="bg-3d-stage" aria-hidden="true"></div>
-    <div class="app-layout">
-        <aside id="vendor-sidebar" class="sidebar" aria-label="Vendor Navigation">
-            <div class="sidebar-brand">
-                <div class="brand-badge" aria-hidden="true">EW</div>
-                <div>
-                    <h2>Venue Studio</h2>
-                    <span id="sidebar-plan-badge">Free Plan</span>
-                </div>
-            </div>
+    <div class="ew-shell">
+        <div id="ew-sidebar-backdrop" class="ew-sidebar-backdrop" onclick="document.getElementById('vendor-sidebar')?.classList.remove('open')"></div>
 
-            <nav class="sidebar-nav">
-                <button type="button" class="nav-item active" data-view="overview"><span class="nav-item-label">🏠 Dashboard</span></button>
-                <button type="button" class="nav-item" data-view="profile"><span class="nav-item-label">👤 My Profile</span></button>
-                <button type="button" class="nav-item" data-view="venues"><span class="nav-item-label">🏛️ My Venues</span></button>
-                <button type="button" class="nav-item" data-view="gallery"><span class="nav-item-label">🖼️ Venue Gallery</span></button>
-                <button type="button" class="nav-item" data-view="pricing"><span class="nav-item-label">💰 Pricing Management</span></button>
-                <button type="button" class="nav-item" data-view="availability"><span class="nav-item-label">📅 Availability Calendar</span></button>
-                <button type="button" class="nav-item" data-view="enquiries"><span class="nav-item-label">📩 Booking Enquiries</span><span id="enq-badge" class="badge-count" hidden>0</span></button>
-                <button type="button" class="nav-item" data-view="bookings"><span class="nav-item-label">📋 Booking Management</span></button>
-                <button type="button" class="nav-item" data-view="quotations"><span class="nav-item-label">📄 Quotations</span></button>
-                <button type="button" class="nav-item" data-view="tour360"><span class="nav-item-label">🌐 360° Venue Tour</span></button>
-                <button type="button" class="nav-item" data-view="locations"><span class="nav-item-label">📍 Multiple Locations</span></button>
-                <button type="button" class="nav-item" data-view="analytics"><span class="nav-item-label">📊 Booking Analytics</span></button>
-                <button type="button" class="nav-item" data-view="subscription"><span class="nav-item-label">⭐ Subscription Plans</span></button>
-                <button type="button" class="nav-item" data-view="team"><span class="nav-item-label">👥 Team Management</span></button>
-                <button type="button" class="nav-item" data-view="settings"><span class="nav-item-label">⚙️ Settings</span><span id="notif-badge" class="badge-count" hidden>0</span></button>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="sidebar-status-chip">
-                    <span class="status-dot" aria-hidden="true"></span>
-                    <span>Vendor Portal Active</span>
-                </div>
-                <button type="button" id="signout-btn" class="signout-btn">Logout</button>
-            </div>
-        </aside>
-
-        <main class="main-area">
-            <header class="studio-topbar">
-                <div>
-                    <button type="button" id="mobile-menu-btn" class="mobile-menu-btn">&#9776; Menu</button>
-                    <span class="module-tag">Banquet Halls, Auditoriums, Studios &amp; Event Locations</span>
-                    <h1>Vendor / Venue Management Dashboard</h1>
-                </div>
-                <div class="topbar-actions">
-                    <button type="button" class="cta-glow-btn" data-jump="venues">+ Add New Venue</button>
-                    <div class="dashboard-user">
-                        <div class="user-meta">
-                            <span id="user-email"></span>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
+        <!-- Main Workspace (Left / Center Column) -->
+        <main class="ew-main">
             <div id="vendor-banner" class="status-banner" role="alert" hidden></div>
 
             <!-- 1. DASHBOARD OVERVIEW -->
             <section id="view-overview" class="view-section">
-                <div class="hero-slideshow" id="hero-video-box" style="height: 440px;" aria-label="Vendor Studio Showcase">
+                <div class="ew-pass-banner">
+                    <button type="button" class="ew-pass-pill" data-jump="subscription">
+                        <span class="ew-plan-dot"></span>
+                        <span id="sidebar-plan-badge">Free Plan</span>
+                    </button>
+                    <span class="ew-pass-meta">Vendor &amp; Venue Portal • Entertainment World</span>
+                </div>
+
+                <div class="ew-hero-card">
+                    <div class="ew-hero-left">
+                        <div class="ew-hero-avatar-box">
+                            <span class="ew-hero-avatar-fallback">VN</span>
+                        </div>
+                        <div class="ew-hero-info">
+                            <div class="ew-hero-title-row">
+                                <h1>Vendor &amp; Venue Studio</h1>
+                                <span class="ew-verified-tick" title="Verified Vendor">✓</span>
+                                <span class="ew-verified-pill">Verified Vendor</span>
+                            </div>
+                            <p class="ew-hero-sub">Banquet halls, auditoriums, studios &amp; event locations • <span id="user-email"></span></p>
+                            <div class="ew-hero-stats">
+                                <span><strong id="kpi-total-venues">0</strong> Venues</span>
+                                <span><strong id="kpi-pending-enquiries">0</strong> Enquiries</span>
+                                <span><strong id="kpi-confirmed-bookings">0</strong> Bookings</span>
+                                <span><strong id="kpi-total-revenue">₹0.00</strong> Revenue</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ew-hero-actions">
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-jump="profile">EDIT PROFILE</button>
+                        <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-jump="venues">+ Add New Venue</button>
+                    </div>
+                </div>
+
+                <div class="hero-slideshow" id="hero-video-box" style="height: 320px;" aria-label="Vendor Studio Showcase">
                     <div class="slide-item active">
                         <img src="/images/vendor-slide-1.jpg" alt="Studio and Venue Showcase">
                         <div class="slide-overlay">
@@ -139,12 +144,8 @@
                 </div>
 
                 <div class="kpi-grid">
-                    <div class="kpi-card"><span>Total Venues</span><strong id="kpi-total-venues">0</strong></div>
                     <div class="kpi-card"><span>Active Venues</span><strong id="kpi-active-venues">0</strong></div>
-                    <div class="kpi-card"><span>Pending Enquiries</span><strong id="kpi-pending-enquiries">0</strong></div>
-                    <div class="kpi-card"><span>Confirmed Bookings</span><strong id="kpi-confirmed-bookings">0</strong></div>
                     <div class="kpi-card"><span>Pending Bookings</span><strong id="kpi-pending-bookings">0</strong></div>
-                    <div class="kpi-card"><span>Total Revenue</span><strong id="kpi-total-revenue">₹0.00</strong></div>
                     <div class="kpi-card"><span>Available Venues</span><strong id="kpi-available-venues">0</strong></div>
                     <div class="kpi-card"><span>Current Plan</span><strong id="kpi-current-plan">FREE</strong></div>
                 </div>
@@ -619,6 +620,80 @@
                 <div id="ew-social-root"></div>
             </section>
         </main>
+
+        <!-- Right Floating Navigation Card (Matches Professional Dashboard) -->
+        <aside id="vendor-sidebar" class="ew-sidebar" aria-label="Vendor navigation">
+            <h2 class="ew-sidebar-title">VENDOR MENU</h2>
+            <nav class="ew-nav">
+                <button type="button" class="nav-item ew-nav-item active" data-view="overview">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="profile">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>My Profile</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="venues">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-4"></path></svg>
+                    <span>My Venues</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="gallery">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <span>Venue Gallery</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="pricing">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Pricing Management</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="availability">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Availability Calendar</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="enquiries">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>Booking Enquiries</span>
+                    <span id="enq-badge" class="ew-nav-badge" hidden>0</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="bookings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Booking Management</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="quotations">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Quotations</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="tour360">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span>360° Venue Tour</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="locations">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <span>Multiple Locations</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="analytics">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Booking Analytics</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="subscription">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                    <span>Subscription Plans</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="team">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Team Management</span>
+                </button>
+                <button type="button" class="nav-item ew-nav-item" data-view="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings</span>
+                    <span id="notif-badge" class="ew-nav-badge" hidden>0</span>
+                </button>
+            </nav>
+
+            <div class="ew-sidebar-footer">
+                <span class="ew-category-pill">Vendor Portal Active</span>
+                <button type="button" id="signout-btn" class="ew-btn ew-btn-outline ew-btn-sm" style="width: 100%; margin-top: 8px;">Sign Out</button>
+            </div>
+        </aside>
     </div>
 
     <!-- MODAL FOR DETAILS / CONFIRMATION -->
