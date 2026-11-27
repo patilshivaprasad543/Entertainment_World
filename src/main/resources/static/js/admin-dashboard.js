@@ -82,6 +82,22 @@
         ],
         complaints: [
             { id: 'CMP-1009', subject: 'Brand campaign brief missing shoot dates', category: 'Casting / Opportunity Dispute', priority: 'High', status: 'Open', badgeClass: 'audition', createdAt: '1 day ago' }
+        ],
+        subscriptionPlans: [
+            { id: 'sp-pro-1', portal: 'Professionals', name: 'Basic Free', price: 0, cycle: 'Monthly', status: 'Active', badge: 'Starter', quota: '5 applications / mo • Standard profile', features: ['Public talent profile', 'Browse open casting calls', 'Up to 5 applications per month'] },
+            { id: 'sp-pro-2', portal: 'Professionals', name: 'Premium', price: 199, cycle: 'Monthly', status: 'Active', badge: 'Popular', quota: '25 applications / mo • Video reel upload', features: ['25 monthly applications', '3 portfolio video uploads', 'Shortlist & audition alerts'] },
+            { id: 'sp-pro-3', portal: 'Professionals', name: 'Pro', price: 399, cycle: 'Monthly', status: 'Active', badge: 'Best Value', quota: 'Unlimited applications • Priority boost', features: ['Unlimited casting applications', 'Priority search placement', 'Verified talent badge & analytics'] },
+            { id: 'sp-cast-1', portal: 'Casting', name: 'Starter Free', price: 0, cycle: 'Monthly', status: 'Active', badge: 'Free', quota: '1 active project • 10 contact views', features: ['1 active casting project', 'Up to 10 artist contact views', 'Basic applicant filtering'] },
+            { id: 'sp-cast-2', portal: 'Casting', name: 'Studio Pro', price: 1499, cycle: 'Monthly', status: 'Active', badge: 'Popular', quota: '10 projects • 250 contact views • 50 invites', features: ['Up to 10 active projects', '250 artist contact views', '50 direct audition invites'] },
+            { id: 'sp-cast-3', portal: 'Casting', name: 'Enterprise', price: 3999, cycle: 'Monthly', status: 'Active', badge: 'Enterprise', quota: 'Unlimited projects • Unlimited portfolio views', features: ['Unlimited casting projects', 'Unlimited portfolio & contact views', 'Dedicated studio verification badge'] },
+            { id: 'sp-brand-1', portal: 'Brands', name: 'Brand Growth', price: 2499, cycle: 'Monthly', status: 'Active', badge: 'Growth', quota: '5 campaigns • 100 creator invites', features: ['5 active brand campaigns', '100 creator collaboration invites', 'Campaign performance summary'] },
+            { id: 'sp-brand-2', portal: 'Brands', name: 'Enterprise', price: 5999, cycle: 'Monthly', status: 'Active', badge: 'Enterprise', quota: 'Unlimited campaigns • Priority talent match', features: ['Unlimited brand campaigns', 'Priority verified talent matching', 'Dedicated account manager'] },
+            { id: 'sp-event-1', portal: 'Events', name: 'Standard', price: 999, cycle: 'Monthly', status: 'Active', badge: 'Standard', quota: '3 events • 50 crew bookings', features: ['Up to 3 active events', '50 crew & talent bookings', 'Standard vendor directory access'] },
+            { id: 'sp-event-2', portal: 'Events', name: 'Premier', price: 1999, cycle: 'Monthly', status: 'Active', badge: 'Popular', quota: '10 events • 200 crew bookings', features: ['Up to 10 active events', '200 crew & talent bookings', 'Priority event promotion'] },
+            { id: 'sp-event-3', portal: 'Events', name: 'Festival Pro', price: 4999, cycle: 'Monthly', status: 'Active', badge: 'Pro', quota: 'Unlimited events • Full production suite', features: ['Unlimited live events', 'Unlimited crew & vendor bookings', 'Multi-city stage scheduling'] },
+            { id: 'sp-vend-1', portal: 'Vendors', name: 'Supplier Basic', price: 0, cycle: 'Monthly', status: 'Active', badge: 'Free', quota: '5 equipment listings • Standard profile', features: ['Up to 5 equipment listings', 'Basic quote requests', 'Standard directory listing'] },
+            { id: 'sp-vend-2', portal: 'Vendors', name: 'Verified', price: 999, cycle: 'Monthly', status: 'Active', badge: 'Verified', quota: '25 listings • Verified vendor badge', features: ['25 equipment & service listings', 'Verified vendor trust badge', 'Direct production inquiries'] },
+            { id: 'sp-vend-3', portal: 'Vendors', name: 'Fleet Pro', price: 2499, cycle: 'Monthly', status: 'Active', badge: 'Pro', quota: 'Unlimited listings • Priority dispatch leads', features: ['Unlimited catalog listings', 'Priority event & shoot RFQs', 'Invoice & settlement tracking'] }
         ]
     };
 
@@ -97,7 +113,10 @@
                 portalPlans: Array.isArray(parsed.portalPlans) && parsed.portalPlans.length
                     ? parsed.portalPlans
                     : structuredClone(DEFAULT_ADMIN_STATE.portalPlans),
-                payments: hasRichPayments ? parsed.payments : structuredClone(DEFAULT_ADMIN_STATE.payments)
+                payments: hasRichPayments ? parsed.payments : structuredClone(DEFAULT_ADMIN_STATE.payments),
+                subscriptionPlans: Array.isArray(parsed.subscriptionPlans) && parsed.subscriptionPlans.length
+                    ? parsed.subscriptionPlans
+                    : structuredClone(DEFAULT_ADMIN_STATE.subscriptionPlans)
             };
         } catch {
             return structuredClone(DEFAULT_ADMIN_STATE);
@@ -107,6 +126,7 @@
     let adminState = loadAdminState();
     let cachedVerifications = [];
     let verifFilter = 'ALL';
+    let subPortalFilter = 'ALL';
     let toastTimer = null;
 
     function saveAdminState() {
@@ -205,7 +225,8 @@
         listEl.innerHTML = '';
         filtered.forEach((item) => {
             const row = document.createElement('div');
-            row.className = 'verification-item';
+            row.className = 'verification-item ew-card-clickable';
+            row.title = 'Click to view all registered & uploaded details';
 
             const meta = document.createElement('div');
             meta.className = 'verification-meta';
@@ -214,6 +235,11 @@
                 <p>Contact: ${escapeHtml(item.fullName)} (${escapeHtml(item.email)})</p>
                 <p>Document: ${escapeHtml(item.documentType || 'N/A')} &bull; No: ${escapeHtml(item.documentNumber || 'N/A')}</p>
             `;
+
+            row.addEventListener('click', (e) => {
+                if (e.target.closest('.verification-actions')) return;
+                openVerificationModal(item);
+            });
 
             const actions = document.createElement('div');
             actions.className = 'verification-actions';
@@ -260,8 +286,124 @@
     async function updateDecision(id, action) {
         await fetch(`/api/admin/verifications/${id}/${action}`, { method: 'POST' });
         showToast(`Verification ${action === 'approve' ? 'approved' : 'rejected'}`);
+        closeVerificationModal();
         await loadVerifications();
     }
+
+    const verifModal = document.getElementById('admin-verif-modal');
+    const verifModalContent = document.getElementById('admin-verif-modal-content');
+    const verifModalCloseBtn = document.getElementById('admin-verif-modal-close');
+
+    function closeVerificationModal() {
+        if (verifModal) verifModal.hidden = true;
+        if (verifModalContent) verifModalContent.innerHTML = '';
+    }
+
+    function openVerificationModal(item) {
+        if (!verifModal || !verifModalContent) return;
+
+        const docUrl = item.documentFileName ? `/api/admin/verifications/${encodeURIComponent(item.id)}/document` : '';
+        const fileNameLower = (item.documentFileName || '').toLowerCase();
+        const isImage = /\.(png|jpe?g|webp|gif)$/i.test(fileNameLower);
+        const isPdf = /\.pdf$/i.test(fileNameLower);
+
+        const statusBadgeMap = {
+            APPROVED: 'shortlisted',
+            PENDING: 'review',
+            REJECTED: 'closed'
+        };
+        const statusBadge = statusBadgeMap[item.verificationStatus] || 'review';
+
+        const detailRows = [
+            { label: 'Organization / Studio', value: item.organizationName || '—' },
+            { label: 'Contact Full Name', value: item.fullName || '—' },
+            { label: 'Registered Email', value: item.email || '—' },
+            { label: 'Portal / Role', value: item.roleDisplayName || item.role || '—' },
+            { label: 'Document Type', value: item.documentType || '—' },
+            { label: 'Document Number', value: item.documentNumber || '—' },
+            { label: 'Uploaded File Name', value: item.documentFileName || 'No file uploaded' }
+        ];
+
+        if (item.phone) detailRows.push({ label: 'Phone', value: item.phone });
+        if (item.city) detailRows.push({ label: 'City', value: item.city });
+        if (item.portfolioOrBio) detailRows.push({ label: 'Bio / Notes', value: item.portfolioOrBio });
+
+        let docPreviewHtml = '<p class="ew-app-meta">No verification document was uploaded.</p>';
+        if (docUrl) {
+            if (isImage) {
+                docPreviewHtml = `
+                    <div class="ew-verif-preview-box">
+                        <img src="${escapeHtml(docUrl)}" alt="Uploaded verification document" class="ew-verif-preview-img">
+                    </div>
+                `;
+            } else if (isPdf) {
+                docPreviewHtml = `
+                    <div class="ew-verif-preview-box">
+                        <iframe src="${escapeHtml(docUrl)}" title="Uploaded verification PDF" class="ew-verif-preview-pdf"></iframe>
+                    </div>
+                `;
+            } else {
+                docPreviewHtml = `<p class="ew-app-meta">Preview not available for this file type. Use the button below to open or download it.</p>`;
+            }
+        }
+
+        verifModalContent.innerHTML = `
+            <div class="ew-person-modal-head">
+                <div>
+                    <h3 id="admin-verif-modal-title">${escapeHtml(item.organizationName || item.fullName)}</h3>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+                        <span class="module-tag">${escapeHtml(item.roleDisplayName || item.role)}</span>
+                        <span class="ew-badge ${escapeHtml(statusBadge)}">${escapeHtml(item.verificationStatus)}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ew-person-modal-body">
+                <div class="ew-verif-detail-grid">
+                    ${detailRows.map((row) => `
+                        <div class="ew-verif-detail-item">
+                            <span class="ew-verif-detail-label">${escapeHtml(row.label)}</span>
+                            <strong class="ew-verif-detail-value">${escapeHtml(row.value)}</strong>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="ew-verif-doc-section">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                        <strong>Uploaded Verification Document</strong>
+                        ${docUrl ? `<a class="ew-btn ew-btn-outline ew-btn-sm" href="${escapeHtml(docUrl)}" target="_blank" rel="noopener">Open in New Tab</a>` : ''}
+                    </div>
+                    ${docPreviewHtml}
+                </div>
+            </div>
+            <div class="ew-inv-modal-actions">
+                ${item.verificationStatus !== 'APPROVED'
+                    ? `<button type="button" class="action-btn btn-approve" data-modal-verif-action="approve" data-modal-verif-id="${escapeHtml(item.id)}">Approve</button>`
+                    : ''}
+                ${item.verificationStatus !== 'REJECTED'
+                    ? `<button type="button" class="action-btn btn-reject" data-modal-verif-action="reject" data-modal-verif-id="${escapeHtml(item.id)}">Reject</button>`
+                    : ''}
+                <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" id="admin-verif-modal-done">Close</button>
+            </div>
+        `;
+
+        verifModal.hidden = false;
+    }
+
+    verifModalCloseBtn?.addEventListener('click', closeVerificationModal);
+    verifModal?.addEventListener('click', (e) => {
+        if (e.target === verifModal || e.target.id === 'admin-verif-modal-done') {
+            closeVerificationModal();
+            return;
+        }
+        const actionBtn = e.target.closest('[data-modal-verif-action]');
+        if (actionBtn) {
+            updateDecision(actionBtn.dataset.modalVerifId, actionBtn.dataset.modalVerifAction);
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && verifModal && !verifModal.hidden) {
+            closeVerificationModal();
+        }
+    });
 
     function renderUsers() {
         const container = document.getElementById('admin-users-list');
@@ -289,6 +431,20 @@
                 </div>
             </article>
         `).join('');
+    }
+
+    const PAYMENT_STATUS_OPTIONS = [
+        { value: 'In Review', label: 'In Review', badge: 'review' },
+        { value: 'Settled', label: 'Settled', badge: 'shortlisted' },
+        { value: 'Paid', label: 'Paid', badge: 'shortlisted' },
+        { value: 'Pending', label: 'Pending', badge: 'audition' },
+        { value: 'Failed', label: 'Failed', badge: 'closed' }
+    ];
+
+    function closePaymentActionMenus() {
+        document.querySelectorAll('.ew-payment-action-menu').forEach((menu) => {
+            menu.hidden = true;
+        });
     }
 
     function renderPayments() {
@@ -371,7 +527,7 @@
         }
 
         if (filtered.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 18px;">No payment records match your search or filters.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 18px;">No payment records match your search or filters.</td></tr>`;
             return;
         }
 
@@ -386,6 +542,23 @@
                 <td><strong>₹${Number(item.amount || 0).toLocaleString('en-IN')}</strong></td>
                 <td>${escapeHtml(item.date)} • ${escapeHtml(item.method)} (${escapeHtml(item.invoice)})</td>
                 <td><span class="ew-badge ${escapeHtml(item.badge || 'review')}">${escapeHtml(item.status)}</span></td>
+                <td>
+                    <div class="ew-payment-action-wrap">
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-payment-menu-toggle="${escapeHtml(item.id)}">
+                            Manage ▾
+                        </button>
+                        <div class="ew-payment-action-menu" data-payment-menu="${escapeHtml(item.id)}" hidden>
+                            ${PAYMENT_STATUS_OPTIONS.map((opt) => `
+                                <button type="button"
+                                    class="ew-payment-action-item${item.status === opt.value ? ' active' : ''}"
+                                    data-payment-id="${escapeHtml(item.id)}"
+                                    data-payment-status="${escapeHtml(opt.value)}">
+                                    <span class="ew-badge ${escapeHtml(opt.badge)}">${escapeHtml(opt.label)}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </td>
             </tr>
         `).join('');
     }
@@ -461,6 +634,49 @@
     }
 
     document.addEventListener('click', (e) => {
+        if (!e.target.closest('.ew-payment-action-wrap')) {
+            closePaymentActionMenus();
+        }
+
+        const paymentMenuBtn = e.target.closest('[data-payment-menu-toggle]');
+        if (paymentMenuBtn) {
+            const paymentId = paymentMenuBtn.dataset.paymentMenuToggle;
+            const menu = document.querySelector(`[data-payment-menu="${CSS.escape(paymentId)}"]`);
+            const wasHidden = menu ? menu.hidden : true;
+            closePaymentActionMenus();
+            if (menu && wasHidden) {
+                menu.hidden = false;
+                const rect = paymentMenuBtn.getBoundingClientRect();
+                const menuRect = menu.getBoundingClientRect();
+                const spaceBelow = window.innerHeight - rect.bottom;
+                const top = spaceBelow >= menuRect.height + 8
+                    ? rect.bottom + 6
+                    : Math.max(8, rect.top - menuRect.height - 6);
+                const left = Math.max(8, Math.min(rect.right - menuRect.width, window.innerWidth - menuRect.width - 8));
+                menu.style.top = `${top}px`;
+                menu.style.left = `${left}px`;
+            }
+            return;
+        }
+
+        const paymentStatusBtn = e.target.closest('[data-payment-status]');
+        if (paymentStatusBtn) {
+            const paymentId = paymentStatusBtn.dataset.paymentId;
+            const newStatus = paymentStatusBtn.dataset.paymentStatus;
+            const option = PAYMENT_STATUS_OPTIONS.find((opt) => opt.value === newStatus);
+            const payment = (adminState.payments || []).find((p) => p.id === paymentId);
+            if (payment && option) {
+                payment.status = option.value;
+                payment.badge = option.badge;
+                saveAdminState();
+                renderPayments();
+                showToast(`${payment.invoice || payment.subscriberName} marked as ${option.value}`);
+            } else {
+                closePaymentActionMenus();
+            }
+            return;
+        }
+
         const navBtn = e.target.closest('.ew-nav-item[data-view]');
         if (navBtn) {
             switchView(navBtn.dataset.view);
@@ -550,10 +766,221 @@
         showToast('Announcement sent');
     });
 
+    const SUB_PORTAL_META = {
+        Professionals: { planId: 'pp-actors', label: 'Professionals (Actors & Talent)' },
+        Casting: { planId: 'pp-casting', label: 'Casting Productions' },
+        Brands: { planId: 'pp-brands', label: 'Brand Promotions' },
+        Events: { planId: 'pp-events', label: 'Event Management' },
+        Vendors: { planId: 'pp-vendors', label: 'Vendors Management' }
+    };
+
+    const planModal = document.getElementById('admin-plan-modal');
+    const planForm = document.getElementById('admin-plan-form');
+
+    function syncPortalPlansFromCatalog() {
+        const catalog = Array.isArray(adminState.subscriptionPlans) ? adminState.subscriptionPlans : [];
+        const portalPlans = Array.isArray(adminState.portalPlans) ? adminState.portalPlans : [];
+        Object.entries(SUB_PORTAL_META).forEach(([portalKey, meta]) => {
+            const activeForPortal = catalog.filter((p) => p.portal === portalKey && p.status === 'Active');
+            const summary = activeForPortal.length
+                ? activeForPortal.map((p) => `${p.name} ${p.price === 0 ? 'Free' : `₹${Number(p.price).toLocaleString('en-IN')}`}`).join(' • ')
+                : 'No active plans';
+            const portalRow = portalPlans.find((pp) => pp.id === meta.planId);
+            if (portalRow) {
+                portalRow.tiers = summary;
+            }
+        });
+    }
+
+    function renderSubscriptionManager() {
+        const grid = document.getElementById('admin-subscriptions-grid');
+        if (!grid) return;
+
+        const plans = Array.isArray(adminState.subscriptionPlans) ? adminState.subscriptionPlans : [];
+        const filtered = subPortalFilter === 'ALL'
+            ? plans
+            : plans.filter((p) => p.portal === subPortalFilter);
+
+        if (!filtered.length) {
+            grid.innerHTML = '<div class="ew-panel"><p>No subscription plans configured for this portal yet.</p></div>';
+            return;
+        }
+
+        grid.innerHTML = filtered.map((plan) => {
+            const isActive = plan.status === 'Active';
+            const priceLabel = Number(plan.price) === 0
+                ? 'Free'
+                : `₹${Number(plan.price).toLocaleString('en-IN')}`;
+            const cycleSuffix = Number(plan.price) === 0 ? '' : `<span>/ ${escapeHtml(plan.cycle || 'Monthly')}</span>`;
+            const features = Array.isArray(plan.features) ? plan.features : [];
+            const portalLabel = SUB_PORTAL_META[plan.portal]?.label || plan.portal;
+
+            return `
+                <article class="ew-panel ew-sub-plan-card">
+                    <div>
+                        <div class="ew-section-head" style="margin-bottom: 8px; gap: 8px;">
+                            <span class="module-tag">${escapeHtml(portalLabel)}</span>
+                            <span class="ew-badge ${isActive ? 'shortlisted' : 'closed'}">${escapeHtml(plan.status)}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px;">
+                            <h3 style="margin: 0;">${escapeHtml(plan.name)}</h3>
+                            ${plan.badge ? `<span class="ew-badge review">${escapeHtml(plan.badge)}</span>` : ''}
+                        </div>
+                        <div class="ew-sub-plan-price">${priceLabel} ${cycleSuffix}</div>
+                        ${plan.quota ? `<p class="ew-app-meta" style="margin: 6px 0 10px;">${escapeHtml(plan.quota)}</p>` : ''}
+                        ${features.length ? `
+                            <ul class="ew-sub-plan-features">
+                                ${features.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                    </div>
+                    <div class="ew-sub-plan-actions">
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-toggle-sub-plan="${escapeHtml(plan.id)}">
+                            ${isActive ? 'Pause' : 'Activate'}
+                        </button>
+                        <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-edit-sub-plan="${escapeHtml(plan.id)}">
+                            Edit Plan
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    function openPlanModal(planId) {
+        if (!planModal || !planForm) return;
+        const plan = planId ? (adminState.subscriptionPlans || []).find((p) => p.id === planId) : null;
+        document.getElementById('admin-plan-modal-title').textContent = plan ? `Edit Plan — ${plan.name}` : 'Add New Subscription Plan';
+        document.getElementById('sub-plan-id').value = plan ? plan.id : '';
+        document.getElementById('sub-plan-portal').value = plan ? plan.portal : (subPortalFilter !== 'ALL' ? subPortalFilter : 'Professionals');
+        document.getElementById('sub-plan-name').value = plan ? plan.name : '';
+        document.getElementById('sub-plan-price').value = plan ? String(plan.price) : '';
+        document.getElementById('sub-plan-cycle').value = plan ? (plan.cycle || 'Monthly') : 'Monthly';
+        document.getElementById('sub-plan-status').value = plan ? (plan.status || 'Active') : 'Active';
+        document.getElementById('sub-plan-badge').value = plan ? (plan.badge || '') : '';
+        document.getElementById('sub-plan-quota').value = plan ? (plan.quota || '') : '';
+        document.getElementById('sub-plan-features').value = plan && Array.isArray(plan.features) ? plan.features.join('\n') : '';
+        planModal.hidden = false;
+    }
+
+    function closePlanModal() {
+        if (planModal) planModal.hidden = true;
+    }
+
+    document.addEventListener('click', (e) => {
+        const subChip = e.target.closest('.ew-chip[data-sub-portal-filter]');
+        if (subChip) {
+            subPortalFilter = subChip.dataset.subPortalFilter;
+            document.querySelectorAll('.ew-chip[data-sub-portal-filter]').forEach((c) => {
+                c.classList.toggle('active', c === subChip);
+            });
+            renderSubscriptionManager();
+            return;
+        }
+
+        const editPlanBtn = e.target.closest('[data-edit-sub-plan]');
+        if (editPlanBtn) {
+            openPlanModal(editPlanBtn.dataset.editSubPlan);
+            return;
+        }
+
+        const togglePlanBtn = e.target.closest('[data-toggle-sub-plan]');
+        if (togglePlanBtn) {
+            const plan = (adminState.subscriptionPlans || []).find((p) => p.id === togglePlanBtn.dataset.toggleSubPlan);
+            if (plan) {
+                plan.status = plan.status === 'Active' ? 'Paused' : 'Active';
+                syncPortalPlansFromCatalog();
+                saveAdminState();
+                renderSubscriptionManager();
+                renderPayments();
+                showToast(`${plan.name} (${plan.portal}) marked ${plan.status}`);
+            }
+        }
+    });
+
+    document.getElementById('admin-add-plan-btn')?.addEventListener('click', () => openPlanModal(null));
+    document.getElementById('admin-reset-plans-btn')?.addEventListener('click', () => {
+        adminState.subscriptionPlans = structuredClone(DEFAULT_ADMIN_STATE.subscriptionPlans);
+        syncPortalPlansFromCatalog();
+        saveAdminState();
+        renderSubscriptionManager();
+        renderPayments();
+        showToast('Subscription plans reset to defaults');
+    });
+
+    document.getElementById('admin-plan-modal-close')?.addEventListener('click', closePlanModal);
+    document.getElementById('admin-plan-cancel')?.addEventListener('click', closePlanModal);
+    planModal?.addEventListener('click', (e) => {
+        if (e.target === planModal) closePlanModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && planModal && !planModal.hidden) {
+            closePlanModal();
+        }
+    });
+
+    planForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('sub-plan-id').value.trim();
+        const portal = document.getElementById('sub-plan-portal').value;
+        const name = document.getElementById('sub-plan-name').value.trim();
+        const price = Math.max(0, Number(document.getElementById('sub-plan-price').value || 0));
+        const cycle = document.getElementById('sub-plan-cycle').value;
+        const status = document.getElementById('sub-plan-status').value;
+        const badge = document.getElementById('sub-plan-badge').value.trim();
+        const quota = document.getElementById('sub-plan-quota').value.trim();
+        const features = document.getElementById('sub-plan-features').value
+            .split(/\r?\n/)
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+        if (!name) return;
+
+        if (!Array.isArray(adminState.subscriptionPlans)) {
+            adminState.subscriptionPlans = [];
+        }
+
+        if (id) {
+            const existing = adminState.subscriptionPlans.find((p) => p.id === id);
+            if (existing) {
+                existing.portal = portal;
+                existing.name = name;
+                existing.price = price;
+                existing.cycle = cycle;
+                existing.status = status;
+                existing.badge = badge;
+                existing.quota = quota;
+                existing.features = features;
+            }
+            showToast(`Updated ${name} plan for ${portal}`);
+        } else {
+            adminState.subscriptionPlans.push({
+                id: `sp-${Date.now()}`,
+                portal,
+                name,
+                price,
+                cycle,
+                status,
+                badge,
+                quota,
+                features
+            });
+            showToast(`Added ${name} plan for ${portal}`);
+        }
+
+        syncPortalPlansFromCatalog();
+        saveAdminState();
+        renderSubscriptionManager();
+        renderPayments();
+        closePlanModal();
+    });
+
     refreshBtn?.addEventListener('click', loadVerifications);
 
     renderUsers();
+    syncPortalPlansFromCatalog();
     renderPayments();
+    renderSubscriptionManager();
     renderBroadcasts();
     renderAdminComplaints();
     loadVerifications();

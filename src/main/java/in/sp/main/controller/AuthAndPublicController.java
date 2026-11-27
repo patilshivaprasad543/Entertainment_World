@@ -244,12 +244,6 @@ public class AuthAndPublicController {
         ));
     }
 
-    @PostMapping("/auth/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok(Map.of("message", "Signed out cleanly"));
-    }
-
     @GetMapping("/auth/me")
     public ResponseEntity<?> currentSession(HttpSession session) {
         Object role = session.getAttribute(SessionAuthHelper.SESSION_ROLE);

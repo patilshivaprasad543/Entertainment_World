@@ -3,6 +3,7 @@ package com.example.demo.model;
 public enum UserRole {
     ADMIN("Admin", "/dashboards/admin.html"),
     ACTOR("Professionals", "/dashboards/actors.html"),
+    INFLUENCER("Influencer", "/dashboards/influencer.html"),
     VENDOR("Vendors Management", "/dashboards/vendors.html"),
     EVENT_MANAGEMENT("Event Management", "/dashboards/events.html"),
     CASTING("Casting Productions", "/dashboards/casting.html"),

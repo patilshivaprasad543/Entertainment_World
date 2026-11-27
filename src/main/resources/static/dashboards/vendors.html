@@ -3,40 +3,637 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vendors Management Dashboard — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css">
+    <title>Vendor &amp; Venue Management Dashboard — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css?v=4">
+    <link rel="stylesheet" href="/css/vendor-portal.css?v=4">
 </head>
-<body data-role="VENDOR" data-login="/vendors-login.html">
-    <main class="dashboard-page">
-        <header class="dashboard-topbar">
-            <div>
-                <span class="module-tag">Equipment &amp; Supply</span>
-                <h1>Vendors Management Dashboard</h1>
-            </div>
-            <div class="dashboard-user">
-                <div class="user-meta">
-                    <strong id="user-name"></strong>
-                    <span id="user-email"></span>
-                </div>
-                <button type="button" id="signout-btn" class="signout-btn">Sign Out</button>
-            </div>
-        </header>
+<body class="vendor-shell" data-role="VENDOR" data-login="/vendors-login.html" style="background: transparent;">
+    <nav class="ew-navbar">
+        <a href="/index.html" class="ew-brand">
+            <span class="ew-logo-box">★</span>
+            <span class="ew-brand-text">
+                <strong>Entertainment World</strong>
+                <span>VENDOR &amp; VENUE MANAGEMENT</span>
+            </span>
+        </a>
+        <div class="ew-nav-links">
+            <a href="/index.html">All Modules</a>
+            <a href="/pricing.html">Pricing</a>
+            <a href="#" data-jump="venues">My Venues</a>
+            <a href="#" data-jump="enquiries">Enquiries</a>
+            <a href="#" data-jump="bookings">Bookings</a>
+            <a href="#" data-jump="subscription">My Subscription</a>
+        </div>
+        <div class="ew-nav-actions">
+            <span class="ew-user-chip"><strong id="user-name"></strong> <span class="ew-verified-tick" title="Verified Vendor">✓</span></span>
+            <button type="button" class="ew-btn-signout" onclick="document.getElementById('signout-btn').click()">Sign Out</button>
+        </div>
+    </nav>
 
-        <section class="dashboard-grid">
-            <article class="dash-widget">
-                <h3>Equipment &amp; Gear Catalog</h3>
-                <p>Manage cameras, lighting rigs, sound systems, props, and catering packages.</p>
-            </article>
-            <article class="dash-widget">
-                <h3>Rental &amp; Supply Bookings</h3>
-                <p>Review incoming requests from Event Management and Casting Productions.</p>
-            </article>
-            <article class="dash-widget">
-                <h3>Invoices &amp; Settlements</h3>
-                <p>Track rental agreements, delivery schedules, and vendor payouts.</p>
-            </article>
-        </section>
-    </main>
-    <script src="/js/dashboard.js"></script>
+    <div id="vendor-full-bg-slideshow" style="position:fixed;inset:0;z-index:-1;overflow:hidden;background:#141219;opacity:1;pointer-events:none;" aria-hidden="true">
+        <div id="vendor-bg-track" style="display:flex;height:100%;transition:transform 0.85s cubic-bezier(0.22,1,0.36,1);will-change:transform;"></div>
+    </div>
+    <div class="bg-3d-stage" aria-hidden="true"></div>
+    <div class="app-layout">
+        <aside id="vendor-sidebar" class="sidebar" aria-label="Vendor Navigation">
+            <div class="sidebar-brand">
+                <div class="brand-badge" aria-hidden="true">EW</div>
+                <div>
+                    <h2>Venue Studio</h2>
+                    <span id="sidebar-plan-badge">Free Plan</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button type="button" class="nav-item active" data-view="overview"><span class="nav-item-label">🏠 Dashboard</span></button>
+                <button type="button" class="nav-item" data-view="profile"><span class="nav-item-label">👤 My Profile</span></button>
+                <button type="button" class="nav-item" data-view="venues"><span class="nav-item-label">🏛️ My Venues</span></button>
+                <button type="button" class="nav-item" data-view="gallery"><span class="nav-item-label">🖼️ Venue Gallery</span></button>
+                <button type="button" class="nav-item" data-view="pricing"><span class="nav-item-label">💰 Pricing Management</span></button>
+                <button type="button" class="nav-item" data-view="availability"><span class="nav-item-label">📅 Availability Calendar</span></button>
+                <button type="button" class="nav-item" data-view="enquiries"><span class="nav-item-label">📩 Booking Enquiries</span><span id="enq-badge" class="badge-count" hidden>0</span></button>
+                <button type="button" class="nav-item" data-view="bookings"><span class="nav-item-label">📋 Booking Management</span></button>
+                <button type="button" class="nav-item" data-view="quotations"><span class="nav-item-label">📄 Quotations</span></button>
+                <button type="button" class="nav-item" data-view="tour360"><span class="nav-item-label">🌐 360° Venue Tour</span></button>
+                <button type="button" class="nav-item" data-view="locations"><span class="nav-item-label">📍 Multiple Locations</span></button>
+                <button type="button" class="nav-item" data-view="analytics"><span class="nav-item-label">📊 Booking Analytics</span></button>
+                <button type="button" class="nav-item" data-view="subscription"><span class="nav-item-label">⭐ Subscription Plans</span></button>
+                <button type="button" class="nav-item" data-view="team"><span class="nav-item-label">👥 Team Management</span></button>
+                <button type="button" class="nav-item" data-view="settings"><span class="nav-item-label">⚙️ Settings</span><span id="notif-badge" class="badge-count" hidden>0</span></button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-status-chip">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>Vendor Portal Active</span>
+                </div>
+                <button type="button" id="signout-btn" class="signout-btn">Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <header class="studio-topbar">
+                <div>
+                    <button type="button" id="mobile-menu-btn" class="mobile-menu-btn">&#9776; Menu</button>
+                    <span class="module-tag">Banquet Halls, Auditoriums, Studios &amp; Event Locations</span>
+                    <h1>Vendor / Venue Management Dashboard</h1>
+                </div>
+                <div class="topbar-actions">
+                    <button type="button" class="cta-glow-btn" data-jump="venues">+ Add New Venue</button>
+                    <div class="dashboard-user">
+                        <div class="user-meta">
+                            <span id="user-email"></span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="vendor-banner" class="status-banner" role="alert" hidden></div>
+
+            <!-- 1. DASHBOARD OVERVIEW -->
+            <section id="view-overview" class="view-section">
+                <div class="hero-slideshow" id="hero-video-box" style="height: 440px;" aria-label="Vendor Studio Showcase">
+                    <div class="slide-item active">
+                        <img src="/images/vendor-slide-1.jpg" alt="Studio and Venue Showcase">
+                        <div class="slide-overlay">
+                            <span class="module-tag">Venues &amp; Studios</span>
+                            <h2>Manage Venues, Pricing, Enquiries &amp; Confirmed Bookings</h2>
+                            <p>List banquet halls, resorts, auditoriums, shooting locations, and recording studios in one workspace.</p>
+                            <div class="hero-cta-row">
+                                <button type="button" class="cta-glow-btn" data-jump="venues">Manage Venues</button>
+                                <button type="button" class="btn-sm btn-secondary" data-jump="enquiries">View Enquiries</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-item">
+                        <img src="/images/vendor-slide-2.jpg" alt="Grand Stage and Auditorium">
+                        <div class="slide-overlay">
+                            <span class="module-tag">Live Availability</span>
+                            <h2>Interactive Calendar &amp; Instant Quotations</h2>
+                            <p>Prevent overlapping bookings, send itemized PDF quotations, and track revenue in real time.</p>
+                            <div class="hero-cta-row">
+                                <button type="button" class="cta-glow-btn" data-jump="availability">Open Calendar</button>
+                                <button type="button" class="btn-sm btn-secondary" data-jump="quotations">Create Quotation</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-item">
+                        <img src="/images/vendor-slide-3.jpg" alt="Production Set">
+                        <div class="slide-overlay">
+                            <span class="module-tag">360° &amp; Multi-Location</span>
+                            <h2>360° Venue Tours &amp; Multi-Branch Control</h2>
+                            <p>Showcase panoramic tours and manage multiple city properties under one verified vendor account.</p>
+                            <div class="hero-cta-row">
+                                <button type="button" class="cta-glow-btn" data-jump="tour360">360° Venue Tour</button>
+                                <button type="button" class="btn-sm btn-secondary" data-jump="subscription">Upgrade Plan</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="slide-prev-btn" class="slide-nav-btn slide-prev" aria-label="Previous slide">&lsaquo;</button>
+                    <button type="button" id="slide-next-btn" class="slide-nav-btn slide-next" aria-label="Next slide">&rsaquo;</button>
+                    <div class="slide-dots" id="slide-dots">
+                        <button type="button" class="slide-dot active" data-slide="0" aria-label="Slide 1"></button>
+                        <button type="button" class="slide-dot" data-slide="1" aria-label="Slide 2"></button>
+                        <button type="button" class="slide-dot" data-slide="2" aria-label="Slide 3"></button>
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span>Total Venues</span><strong id="kpi-total-venues">0</strong></div>
+                    <div class="kpi-card"><span>Active Venues</span><strong id="kpi-active-venues">0</strong></div>
+                    <div class="kpi-card"><span>Pending Enquiries</span><strong id="kpi-pending-enquiries">0</strong></div>
+                    <div class="kpi-card"><span>Confirmed Bookings</span><strong id="kpi-confirmed-bookings">0</strong></div>
+                    <div class="kpi-card"><span>Pending Bookings</span><strong id="kpi-pending-bookings">0</strong></div>
+                    <div class="kpi-card"><span>Total Revenue</span><strong id="kpi-total-revenue">₹0.00</strong></div>
+                    <div class="kpi-card"><span>Available Venues</span><strong id="kpi-available-venues">0</strong></div>
+                    <div class="kpi-card"><span>Current Plan</span><strong id="kpi-current-plan">FREE</strong></div>
+                </div>
+
+                <div class="dashboard-grid" style="margin-bottom:1.25rem;">
+                    <article class="panel-card" style="margin-bottom:0;">
+                        <div class="panel-header"><h3>A. Recent Booking Enquiries</h3><button type="button" class="btn-sm btn-secondary" data-jump="enquiries">View All</button></div>
+                        <div id="ov-recent-enquiries"></div>
+                    </article>
+                    <article class="panel-card" style="margin-bottom:0;">
+                        <div class="panel-header"><h3>B. Upcoming Bookings</h3><button type="button" class="btn-sm btn-secondary" data-jump="bookings">View All</button></div>
+                        <div id="ov-upcoming-bookings"></div>
+                    </article>
+                </div>
+
+                <div class="dashboard-grid" style="margin-bottom:1.25rem;">
+                    <article class="panel-card" style="margin-bottom:0;">
+                        <div class="panel-header"><h3>C. Recent Activities</h3></div>
+                        <div id="ov-recent-activities"></div>
+                    </article>
+                    <article class="panel-card" style="margin-bottom:0;">
+                        <div class="panel-header"><h3>D. Booking Status Overview</h3></div>
+                        <div id="ov-status-overview"></div>
+                    </article>
+                </div>
+
+                <div class="dashboard-grid">
+                    <article class="panel-card" style="margin-bottom:0;">
+                        <div class="panel-header"><h3>E. Monthly Revenue Chart</h3></div>
+                        <div id="ov-revenue-chart" class="bar-chart"></div>
+                    </article>
+                    <article class="panel-card" style="margin-bottom:0;">
+                        <div class="panel-header"><h3>F. Venue Performance Chart</h3></div>
+                        <div id="ov-performance-chart" class="bar-chart"></div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- 2. MY PROFILE -->
+            <section id="view-profile" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>My Vendor Profile</h2><span class="brand-subtitle">Connected to your verified Vendor Account</span></div>
+                        <span id="prof-ver-status" class="pill pill-APPROVED">APPROVED</span>
+                    </div>
+                    <div class="profile-banner-wrap">
+                        <img id="prof-cover-preview" class="profile-cover-preview" src="/images/vendor-slide-2.jpg" alt="Cover">
+                        <div class="profile-banner-overlay">
+                            <img id="prof-logo-preview" class="logo-preview" alt="Logo" hidden>
+                            <div>
+                                <h3 id="prof-banner-company" style="margin:0;color:#fff;">Vendor Studio</h3>
+                                <span style="font-size:0.85rem;color:#f3ede2;" id="prof-doc-info">Document Info</span>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="profile-form" class="form-grid">
+                        <div class="field-group"><label for="prof-company">Vendor / Business Name *</label><input type="text" id="prof-company" required></div>
+                        <div class="field-group"><label for="prof-contact">Owner Name *</label><input type="text" id="prof-contact" required></div>
+                        <div class="field-group"><label for="prof-designation">Designation</label><input type="text" id="prof-designation" placeholder="Managing Director"></div>
+                        <div class="field-group"><label for="prof-email">Business Email *</label><input type="email" id="prof-email" required></div>
+                        <div class="field-group"><label for="prof-phone">Mobile Number</label><input type="text" id="prof-phone"></div>
+                        <div class="field-group"><label for="prof-alt-phone">Alternate Phone</label><input type="text" id="prof-alt-phone"></div>
+                        <div class="field-group"><label for="prof-gst">GST Number (Optional)</label><input type="text" id="prof-gst" placeholder="29ABCDE1234F1Z5"></div>
+                        <div class="field-group"><label for="prof-website">Business Website</label><input type="url" id="prof-website" placeholder="https://example.com"></div>
+                        <div class="field-group"><label for="prof-years">Years in Business</label><input type="number" id="prof-years" min="0"></div>
+                        <div class="field-group"><label for="prof-venues">Venues Managed</label><input type="number" id="prof-venues" min="0"></div>
+                        <div class="field-group"><label for="prof-country">Country</label><input type="text" id="prof-country" value="India"></div>
+                        <div class="field-group"><label for="prof-state">State</label><input type="text" id="prof-state"></div>
+                        <div class="field-group"><label for="prof-city">City</label><input type="text" id="prof-city"></div>
+                        <div class="field-group"><label for="prof-pincode">PIN Code</label><input type="text" id="prof-pincode"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="prof-address">Business Address</label><input type="text" id="prof-address"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="prof-bio">Short Bio</label><input type="text" id="prof-bio"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="prof-desc">Business Description</label><textarea id="prof-desc" rows="3"></textarea></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="prof-about-us">About Us</label><textarea id="prof-about-us" rows="3"></textarea></div>
+                        <div class="field-group" style="grid-column:1/-1;">
+                            <label><input type="checkbox" id="prof-terms" checked> I accept the Terms &amp; Conditions</label>
+                            <label><input type="checkbox" id="prof-privacy" checked> I accept the Privacy Policy</label>
+                        </div>
+                        <div style="grid-column:1/-1;" class="btn-row">
+                            <button type="submit" class="btn-sm btn-primary">Save Profile Changes</button>
+                            <a id="prof-doc-link" href="#" target="_blank" class="btn-sm btn-secondary" hidden>View Business Document</a>
+                        </div>
+                    </form>
+                    <div class="dashboard-grid" style="margin-top:1rem;">
+                        <form id="logo-form" class="field-group"><label for="logo-file">Upload Business Logo</label><div class="btn-row"><input type="file" id="logo-file" accept="image/*"><button type="submit" class="btn-sm btn-secondary">Upload Logo</button></div></form>
+                        <form id="cover-form" class="field-group"><label for="cover-file">Upload Cover Banner</label><div class="btn-row"><input type="file" id="cover-file" accept="image/*"><button type="submit" class="btn-sm btn-secondary">Upload Cover</button></div></form>
+                    </div>
+                    <div id="prof-venue-photos-wrap" style="margin-top:1.75rem;"></div>
+                </div>
+            </section>
+
+            <!-- 3. MY VENUES -->
+            <section id="view-venues" class="view-section" hidden>
+                <div id="venue-form-card" class="panel-card">
+                    <div class="panel-header">
+                        <div><h2 id="venue-form-title">Add New Venue</h2><span class="brand-subtitle" id="venue-limit-label">Loading plan limit...</span></div>
+                        <button type="button" id="venue-reset-btn" class="btn-sm btn-secondary">Reset Form</button>
+                    </div>
+                    <form id="venue-form" novalidate>
+                        <input type="hidden" id="vn-id">
+                        <div id="venue-form-error" class="status-banner error" hidden></div>
+
+                        <h3 style="margin:0.5rem 0 0.75rem;font-size:0.95rem;color:#be123c;border-bottom:1px solid #e7e2d9;padding-bottom:0.35rem;">SECTION A: BASIC VENUE DETAILS</h3>
+                        <div class="form-grid" style="margin-bottom:1.25rem;">
+                            <div class="field-group"><label for="vn-name">Venue Name *</label><input type="text" id="vn-name" placeholder="Grand Celebration Hall" required></div>
+                            <div class="field-group">
+                                <label for="vn-type">Venue Type *</label>
+                                <select id="vn-type" required>
+                                    <option value="">-- Select Venue Type --</option>
+                                    <option value="Banquet Hall">Banquet Hall</option>
+                                    <option value="Marriage Hall">Marriage Hall</option>
+                                    <option value="Function Hall">Function Hall</option>
+                                    <option value="Auditorium">Auditorium</option>
+                                    <option value="Convention Center">Convention Center</option>
+                                    <option value="Resort">Resort</option>
+                                    <option value="Outdoor Lawn">Outdoor Lawn</option>
+                                    <option value="Party Hall">Party Hall</option>
+                                    <option value="Shooting Location">Shooting Location</option>
+                                    <option value="Recording Studio">Recording Studio</option>
+                                    <option value="Photography Studio">Photography Studio</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="field-group" style="grid-column:1/-1;"><label for="vn-desc">Venue Description *</label><textarea id="vn-desc" rows="4" placeholder="Describe your venue, ambiance, capacity highlights, and unique features..." required></textarea></div>
+                        </div>
+
+                        <h3 style="margin:0.5rem 0 0.75rem;font-size:0.95rem;color:#be123c;border-bottom:1px solid #e7e2d9;padding-bottom:0.35rem;">SECTION B: VENUE LOCATION DETAILS</h3>
+                        <div class="form-grid" style="margin-bottom:1.25rem;">
+                            <div class="field-group">
+                                <label for="vn-country">Country *</label>
+                                <select id="vn-country" required>
+                                    <option value="India" selected>India</option>
+                                    <option value="United States">United States</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="Australia">Australia</option>
+                                    <option value="UAE">UAE</option>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label for="vn-state">State *</label>
+                                <select id="vn-state" required></select>
+                            </div>
+                            <div class="field-group"><label for="vn-city">City *</label><input type="text" id="vn-city" placeholder="Bengaluru / Hyderabad" required></div>
+                            <div class="field-group"><label for="vn-area">Area / Locality *</label><input type="text" id="vn-area" placeholder="Indiranagar / Jubilee Hills" required></div>
+                            <div class="field-group" style="grid-column:1/-1;"><label for="vn-address">Complete Address *</label><textarea id="vn-address" rows="3" placeholder="Building/Plot No, Street Name, Landmark..." required></textarea></div>
+                            <div class="field-group"><label for="vn-pincode">PIN Code *</label><input type="text" id="vn-pincode" placeholder="560001" required></div>
+                            <div class="field-group">
+                                <label for="vn-map">Google Maps Location *</label>
+                                <div class="btn-row">
+                                    <input type="url" id="vn-map" placeholder="https://maps.google.com/?q=..." style="flex:1;" required>
+                                    <a id="vn-map-preview" href="#" target="_blank" rel="noopener noreferrer" class="btn-sm btn-secondary" hidden>Open Map</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 style="margin:0.5rem 0 0.75rem;font-size:0.95rem;color:#be123c;border-bottom:1px solid #e7e2d9;padding-bottom:0.35rem;">SECTION C: VENUE CONTACT DETAILS</h3>
+                        <div class="form-grid" style="margin-bottom:1.25rem;">
+                            <div class="field-group">
+                                <label for="vn-phone-code">Country Code *</label>
+                                <select id="vn-phone-code" required>
+                                    <option value="+91" selected>+91 (India)</option>
+                                    <option value="+1">+1 (USA / Canada)</option>
+                                    <option value="+44">+44 (UK)</option>
+                                    <option value="+971">+971 (UAE)</option>
+                                    <option value="+61">+61 (Australia)</option>
+                                    <option value="+65">+65 (Singapore)</option>
+                                </select>
+                            </div>
+                            <div class="field-group"><label for="vn-phone">Contact Phone Number *</label><input type="tel" id="vn-phone" placeholder="9876543210" required></div>
+                        </div>
+
+                        <h3 style="margin:0.5rem 0 0.75rem;font-size:0.95rem;color:#be123c;border-bottom:1px solid #e7e2d9;padding-bottom:0.35rem;">SECTION D: VENUE CATEGORY</h3>
+                        <div class="field-group" style="margin-bottom:1.25rem;">
+                            <label>Venue Category *</label>
+                            <div class="btn-row" style="gap:1.5rem;padding:0.5rem 0;">
+                                <label style="display:flex;align-items:center;gap:0.45rem;font-weight:600;cursor:pointer;"><input type="radio" name="vn-category" value="Indoor" checked> Indoor</label>
+                                <label style="display:flex;align-items:center;gap:0.45rem;font-weight:600;cursor:pointer;"><input type="radio" name="vn-category" value="Outdoor"> Outdoor</label>
+                            </div>
+                        </div>
+
+                        <div class="btn-row">
+                            <button type="submit" class="btn-sm btn-primary" id="venue-save-btn">Save Venue</button>
+                            <button type="button" class="btn-sm btn-secondary" id="venue-cancel-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="panel-card" id="my-venues-list-card">
+                    <div class="panel-header">
+                        <h2>My Registered Venues</h2>
+                        <button type="button" id="open-add-venue-btn" class="btn-sm btn-primary">+ Add New Venue</button>
+                    </div>
+                    <div id="venues-list" class="dashboard-grid"></div>
+                </div>
+            </section>
+
+            <!-- 4. VENUE GALLERY -->
+            <section id="view-gallery" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>Venue Gallery Management</h2><span class="brand-subtitle" id="gallery-limit-label">Select a venue to upload photos or videos</span></div>
+                    </div>
+                    <form id="gallery-upload-form" class="form-grid">
+                        <div class="field-group"><label for="gal-venue">Select Venue *</label><select id="gal-venue" required></select></div>
+                        <div class="field-group"><label for="gal-type">Media Type</label><select id="gal-type"><option value="PHOTO">Photo (jpg/png/webp)</option><option value="VIDEO">Video (mp4/webm/mov)</option></select></div>
+                        <div class="field-group"><label for="gal-title">Media Title</label><input type="text" id="gal-title" placeholder="Main Banquet Hall"></div>
+                        <div class="field-group"><label for="gal-files">Select File(s) *</label><input type="file" id="gal-files" multiple accept="image/*,video/*" required></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Upload Media</button></div>
+                    </form>
+                    <div id="gallery-media-grid" class="media-grid"></div>
+                </div>
+            </section>
+
+            <!-- 5. PRICING MANAGEMENT -->
+            <section id="view-pricing" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Pricing Management</h2></div>
+                    <form id="pricing-form" class="form-grid">
+                        <div class="field-group" style="grid-column:1/-1;"><label for="pr-venue">Select Venue *</label><select id="pr-venue" required></select></div>
+                        <div class="field-group"><label for="pr-day">Base / Per Day Price (₹)</label><input type="number" id="pr-day" required></div>
+                        <div class="field-group"><label for="pr-hour">Per Hour Price (₹)</label><input type="number" id="pr-hour"></div>
+                        <div class="field-group"><label for="pr-weekday">Weekday Price (₹)</label><input type="number" id="pr-weekday"></div>
+                        <div class="field-group"><label for="pr-weekend">Weekend Price (₹)</label><input type="number" id="pr-weekend"></div>
+                        <div class="field-group"><label for="pr-seasonal">Seasonal Price (₹)</label><input type="number" id="pr-seasonal"></div>
+                        <div class="field-group"><label for="pr-special">Special Event Price (₹)</label><input type="number" id="pr-special"></div>
+                        <div class="field-group"><label for="pr-additional">Additional Service Charges (₹)</label><input type="number" id="pr-additional"></div>
+                        <div class="field-group"><label for="pr-decoration">Decoration Charges (₹)</label><input type="number" id="pr-decoration"></div>
+                        <div class="field-group"><label for="pr-catering">Catering Charges (₹)</label><input type="number" id="pr-catering"></div>
+                        <div class="field-group"><label for="pr-advance">Advance Payment (₹)</label><input type="number" id="pr-advance"></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Update Venue Pricing</button></div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 6. AVAILABILITY CALENDAR -->
+            <section id="view-availability" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>Interactive Availability Calendar</h2><span class="brand-subtitle">Click any available or blocked date to toggle status</span></div>
+                    </div>
+                    <div class="cal-toolbar">
+                        <div class="btn-row">
+                            <select id="cal-venue"></select>
+                            <button type="button" id="cal-prev-btn" class="btn-sm btn-secondary">&lsaquo; Prev</button>
+                            <strong id="cal-month-label" style="min-width:130px;text-align:center;">Month</strong>
+                            <button type="button" id="cal-next-btn" class="btn-sm btn-secondary">Next &rsaquo;</button>
+                            <button type="button" id="cal-mode-month" class="btn-sm btn-primary">Monthly</button>
+                            <button type="button" id="cal-mode-week" class="btn-sm btn-secondary">Weekly</button>
+                        </div>
+                        <div class="cal-legend">
+                            <span><i class="cal-dot" style="background:#22c55e;"></i>Available</span>
+                            <span><i class="cal-dot" style="background:#ef4444;"></i>Booked</span>
+                            <span><i class="cal-dot" style="background:#eab308;"></i>Pending</span>
+                            <span><i class="cal-dot" style="background:#9ca3af;"></i>Blocked</span>
+                        </div>
+                    </div>
+                    <div id="cal-grid" class="cal-grid"></div>
+                </div>
+            </section>
+
+            <!-- 7. BOOKING ENQUIRIES -->
+            <section id="view-enquiries" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Booking Enquiries</h2></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Code</th><th>Customer</th><th>Venue</th><th>Event Date</th><th>Guests / Budget</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="enquiries-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. BOOKING MANAGEMENT -->
+            <section id="view-bookings" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Add Direct / Walk-In Booking</h2></div>
+                    <form id="booking-create-form" class="form-grid">
+                        <div class="field-group"><label for="bk-venue">Venue *</label><select id="bk-venue" required></select></div>
+                        <div class="field-group"><label for="bk-name">Customer Name *</label><input type="text" id="bk-name" required></div>
+                        <div class="field-group"><label for="bk-email">Customer Email *</label><input type="email" id="bk-email" required></div>
+                        <div class="field-group"><label for="bk-mobile">Mobile</label><input type="text" id="bk-mobile"></div>
+                        <div class="field-group"><label for="bk-type">Event Type</label><input type="text" id="bk-type" value="Wedding"></div>
+                        <div class="field-group"><label for="bk-date">Event Date *</label><input type="date" id="bk-date" required></div>
+                        <div class="field-group"><label for="bk-guests">Guests</label><input type="number" id="bk-guests" value="250"></div>
+                        <div class="field-group"><label for="bk-total">Total Amount (₹)</label><input type="number" id="bk-total" value="50000"></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Create Booking</button></div>
+                    </form>
+                </div>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>All Venue Bookings</h2></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Code</th><th>Customer</th><th>Venue</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="bookings-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. QUOTATIONS -->
+            <section id="view-quotations" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Create / Edit Quotation</h2></div>
+                    <form id="quotation-form" class="form-grid">
+                        <input type="hidden" id="qt-id">
+                        <input type="hidden" id="qt-enq-id">
+                        <div class="field-group"><label for="qt-venue">Venue *</label><select id="qt-venue" required></select></div>
+                        <div class="field-group"><label for="qt-name">Customer Name *</label><input type="text" id="qt-name" required></div>
+                        <div class="field-group"><label for="qt-email">Customer Email *</label><input type="email" id="qt-email" required></div>
+                        <div class="field-group"><label for="qt-mobile">Mobile</label><input type="text" id="qt-mobile"></div>
+                        <div class="field-group"><label for="qt-date">Event Date *</label><input type="date" id="qt-date" required></div>
+                        <div class="field-group"><label for="qt-valid">Valid Until</label><input type="date" id="qt-valid"></div>
+                        <div class="field-group"><label for="qt-rental">Venue Rental (₹)</label><input type="number" id="qt-rental" value="50000" class="qt-calc"></div>
+                        <div class="field-group"><label for="qt-add">Additional Charges (₹)</label><input type="number" id="qt-add" value="0" class="qt-calc"></div>
+                        <div class="field-group"><label for="qt-decor">Decoration (₹)</label><input type="number" id="qt-decor" value="0" class="qt-calc"></div>
+                        <div class="field-group"><label for="qt-cater">Catering (₹)</label><input type="number" id="qt-cater" value="0" class="qt-calc"></div>
+                        <div class="field-group"><label for="qt-disc">Discount (₹)</label><input type="number" id="qt-disc" value="0" class="qt-calc"></div>
+                        <div class="field-group"><label for="qt-tax">Tax (₹)</label><input type="number" id="qt-tax" value="0" class="qt-calc"></div>
+                        <div class="field-group"><label for="qt-adv">Advance (₹)</label><input type="number" id="qt-adv" value="15000" class="qt-calc"></div>
+                        <div class="field-group"><label>Auto Total / Remaining</label><strong id="qt-summary" style="padding-top:0.5rem;">Total: ₹50000 | Rem: ₹35000</strong></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="qt-terms">Terms &amp; Conditions</label><textarea id="qt-terms" rows="2"></textarea></div>
+                        <div style="grid-column:1/-1;" class="btn-row">
+                            <button type="submit" class="btn-sm btn-secondary" data-qstatus="DRAFT">Save Draft</button>
+                            <button type="button" id="qt-send-btn" class="btn-sm btn-primary">Send Quotation</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Quotations List</h2></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Code</th><th>Customer</th><th>Venue</th><th>Event Date</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="quotations-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. 360 VENUE TOUR -->
+            <section id="view-tour360" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>360° Venue Tour</h2><span class="brand-subtitle" id="tour360-gate-msg">Upload panoramic 360° venue images (Premium / Pro feature)</span></div>
+                    </div>
+                    <form id="tour360-form" class="form-grid">
+                        <div class="field-group"><label for="t360-venue">Venue *</label><select id="t360-venue" required></select></div>
+                        <div class="field-group"><label for="t360-title">Tour Title</label><input type="text" id="t360-title" placeholder="Main Hall 360 Panorama"></div>
+                        <div class="field-group"><label for="t360-file">360° Panoramic Image *</label><input type="file" id="t360-file" accept="image/*" required></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Upload 360° Tour</button></div>
+                    </form>
+                    <div id="tour360-viewer-wrap" style="margin-top:1rem;" hidden>
+                        <div id="tour360-viewport" class="tour-360-viewport">
+                            <span class="tour-360-badge" id="tour360-badge">Drag horizontally to look around 360°</span>
+                        </div>
+                    </div>
+                    <div id="tour360-list" class="media-grid"></div>
+                    <div id="tour360-3d-section" style="margin-top:1.75rem;border-top:1px solid #e7e2d9;padding-top:1.25rem;">
+                        <h3 style="margin:0 0 0.35rem;">3D Generated Venue Photos (Click any photo for Interactive 3D View)</h3>
+                        <p class="brand-subtitle" style="margin-bottom:1rem;">Move mouse over any photo for 3D depth preview, or click to open full Interactive 3D / 360° View.</p>
+                        <div id="tour360-3d-gallery" class="media-grid" style="perspective:1000px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. MULTIPLE LOCATIONS -->
+            <section id="view-locations" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>Multiple Location Management</h2><span class="brand-subtitle" id="loc-gate-msg">Manage branch properties across cities (Premium / Pro)</span></div>
+                    </div>
+                    <form id="location-form" class="form-grid">
+                        <input type="hidden" id="loc-id">
+                        <div class="field-group"><label for="loc-name">Location / Branch Name *</label><input type="text" id="loc-name" required></div>
+                        <div class="field-group"><label for="loc-code">Branch Code</label><input type="text" id="loc-code" placeholder="BLR-01"></div>
+                        <div class="field-group"><label for="loc-city">City *</label><input type="text" id="loc-city" required></div>
+                        <div class="field-group"><label for="loc-state">State</label><input type="text" id="loc-state"></div>
+                        <div class="field-group"><label for="loc-pincode">PIN Code</label><input type="text" id="loc-pincode"></div>
+                        <div class="field-group"><label for="loc-venue">Link Venue</label><select id="loc-venue"></select></div>
+                        <div class="field-group"><label for="loc-person">Manager Name</label><input type="text" id="loc-person"></div>
+                        <div class="field-group"><label for="loc-phone">Manager Phone</label><input type="text" id="loc-phone"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="loc-addr">Address</label><input type="text" id="loc-addr"></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Save Location</button></div>
+                    </form>
+                    <div class="table-wrap" style="margin-top:1rem;">
+                        <table class="data-table">
+                            <thead><tr><th>Location</th><th>City</th><th>Manager</th><th>Linked Venue</th><th>Actions</th></tr></thead>
+                            <tbody id="locations-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. BOOKING ANALYTICS -->
+            <section id="view-analytics" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <h2>Booking &amp; Revenue Analytics</h2>
+                        <div class="btn-row">
+                            <button type="button" class="btn-sm btn-secondary an-range" data-range="7d">7 Days</button>
+                            <button type="button" class="btn-sm btn-primary an-range" data-range="30d">30 Days</button>
+                            <button type="button" class="btn-sm btn-secondary an-range" data-range="3m">3 Months</button>
+                            <button type="button" class="btn-sm btn-secondary an-range" data-range="6m">6 Months</button>
+                        </div>
+                    </div>
+                    <div class="btn-row" style="margin-bottom:1rem;">
+                        <input type="date" id="an-from"><input type="date" id="an-to">
+                        <button type="button" id="an-custom-btn" class="btn-sm btn-secondary">Apply Custom Range</button>
+                    </div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card"><span>Total Enquiries</span><strong id="an-enq">0</strong></div>
+                        <div class="kpi-card"><span>Confirmed</span><strong id="an-conf">0</strong></div>
+                        <div class="kpi-card"><span>Rejected</span><strong id="an-rej">0</strong></div>
+                        <div class="kpi-card"><span>Cancelled</span><strong id="an-can">0</strong></div>
+                        <div class="kpi-card"><span>Conversion Rate</span><strong id="an-conv">0%</strong></div>
+                        <div class="kpi-card"><span>Revenue</span><strong id="an-rev">₹0</strong></div>
+                        <div class="kpi-card"><span>Popular Venue</span><strong id="an-pop">-</strong></div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <article class="panel-card" style="margin-bottom:0;"><h3>Monthly Trends</h3><div id="an-trends-chart" class="bar-chart"></div></article>
+                        <article class="panel-card" style="margin-bottom:0;"><h3>Venue-wise Performance</h3><div id="an-venue-chart" class="bar-chart"></div></article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 13. SUBSCRIPTION PLANS -->
+            <section id="view-subscription" class="view-section" hidden>
+                <div id="ew-subscription-root"></div>
+            </section>
+
+            <!-- 14. TEAM MANAGEMENT -->
+            <section id="view-team" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>Team Management</h2><span class="brand-subtitle" id="team-limit-label">Loading team limit...</span></div>
+                    </div>
+                    <form id="team-form" class="form-grid">
+                        <input type="hidden" id="tm-id">
+                        <div class="field-group"><label for="tm-name">Full Name *</label><input type="text" id="tm-name" required></div>
+                        <div class="field-group"><label for="tm-email">Email *</label><input type="email" id="tm-email" required></div>
+                        <div class="field-group"><label for="tm-phone">Phone</label><input type="text" id="tm-phone"></div>
+                        <div class="field-group">
+                            <label for="tm-role">Role</label>
+                            <select id="tm-role">
+                                <option value="OWNER">Owner</option>
+                                <option value="MANAGER">Manager</option>
+                                <option value="BOOKING_MANAGER">Booking Manager</option>
+                                <option value="STAFF" selected>Staff</option>
+                            </select>
+                        </div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="tm-perms">Assigned Permissions</label><input type="text" id="tm-perms" value="VENUES,CALENDAR,ENQUIRIES,BOOKINGS"></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Save Team Member</button></div>
+                    </form>
+                    <div class="table-wrap" style="margin-top:1rem;">
+                        <table class="data-table">
+                            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Permissions</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="team-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 15. SETTINGS & NOTIFICATIONS -->
+            <section id="view-settings" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>In-Dashboard Notifications</h2></div>
+                    <div id="notifications-list"></div>
+                </div>
+                <div id="ew-social-root"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL FOR DETAILS / CONFIRMATION -->
+    <div id="ew-modal" class="ew-modal-backdrop" hidden>
+        <div class="ew-modal-card">
+            <div class="panel-header">
+                <h3 id="ew-modal-title" style="margin:0;">Details</h3>
+                <button type="button" id="ew-modal-close" class="btn-sm btn-secondary">Close</button>
+            </div>
+            <div id="ew-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js?v=4"></script>
+    <script src="/js/subscription-widget.js?v=4"></script>
+    <script src="/js/vendor-dashboard.js?v=11"></script>
 </body>
 </html>

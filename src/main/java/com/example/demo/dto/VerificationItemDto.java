@@ -10,6 +10,9 @@ public record VerificationItemDto(
         String documentType,
         String documentNumber,
         String documentFileName,
-        String verificationStatus
+        String verificationStatus,
+        String phone,
+        String city,
+        String portfolioOrBio
 ) {
 }

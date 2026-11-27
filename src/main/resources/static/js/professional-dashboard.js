@@ -573,6 +573,10 @@
                 role: 'Casting Director • Mumbai',
                 connected: true,
                 status: 'mutual',
+                chatContext: 'Audition: Lead Role',
+                unreadCount: 1,
+                blocked: false,
+                reported: false,
                 photoUrl: '/images/avatars/director-female-1.jpg',
                 videos: [
                     { id: 'net1-v1', title: 'Casting Process & Audition Tips', category: 'Casting Brief', fileName: 'meera-audition-tips.mp4', sizeLabel: '14.8 MB • 2:10', uploadedAt: '3 days ago' },
@@ -585,6 +589,10 @@
                 role: 'Executive Producer • RedFrame',
                 connected: true,
                 status: 'mutual',
+                chatContext: 'Campaign: Brand Collab',
+                unreadCount: 0,
+                blocked: false,
+                reported: false,
                 photoUrl: '/images/avatars/producer-male-1.jpg',
                 videos: [
                     { id: 'net2-v1', title: 'RedFrame Originals 2026 Slate', category: 'Production Reel', fileName: 'redframe-2026-slate.mp4', sizeLabel: '22.4 MB • 2:45', uploadedAt: '5 days ago' }
@@ -596,6 +604,10 @@
                 role: 'Talent Manager • Starlight',
                 connected: false,
                 status: 'pending_incoming',
+                chatContext: 'Booking: Live Event',
+                unreadCount: 1,
+                blocked: false,
+                reported: false,
                 photoUrl: '/images/avatars/actor-female-1.jpg',
                 videos: [
                     { id: 'net3-v1', title: 'Starlight Talent Showcase', category: 'Showcase', fileName: 'starlight-showcase.mp4', sizeLabel: '17.3 MB • 2:20', uploadedAt: '1 week ago' }
@@ -607,6 +619,10 @@
                 role: 'Director of Photography',
                 connected: false,
                 status: 'not_connected',
+                chatContext: 'General Networking',
+                unreadCount: 0,
+                blocked: false,
+                reported: false,
                 photoUrl: '/images/avatars/actor-male-1.jpg',
                 videos: [
                     { id: 'net4-v1', title: 'Anamorphic Cinematography Reel', category: 'Showreel', fileName: 'vikram-dop-reel.mp4', sizeLabel: '26.1 MB • 3:00', uploadedAt: '4 days ago' },
@@ -614,12 +630,15 @@
                 ]
             }
         ],
+        chatSettings: {
+            readReceipts: true
+        },
         networkChats: {
             'net-1': [
-                { sender: 'peer', text: 'Hi! Loved your latest showreel. Let us stay in touch for upcoming casting calls.', time: 'Yesterday' }
+                { sender: 'peer', text: 'Hi! Loved your latest showreel. Let us stay in touch for upcoming casting calls.', time: 'Yesterday, 4:15 PM', status: 'Read' }
             ],
             'net-2': [
-                { sender: 'peer', text: 'Thanks for connecting! We are casting for Q1 web series roles soon.', time: '2 days ago' }
+                { sender: 'peer', text: 'Thanks for connecting! We are casting for Q1 web series roles soon.', time: '2 days ago', status: 'Read' }
             ]
         },
         teammateSuggestions: [
@@ -735,6 +754,12 @@
             showreelUrl: 'https://vimeo.com/showcase/showreel',
             availability: 'Available immediately'
         },
+        availabilityDates: {
+            '2026-11-28': { status: 'available', note: 'Open for Auditions' },
+            '2026-11-29': { status: 'available', note: 'Full Day Available' },
+            '2026-12-02': { status: 'blocked', note: 'Commercial Shoot' },
+            '2026-12-05': { status: 'blocked', note: 'Out of City' }
+        },
         videos: [
             {
                 id: 'vid-1',
@@ -771,7 +796,10 @@
                     : structuredClone(DEFAULT_STATE.brandInvitations),
                 planHistory: Array.isArray(parsed.planHistory) && parsed.planHistory.length
                     ? parsed.planHistory
-                    : structuredClone(DEFAULT_STATE.planHistory)
+                    : structuredClone(DEFAULT_STATE.planHistory),
+                availabilityDates: parsed.availabilityDates && typeof parsed.availabilityDates === 'object'
+                    ? parsed.availabilityDates
+                    : structuredClone(DEFAULT_STATE.availabilityDates)
             };
         } catch {
             return structuredClone(DEFAULT_STATE);
@@ -1409,7 +1437,113 @@
         return person.connected ? 'mutual' : 'not_connected';
     }
 
+    let inboxFilterMode = 'all';
+
+    function getUnreadTotal() {
+        return state.network.reduce((sum, p) => {
+            if (p.blocked) return sum;
+            const status = getConnectionStatus(p);
+            const msgUnread = typeof p.unreadCount === 'number' ? p.unreadCount : 0;
+            const reqUnread = status === 'pending_incoming' ? 1 : 0;
+            return sum + Math.max(msgUnread, reqUnread);
+        }, 0);
+    }
+
+    function renderChatInbox() {
+        const unreadTotal = getUnreadTotal();
+        const navBadge = document.getElementById('network-nav-badge');
+        if (navBadge) {
+            navBadge.textContent = String(unreadTotal);
+            navBadge.hidden = unreadTotal === 0;
+        }
+
+        const unreadPill = document.getElementById('inbox-unread-pill');
+        if (unreadPill) {
+            unreadPill.textContent = `${unreadTotal} Unread`;
+        }
+
+        const receiptsBtn = document.getElementById('chat-read-receipts-toggle');
+        if (receiptsBtn) {
+            const on = state.chatSettings?.readReceipts !== false;
+            receiptsBtn.textContent = on ? 'Read Receipts: On' : 'Read Receipts: Off';
+        }
+
+        const container = document.getElementById('network-inbox-list');
+        if (!container) return;
+
+        const query = (document.getElementById('inbox-search')?.value || '').trim().toLowerCase();
+        const filtered = state.network.filter((person) => {
+            const status = getConnectionStatus(person);
+            const ctx = person.chatContext || 'General Networking';
+            const msgs = (state.networkChats && state.networkChats[person.id]) || [];
+            const lastMsg = msgs.length ? msgs[msgs.length - 1].text : '';
+
+            if (inboxFilterMode === 'unread' && !(person.unreadCount > 0 || status === 'pending_incoming')) return false;
+            if (inboxFilterMode === 'requests' && status !== 'pending_incoming' && status !== 'pending_outgoing') return false;
+            if (inboxFilterMode === 'blocked' && !person.blocked) return false;
+            if (['Audition', 'Campaign', 'Booking'].includes(inboxFilterMode) && !ctx.toLowerCase().includes(inboxFilterMode.toLowerCase())) return false;
+            if (inboxFilterMode !== 'blocked' && person.blocked) return false;
+
+            if (!query) return true;
+            return person.name.toLowerCase().includes(query)
+                || person.role.toLowerCase().includes(query)
+                || ctx.toLowerCase().includes(query)
+                || lastMsg.toLowerCase().includes(query);
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="ew-panel"><p>No conversations match your current search or filter.</p></div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map((person) => {
+            const status = getConnectionStatus(person);
+            const msgs = (state.networkChats && state.networkChats[person.id]) || [];
+            const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
+            const unread = !person.blocked && (person.unreadCount > 0 || status === 'pending_incoming');
+            const photo = person.photoUrl || DEFAULT_STATE.network.find((n) => n.id === person.id || n.name === person.name)?.photoUrl || '/images/avatars/director-female-1.jpg';
+            const ctx = person.chatContext || 'General Networking';
+
+            let actionBtns = '';
+            if (person.blocked) {
+                actionBtns = `<button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-unblock-chat="${escapeHtml(person.id)}">Unblock</button>`;
+            } else if (status === 'mutual') {
+                actionBtns = `<button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-open-chat="${escapeHtml(person.id)}">Open Chat</button>`;
+            } else if (status === 'pending_incoming') {
+                actionBtns = `
+                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-approve-incoming="${escapeHtml(person.id)}">Accept</button>
+                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-decline-incoming="${escapeHtml(person.id)}">Reject</button>
+                `;
+            } else if (status === 'pending_outgoing') {
+                actionBtns = `<span class="ew-badge pending">Request Sent</span>`;
+            } else {
+                actionBtns = `<button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-start-conversation="${escapeHtml(person.id)}">Start Conversation</button>`;
+            }
+
+            return `
+                <article class="ew-inbox-item ${unread ? 'unread' : ''}">
+                    <div class="ew-inbox-left">
+                        <img class="ew-network-avatar" src="${escapeHtml(photo)}" alt="${escapeHtml(person.name)}">
+                        <div style="min-width: 0;">
+                            <div class="ew-inbox-meta-row">
+                                <strong>${escapeHtml(person.name)}</strong>
+                                <span class="ew-context-pill">${escapeHtml(ctx)}</span>
+                                ${unread ? `<span class="ew-unread-pill">${person.unreadCount || 1} New</span>` : ''}
+                                ${person.blocked ? `<span class="ew-badge closed">Blocked</span>` : ''}
+                            </div>
+                            <div class="ew-app-meta">${lastMsg ? `${escapeHtml(lastMsg.text)} • ${escapeHtml(lastMsg.time)}` : escapeHtml(person.role)}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        ${actionBtns}
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
     function renderNetwork() {
+        renderChatInbox();
         const container = document.getElementById('network-list');
         if (!container) return;
 
@@ -1475,7 +1609,7 @@
                 `;
             } else {
                 actionsHtml = `
-                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-toggle-connect="${escapeHtml(person.id)}">Connect</button>
+                    <button type="button" class="ew-btn ew-btn-primary ew-btn-sm" data-start-conversation="${escapeHtml(person.id)}">Start Conversation</button>
                 `;
             }
 
@@ -2081,6 +2215,26 @@
                 renderOpportunities();
                 renderPlanUsage();
                 showToast(`Applied to "${opp.title}"`);
+
+                if (opp.backendProjectId) {
+                    const user = getSessionUser() || {};
+                    const latestVideo = state.videos && state.videos[0];
+                    fetch('/api/workflow/professional/apply', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            projectId: opp.backendProjectId,
+                            email: user.email || 'actor@entertainmentworld.com',
+                            fullName: user.fullName || 'Entertainment Professional',
+                            category: user.professionalCategory || opp.category,
+                            city: state.profileExtras?.city || 'Mumbai',
+                            phone: state.profileExtras?.phone || '',
+                            roleName: opp.roleName || opp.title,
+                            auditionSubmissionTitle: latestVideo ? latestVideo.title : '',
+                            auditionVideoUrl: latestVideo ? latestVideo.fileName : ''
+                        })
+                    }).catch(() => {});
+                }
             }
             return;
         }
@@ -2398,6 +2552,11 @@
 
         const openToolBtn = e.target.closest('[data-open-tool]');
         if (openToolBtn) {
+            if (openToolBtn.dataset.openTool === 'Availability Calendar') {
+                switchView('profile');
+                document.getElementById('availability-calendar-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
             showToast(`${openToolBtn.dataset.openTool} launched for your ${state.currentPlan.toUpperCase()} plan`);
         }
     });
@@ -3132,60 +3291,275 @@
     const chatMessagesEl = document.getElementById('ew-chat-messages');
     const chatForm = document.getElementById('ew-chat-form');
     const chatInput = document.getElementById('ew-chat-input');
+    const chatContextSelect = document.getElementById('ew-chat-context-select');
+    const chatAttachInput = document.getElementById('ew-chat-attach');
+    const chatAttachPreview = document.getElementById('ew-chat-attach-preview');
+    const chatBlockBtn = document.getElementById('ew-chat-block-btn');
+    const chatReportBtn = document.getElementById('ew-chat-report-btn');
+
     let activeChatPersonId = null;
+    let pendingChatAttachment = null;
+    const chatSendTimestamps = [];
+
+    const SPAM_PATTERNS = [/bit\.ly\//i, /tinyurl\.com/i, /free[- ]money/i, /crypto[- ]airdrop/i, /win[- ]prize/i, /click[- ]here[- ]now/i];
+
+    function clearPendingAttachment() {
+        pendingChatAttachment = null;
+        if (chatAttachInput) chatAttachInput.value = '';
+        if (chatAttachPreview) {
+            chatAttachPreview.hidden = true;
+            chatAttachPreview.innerHTML = '';
+        }
+    }
 
     function closeChatModal() {
         if (chatModal) chatModal.hidden = true;
         activeChatPersonId = null;
+        clearPendingAttachment();
     }
 
     function renderChatMessages(personId) {
         if (!chatMessagesEl) return;
         if (!state.networkChats) state.networkChats = {};
         const messages = state.networkChats[personId] || [];
+        const readReceiptsOn = state.chatSettings?.readReceipts !== false;
+
         if (messages.length === 0) {
-            chatMessagesEl.innerHTML = `<div class="ew-app-meta" style="text-align:center; margin:auto;">Both ends approved! Start your conversation below.</div>`;
+            chatMessagesEl.innerHTML = `<div class="ew-app-meta" style="text-align:center; margin:auto;">Permission granted! Start your conversation below.</div>`;
             return;
         }
-        chatMessagesEl.innerHTML = messages.map((m) => `
-            <div class="ew-chat-bubble ${m.sender === 'me' ? 'me' : 'peer'}">
-                <div>${escapeHtml(m.text)}</div>
-                <span class="ew-chat-time">${escapeHtml(m.time)}</span>
-            </div>
-        `).join('');
+        chatMessagesEl.innerHTML = messages.map((m) => {
+            const receiptLabel = m.sender === 'me'
+                ? (readReceiptsOn ? (m.status || 'Delivered') : 'Sent')
+                : '';
+            let attachHtml = '';
+            if (m.attachment) {
+                if (m.attachment.isImage && m.attachment.previewUrl) {
+                    attachHtml = `<div class="ew-chat-attachment"><strong>${escapeHtml(m.attachment.name)}</strong><img src="${escapeHtml(m.attachment.previewUrl)}" alt="Attachment"></div>`;
+                } else {
+                    attachHtml = `<div class="ew-chat-attachment">📎 <strong>${escapeHtml(m.attachment.name)}</strong> (${escapeHtml(m.attachment.sizeLabel)})</div>`;
+                }
+            }
+            return `
+                <div class="ew-chat-bubble ${m.sender === 'me' ? 'me' : 'peer'}">
+                    ${m.text ? `<div>${escapeHtml(m.text)}</div>` : ''}
+                    ${attachHtml}
+                    <div class="ew-chat-meta-line">
+                        <span>${escapeHtml(m.time)}</span>
+                        ${receiptLabel ? `<span>✓✓ ${escapeHtml(receiptLabel)}</span>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
         chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
     }
 
     function openChatModal(personId) {
         const person = state.network.find((n) => n.id === personId);
         if (!person) return;
+        if (person.blocked) {
+            showToast(`Access blocked: Unblock ${person.name} in the Chat Inbox to message.`);
+            return;
+        }
         if (getConnectionStatus(person) !== 'mutual') {
-            showToast('Chat unlocks only after both ends approve the connection.');
+            showToast('Access denied: Chat unlocks only after recipient accepts your request.');
             return;
         }
         activeChatPersonId = person.id;
+        person.unreadCount = 0;
+        saveState();
+        renderChatInbox();
+
         if (chatNameEl) chatNameEl.textContent = person.name;
         if (chatRoleEl) chatRoleEl.textContent = person.role;
+        if (chatContextSelect) chatContextSelect.value = person.chatContext || 'General Networking';
+        if (chatBlockBtn) chatBlockBtn.textContent = person.blocked ? 'Unblock' : 'Block';
+
         renderChatMessages(person.id);
         if (chatModal) chatModal.hidden = false;
         chatInput?.focus();
     }
 
+    chatContextSelect?.addEventListener('change', () => {
+        if (!activeChatPersonId) return;
+        const person = state.network.find((n) => n.id === activeChatPersonId);
+        if (person) {
+            person.chatContext = chatContextSelect.value;
+            saveState();
+            renderChatInbox();
+            showToast(`Linked chat to ${person.chatContext}`);
+        }
+    });
+
+    chatAttachInput?.addEventListener('change', () => {
+        const file = chatAttachInput.files && chatAttachInput.files[0];
+        if (!file) return;
+        const allowedExt = /\.(jpg|jpeg|png|webp|pdf|doc|docx|txt|mp4|webm|mp3|wav)$/i.test(file.name);
+        if (!allowedExt) {
+            showToast('Security: Unsupported attachment format. Use images, PDF/DOC, or MP4/MP3.');
+            clearPendingAttachment();
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Security: Attachment exceeds 10 MB limit.');
+            clearPendingAttachment();
+            return;
+        }
+        const isImage = /\.(jpg|jpeg|png|webp)$/i.test(file.name);
+        const sizeLabel = `${(file.size / 1024).toFixed(0)} KB`;
+        const finishAttach = (previewUrl) => {
+            pendingChatAttachment = { name: file.name, sizeLabel, isImage, previewUrl };
+            if (chatAttachPreview) {
+                chatAttachPreview.hidden = false;
+                chatAttachPreview.innerHTML = `<span>📎 ${escapeHtml(file.name)} (${sizeLabel})</span><button type="button" id="ew-chat-remove-attach" class="ew-btn ew-btn-outline ew-btn-sm">Remove</button>`;
+                document.getElementById('ew-chat-remove-attach')?.addEventListener('click', clearPendingAttachment);
+            }
+        };
+        if (isImage) {
+            const reader = new FileReader();
+            reader.onload = () => finishAttach(typeof reader.result === 'string' ? reader.result : '');
+            reader.readAsDataURL(file);
+        } else {
+            finishAttach('');
+        }
+    });
+
+    chatBlockBtn?.addEventListener('click', () => {
+        if (!activeChatPersonId) return;
+        const person = state.network.find((n) => n.id === activeChatPersonId);
+        if (!person) return;
+        person.blocked = true;
+        saveState();
+        closeChatModal();
+        renderNetwork();
+        showToast(`Blocked ${person.name}. Conversation hidden from active inbox.`);
+    });
+
+    chatReportBtn?.addEventListener('click', () => {
+        if (!activeChatPersonId) return;
+        const person = state.network.find((n) => n.id === activeChatPersonId);
+        if (!person) return;
+        person.reported = true;
+        state.notifications.unshift({
+            id: `n-${Date.now()}`,
+            text: `Safety report submitted for conversation with ${person.name}.`,
+            time: 'Just now',
+            unread: true
+        });
+        saveState();
+        renderNotifications();
+        showToast(`Reported conversation with ${person.name} to Trust & Safety.`);
+    });
+
     chatForm?.addEventListener('submit', (e) => {
         e.preventDefault();
         if (!activeChatPersonId || !chatInput) return;
+        const person = state.network.find((n) => n.id === activeChatPersonId);
+        if (!person || person.blocked || getConnectionStatus(person) !== 'mutual') {
+            showToast('Security: You do not have permission to message this user.');
+            return;
+        }
+
         const text = chatInput.value.trim();
-        if (!text) return;
+        if (!text && !pendingChatAttachment) return;
+
+        // Rate limiting: max 5 messages per 15 seconds
+        const now = Date.now();
+        while (chatSendTimestamps.length && now - chatSendTimestamps[0] > 15000) {
+            chatSendTimestamps.shift();
+        }
+        if (chatSendTimestamps.length >= 5) {
+            showToast('Rate limit: Please wait a few seconds before sending more messages.');
+            return;
+        }
+
+        // Spam protection
+        if (SPAM_PATTERNS.some((rx) => rx.test(text))) {
+            showToast('Security: Message blocked by spam/phishing filter.');
+            return;
+        }
+
         if (!state.networkChats) state.networkChats = {};
         if (!state.networkChats[activeChatPersonId]) state.networkChats[activeChatPersonId] = [];
-        state.networkChats[activeChatPersonId].push({
+        const history = state.networkChats[activeChatPersonId];
+        const recentSame = history.slice(-2).filter((m) => m.sender === 'me' && m.text === text).length;
+        if (text && recentSame >= 2) {
+            showToast('Spam protection: Repeated identical messages are blocked.');
+            return;
+        }
+
+        chatSendTimestamps.push(now);
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const readReceiptsOn = state.chatSettings?.readReceipts !== false;
+
+        history.push({
             sender: 'me',
             text,
-            time: 'Just now'
+            attachment: pendingChatAttachment ? { ...pendingChatAttachment } : null,
+            time: timeStr,
+            status: readReceiptsOn ? 'Read' : 'Delivered'
         });
+
         saveState();
         chatInput.value = '';
+        clearPendingAttachment();
         renderChatMessages(activeChatPersonId);
+        renderChatInbox();
+    });
+
+    document.getElementById('inbox-search')?.addEventListener('input', renderChatInbox);
+    document.getElementById('chat-read-receipts-toggle')?.addEventListener('click', () => {
+        if (!state.chatSettings) state.chatSettings = { readReceipts: true };
+        state.chatSettings.readReceipts = !state.chatSettings.readReceipts;
+        saveState();
+        renderChatInbox();
+        if (activeChatPersonId) renderChatMessages(activeChatPersonId);
+        showToast(`Read receipts ${state.chatSettings.readReceipts ? 'enabled' : 'disabled'}`);
+    });
+
+    document.addEventListener('click', (e) => {
+        const inboxChip = e.target.closest('.ew-chip[data-inbox-filter]');
+        if (inboxChip) {
+            inboxFilterMode = inboxChip.dataset.inboxFilter;
+            document.querySelectorAll('.ew-chip[data-inbox-filter]').forEach((c) => {
+                c.classList.toggle('active', c === inboxChip);
+            });
+            renderChatInbox();
+            return;
+        }
+
+        const startConvBtn = e.target.closest('[data-start-conversation]');
+        if (startConvBtn) {
+            const person = state.network.find((n) => n.id === startConvBtn.dataset.startConversation);
+            if (person) {
+                person.status = 'pending_outgoing';
+                person.connected = false;
+                if (!person.chatContext) person.chatContext = 'Audition: Lead Role';
+                state.notifications.unshift({
+                    id: `n-${Date.now()}`,
+                    text: `Chat request sent to ${person.name} (${person.chatContext}). Waiting for approval.`,
+                    time: 'Just now',
+                    unread: true
+                });
+                saveState();
+                renderNotifications();
+                renderNetwork();
+                showToast(`Conversation request sent to ${person.name}. Permission required.`);
+            }
+            return;
+        }
+
+        const unblockBtn = e.target.closest('[data-unblock-chat]');
+        if (unblockBtn) {
+            const person = state.network.find((n) => n.id === unblockBtn.dataset.unblockChat);
+            if (person) {
+                person.blocked = false;
+                saveState();
+                renderNetwork();
+                showToast(`Unblocked ${person.name}`);
+            }
+            return;
+        }
     });
 
     chatClose?.addEventListener('click', closeChatModal);
@@ -3200,6 +3574,210 @@
             closePersonModal();
             closeInvitationModal();
             closeChatModal();
+        }
+    });
+
+    async function syncWorkflowFromBackend() {
+        const user = getSessionUser();
+        try {
+            const oppRes = await fetch('/api/workflow/opportunities');
+            if (oppRes.ok) {
+                const liveOpps = await oppRes.json();
+                if (Array.isArray(liveOpps) && liveOpps.length) {
+                    const existingIds = new Set(state.opportunities.map((o) => o.id));
+                    const merged = [...state.opportunities];
+                    liveOpps.forEach((item) => {
+                        if (!existingIds.has(item.id)) {
+                            merged.unshift(item);
+                        }
+                    });
+                    state.opportunities = merged;
+                    renderOpportunities();
+                }
+            }
+        } catch {
+            // Keep offline/demo opportunities if backend is unavailable
+        }
+
+        if (!user || !user.email) return;
+
+        try {
+            await fetch('/api/workflow/professional/sync-profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: user.email,
+                    fullName: user.fullName || '',
+                    category: user.professionalCategory || 'Actor',
+                    city: state.profileExtras?.city || 'Mumbai',
+                    phone: state.profileExtras?.phone || '',
+                    bio: state.profileExtras?.bio || ''
+                })
+            });
+
+            const appRes = await fetch(`/api/workflow/professional/applications?email=${encodeURIComponent(user.email)}`);
+            if (appRes.ok) {
+                const liveApps = await appRes.json();
+                if (Array.isArray(liveApps) && liveApps.length) {
+                    const badgeMap = {
+                        APPLIED: 'review',
+                        SHORTLISTED: 'shortlisted',
+                        INVITED: 'audition',
+                        AUDITION_SCHEDULED: 'audition',
+                        ACCEPTED: 'shortlisted',
+                        REJECTED: 'closed',
+                        DECLINED: 'closed'
+                    };
+                    liveApps.forEach((item) => {
+                        const existing = state.applications.find((a) => a.title === item.title && a.company === item.company);
+                        if (existing) {
+                            existing.status = item.status;
+                            existing.badgeClass = badgeMap[item.status] || 'review';
+                        } else {
+                            state.applications.unshift({
+                                id: `wf-app-${item.applicationId}`,
+                                title: item.title,
+                                company: item.company,
+                                location: item.location,
+                                appliedDate: item.appliedAt || 'Recently',
+                                status: item.status,
+                                badgeClass: badgeMap[item.status] || 'review',
+                                compensation: 'As per project'
+                            });
+                        }
+                    });
+                    renderKpis();
+                    renderRecentApplications();
+                    renderAllApplications();
+                }
+            }
+        } catch {
+            // Keep local state if backend sync fails
+        }
+    }
+
+    let availCalDate = new Date();
+
+    function renderAvailabilityCalendar() {
+        const grid = document.getElementById('avail-calendar-grid');
+        const monthLabel = document.getElementById('avail-cal-month-label');
+        const summaryPill = document.getElementById('availability-summary-pill');
+        const availList = document.getElementById('avail-dates-list');
+        const blockedList = document.getElementById('blocked-dates-list');
+        const dateInput = document.getElementById('avail-date-input');
+        if (!grid) return;
+
+        if (dateInput && !dateInput.min) {
+            const now = new Date();
+            dateInput.min = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        const datesMap = state.availabilityDates || {};
+        const year = availCalDate.getFullYear();
+        const month = availCalDate.getMonth();
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        if (monthLabel) monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const cells = [];
+        for (let i = 0; i < firstDay; i++) {
+            cells.push(`<div class="ew-cal-day empty"></div>`);
+        }
+        for (let day = 1; day <= daysInMonth; day++) {
+            const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const entry = datesMap[iso];
+            const cls = entry ? entry.status : '';
+            const title = entry ? `${entry.status.toUpperCase()}${entry.note ? ' — ' + entry.note : ''}` : 'Click to mark Available or Blocked';
+            cells.push(`<button type="button" class="ew-cal-day ${escapeHtml(cls)}" data-toggle-avail-date="${iso}" title="${escapeHtml(title)}">${day}</button>`);
+        }
+        grid.innerHTML = cells.join('');
+
+        const entries = Object.entries(datesMap).sort(([a], [b]) => a.localeCompare(b));
+        const availEntries = entries.filter(([, v]) => v.status === 'available');
+        const blockedEntries = entries.filter(([, v]) => v.status === 'blocked');
+
+        if (summaryPill) {
+            summaryPill.textContent = `${availEntries.length} Available • ${blockedEntries.length} Blocked`;
+        }
+        if (availList) {
+            availList.innerHTML = availEntries.length
+                ? availEntries.map(([iso, v]) => `
+                    <span class="ew-date-pill available">
+                        ${escapeHtml(iso)}${v.note ? ` • ${escapeHtml(v.note)}` : ''}
+                        <button type="button" data-remove-avail-date="${escapeHtml(iso)}" aria-label="Remove">&times;</button>
+                    </span>
+                `).join('')
+                : `<span class="ew-app-meta">No available dates marked.</span>`;
+        }
+        if (blockedList) {
+            blockedList.innerHTML = blockedEntries.length
+                ? blockedEntries.map(([iso, v]) => `
+                    <span class="ew-date-pill blocked">
+                        ${escapeHtml(iso)}${v.note ? ` • ${escapeHtml(v.note)}` : ''}
+                        <button type="button" data-remove-avail-date="${escapeHtml(iso)}" aria-label="Remove">&times;</button>
+                    </span>
+                `).join('')
+                : `<span class="ew-app-meta">No blocked dates marked.</span>`;
+        }
+    }
+
+    document.getElementById('avail-cal-prev')?.addEventListener('click', () => {
+        availCalDate = new Date(availCalDate.getFullYear(), availCalDate.getMonth() - 1, 1);
+        renderAvailabilityCalendar();
+    });
+
+    document.getElementById('avail-cal-next')?.addEventListener('click', () => {
+        availCalDate = new Date(availCalDate.getFullYear(), availCalDate.getMonth() + 1, 1);
+        renderAvailabilityCalendar();
+    });
+
+    document.getElementById('avail-date-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const iso = document.getElementById('avail-date-input')?.value;
+        const status = document.getElementById('avail-date-status')?.value || 'available';
+        const note = document.getElementById('avail-date-note')?.value.trim() || '';
+        if (!iso) return;
+        if (!state.availabilityDates) state.availabilityDates = {};
+        state.availabilityDates[iso] = { status, note };
+        saveState();
+        renderAvailabilityCalendar();
+        e.target.reset();
+        showToast(`Marked ${iso} as ${status}`);
+    });
+
+    document.addEventListener('click', (e) => {
+        const toggleDateBtn = e.target.closest('[data-toggle-avail-date]');
+        if (toggleDateBtn) {
+            const iso = toggleDateBtn.dataset.toggleAvailDate;
+            if (!state.availabilityDates) state.availabilityDates = {};
+            const current = state.availabilityDates[iso];
+            if (!current) {
+                state.availabilityDates[iso] = { status: 'available', note: '' };
+                showToast(`${iso} marked Available`);
+            } else if (current.status === 'available') {
+                state.availabilityDates[iso] = { status: 'blocked', note: current.note || '' };
+                showToast(`${iso} marked Blocked`);
+            } else {
+                delete state.availabilityDates[iso];
+                showToast(`${iso} unmarked`);
+            }
+            saveState();
+            renderAvailabilityCalendar();
+            return;
+        }
+
+        const removeDateBtn = e.target.closest('[data-remove-avail-date]');
+        if (removeDateBtn) {
+            const iso = removeDateBtn.dataset.removeAvailDate;
+            if (state.availabilityDates && state.availabilityDates[iso]) {
+                delete state.availabilityDates[iso];
+                saveState();
+                renderAvailabilityCalendar();
+                showToast(`Removed ${iso}`);
+            }
+            return;
         }
     });
 
@@ -3220,5 +3798,7 @@
     renderCategories();
     renderComplaints();
     populateProfileForm();
+    renderAvailabilityCalendar();
     populateSettings();
+    syncWorkflowFromBackend();
 })();

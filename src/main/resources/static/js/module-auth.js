@@ -123,6 +123,96 @@
 
     if (!registerForm) return;
 
+    const regCategoryEl = document.getElementById('register-category');
+    const regStartAgeEl = document.getElementById('register-start-age');
+    const regDobEl = document.getElementById('register-dob');
+    const regGenderEl = document.getElementById('register-gender');
+    const regExperienceEl = document.getElementById('register-experience');
+
+    function getTodayIso() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    function calculateAgeFromDob(dobStr) {
+        if (!dobStr) return null;
+        const dob = new Date(dobStr + 'T00:00:00');
+        if (Number.isNaN(dob.getTime())) return null;
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+            age -= 1;
+        }
+        return age;
+    }
+
+    function getExpectedExperienceOption(yearsExp) {
+        if (yearsExp <= 1) return 'Fresher (0-1 years)';
+        if (yearsExp <= 3) return 'Intermediate (1-3 years)';
+        if (yearsExp <= 7) return 'Experienced (3-7 years)';
+        return 'Senior / Veteran (7+ years)';
+    }
+
+    function applyCategoryGenderRestriction() {
+        if (!regCategoryEl || !regGenderEl) return;
+        const cat = regCategoryEl.value;
+        const lockedGender = cat === 'Actor' ? 'Male' : cat === 'Actress' ? 'Female' : '';
+
+        Array.from(regGenderEl.options).forEach((opt) => {
+            if (!opt.value) {
+                opt.disabled = Boolean(lockedGender);
+                return;
+            }
+            opt.disabled = lockedGender ? opt.value !== lockedGender : false;
+        });
+
+        if (lockedGender) {
+            regGenderEl.value = lockedGender;
+        }
+    }
+
+    function applyAgeAndExperienceRestriction() {
+        if (!regDobEl || !regStartAgeEl || !regExperienceEl) return;
+        const todayIso = getTodayIso();
+        regDobEl.max = todayIso;
+
+        const currentAge = calculateAgeFromDob(regDobEl.value);
+        if (currentAge !== null && currentAge >= 1) {
+            regStartAgeEl.max = String(currentAge);
+        } else {
+            regStartAgeEl.max = '100';
+        }
+
+        const startAge = Number(regStartAgeEl.value);
+        if (currentAge !== null && startAge >= 1 && startAge <= currentAge) {
+            const yearsExp = currentAge - startAge;
+            const expectedExp = getExpectedExperienceOption(yearsExp);
+            Array.from(regExperienceEl.options).forEach((opt) => {
+                if (!opt.value) {
+                    opt.disabled = true;
+                    return;
+                }
+                opt.disabled = opt.value !== expectedExp;
+            });
+            regExperienceEl.value = expectedExp;
+        } else {
+            Array.from(regExperienceEl.options).forEach((opt) => {
+                opt.disabled = false;
+            });
+        }
+    }
+
+    if (mode === 'professional') {
+        if (regDobEl) regDobEl.max = getTodayIso();
+        regCategoryEl?.addEventListener('change', applyCategoryGenderRestriction);
+        regDobEl?.addEventListener('change', applyAgeAndExperienceRestriction);
+        regStartAgeEl?.addEventListener('input', applyAgeAndExperienceRestriction);
+    }
+
     registerForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const fullName = document.getElementById('register-name').value.trim();
@@ -173,8 +263,39 @@
                 showStatus('Please enter a valid acting started age (1-100).', 'error');
                 return;
             }
+            if (professionalCategory === 'Actor' && gender !== 'Male') {
+                showStatus('Category "Actor" requires Gender to be Male.', 'error');
+                return;
+            }
+            if (professionalCategory === 'Actress' && gender !== 'Female') {
+                showStatus('Category "Actress" requires Gender to be Female.', 'error');
+                return;
+            }
+            const currentAge = calculateAgeFromDob(dateOfBirth);
+            if (currentAge === null || currentAge < 1) {
+                showStatus('Please enter a valid Date of Birth in the past.', 'error');
+                return;
+            }
+            if (professionalCategory === 'Child Artist' && currentAge >= 18) {
+                showStatus('Child Artist category is restricted to age under 18.', 'error');
+                return;
+            }
+            if (actingStartAge > currentAge) {
+                showStatus(`Acting started age (${actingStartAge}) cannot be greater than your current age (${currentAge}).`, 'error');
+                return;
+            }
+            const expectedExp = getExpectedExperienceOption(currentAge - actingStartAge);
+            if (experienceCategory !== expectedExp) {
+                applyAgeAndExperienceRestriction();
+                showStatus(`Based on your age (${currentAge}) and starting age (${actingStartAge}), Experience Category must be "${expectedExp}".`, 'error');
+                return;
+            }
             if (!photoInput.files || photoInput.files.length === 0) {
-                showStatus('Please upload a profile photo.', 'error');
+                showStatus('Please upload a profile photo (mandatory).', 'error');
+                return;
+            }
+            if (!portfolioOrBio) {
+                showStatus('Please enter your Portfolio Link / Short Bio.', 'error');
                 return;
             }
 

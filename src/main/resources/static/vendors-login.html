@@ -4,21 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendors Management Login — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/auth.css?v=4">
 </head>
 <body data-role="VENDOR" data-endpoint="/api/auth/vendors" data-mode="document-verification">
-    <main class="auth-page">
+    <nav class="ew-navbar">
+        <a href="/index.html" class="ew-brand">
+            <span class="ew-logo-box">★</span>
+            <span class="ew-brand-text">
+                <strong>Entertainment World</strong>
+                <span>FIND STARDOM. FIND STARS.</span>
+            </span>
+        </a>
+        <div class="ew-nav-links">
+            <a href="/index.html">All Modules</a>
+            <a href="/pricing.html">Pricing</a>
+        </div>
+        <div class="ew-nav-actions">
+            <a href="/admin-login.html" class="ew-btn-outline">Super Admin</a>
+            <a href="/actors-login.html" class="ew-btn-primary">Join Free</a>
+        </div>
+    </nav>
+    <main class="auth-page" style="max-width: 660px;">
         <section class="auth-card" aria-labelledby="module-title">
             <a href="/index.html" class="back-link">&larr; All Modules</a>
             <header class="brand-header">
                 <div class="brand-badge" aria-hidden="true">VM</div>
                 <h1 id="module-title">Vendors Management</h1>
                 <p class="brand-subtitle">Equipment rentals, sound, lighting &amp; production supply</p>
+                <p style="margin-top:0.5rem;font-size:0.86rem;"><a href="/service-vendors-register.html" style="color:#be123c;font-weight:700;">Other Vendor Categories (Production, Editing, Audio, Lighting, Logistics, Marketing) &rarr; Register Here</a></p>
             </header>
 
             <div class="tab-bar" role="tablist" aria-label="Vendors Management authentication">
                 <button type="button" id="tab-login" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-login" data-tab="login">Sign In</button>
-                <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Register &amp; Verify</button>
+                <button type="button" id="tab-register" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-register" data-tab="register">Register</button>
             </div>
 
             <div id="status-banner" class="status-banner" role="alert" hidden></div>
@@ -40,18 +58,88 @@
             </form>
 
             <form id="panel-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
-                <div class="field-group">
-                    <label for="register-name">Contact Person Name</label>
-                    <input type="text" id="register-name" placeholder="Full Name" autocomplete="name" required>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-name">Contact Person Name</label>
+                        <input type="text" id="register-name" placeholder="Full Name" autocomplete="name" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-designation">Designation</label>
+                        <input type="text" id="register-designation" placeholder="e.g. Founder / Manager" required>
+                    </div>
                 </div>
-                <div class="field-group">
-                    <label for="register-org">Vendor Company Name</label>
-                    <input type="text" id="register-org" placeholder="Prime Stage Vendors Pvt Ltd" autocomplete="organization" required>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-org">Vendor Company Name</label>
+                        <input type="text" id="register-org" placeholder="Prime Stage Vendors Pvt Ltd" autocomplete="organization" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-email">Business Email</label>
+                        <input type="email" id="register-email" placeholder="contact@company.com" autocomplete="email" required>
+                    </div>
                 </div>
-                <div class="field-group">
-                    <label for="register-email">Business Email</label>
-                    <input type="email" id="register-email" placeholder="contact@company.com" autocomplete="email" required>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-phone">Phone Number</label>
+                        <input type="tel" id="register-phone" placeholder="+91 9876543210" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-alt-phone">Alternate Phone Number</label>
+                        <input type="tel" id="register-alt-phone" placeholder="+91 9123456780">
+                    </div>
                 </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-years">Years in Business</label>
+                        <input type="number" id="register-years" min="0" placeholder="e.g. 5" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-venues">Number of Venues Managed</label>
+                        <input type="number" id="register-venues" min="0" placeholder="e.g. 20" required>
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-country">Country</label>
+                        <input type="text" id="register-country" placeholder="India" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-state">State</label>
+                        <input type="text" id="register-state" placeholder="Telangana" required>
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-city">City</label>
+                        <input type="text" id="register-city" placeholder="Hyderabad" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-pincode">Pincode</label>
+                        <input type="text" id="register-pincode" placeholder="500081" required>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="register-website">Business Website URL</label>
+                    <input type="url" id="register-website" placeholder="https://yourcompany.com">
+                </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-logo-file">Logo Image Upload</label>
+                        <input type="file" id="register-logo-file" accept=".png,.jpg,.jpeg,.webp">
+                    </div>
+                    <div class="field-group">
+                        <label for="register-cover-file">Cover Image Upload</label>
+                        <input type="file" id="register-cover-file" accept=".png,.jpg,.jpeg,.webp">
+                    </div>
+                </div>
+
                 <div class="field-row">
                     <div class="field-group">
                         <label for="register-doc-type">Document Type</label>
@@ -67,29 +155,45 @@
                         <input type="text" id="register-doc-number" placeholder="VND-2026-001" required>
                     </div>
                 </div>
+
                 <div class="field-group">
                     <label for="register-doc-file">Upload Verification Document (PDF / Image)</label>
                     <input type="file" id="register-doc-file" accept=".pdf,.png,.jpg,.jpeg" required>
                 </div>
-                <div class="field-group">
-                    <label for="register-password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
-                        <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="register-password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="register-password" placeholder="Minimum 6 characters" autocomplete="new-password" required>
+                            <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="register-confirm">Confirm Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
+                            <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
+                        </div>
                     </div>
                 </div>
+
                 <div class="field-group">
-                    <label for="register-confirm">Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="register-confirm" placeholder="Re-enter password" autocomplete="new-password" required>
-                        <button type="button" class="toggle-password" data-target="register-confirm" aria-label="Show password">Show</button>
-                    </div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="register-terms" required>
+                        <span>I agree to the Terms and Conditions</span>
+                    </label>
+                    <label class="checkbox-label" style="margin-top:0.35rem;">
+                        <input type="checkbox" id="register-privacy" required>
+                        <span>I agree to the Privacy Policy</span>
+                    </label>
                 </div>
-                <span class="demo-hint">Login is enabled after Admin verifies your submitted document.</span>
-                <button type="submit" class="submit-btn" id="register-submit">Submit for Admin Verification</button>
+
+                <span class="demo-hint">Register your vendor account to sign in immediately and manage your services.</span>
+                <button type="submit" class="submit-btn" id="register-submit">Register Vendor Account</button>
             </form>
         </section>
     </main>
-    <script src="/js/module-auth.js"></script>
+    <script src="/js/module-auth.js?v=2"></script>
 </body>
 </html>

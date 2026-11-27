@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Pricing — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css?v=4">
+    <link rel="stylesheet" href="/css/vendor-portal.css?v=4">
+</head>
+<body class="vendor-shell">
+    <nav class="ew-navbar">
+        <a href="/index.html" class="ew-brand">
+            <div class="ew-logo-box" aria-hidden="true">&#9733;</div>
+            <div class="ew-brand-text">
+                <strong>Entertainment World</strong>
+                <span>Subscription Passes</span>
+            </div>
+        </a>
+        <div class="ew-nav-links">
+            <a href="/index.html">Main Modules</a>
+            <a href="/pricing.html" style="color:#fff;">3 Passes &amp; Pricing</a>
+        </div>
+        <div class="ew-nav-actions">
+            <a href="/admin-login.html" class="ew-pill-btn ew-btn-outline">Super Admin</a>
+            <a href="/vendors-login.html" class="ew-pill-btn ew-btn-crimson">Vendor Login</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-page">
+        <header class="studio-topbar">
+            <div>
+                <a href="/index.html" class="back-link" style="margin-bottom:0.35rem;">&larr; Back to Main Modules</a>
+                <h1>Entertainment World — Subscription Plans</h1>
+                <p class="brand-subtitle">Proposed launch pricing in INR, before applicable taxes (18% GST)</p>
+            </div>
+            <div class="btn-row">
+                <select id="pricing-role-select" class="filter-bar" style="margin:0;">
+                    <option value="ACTOR">2. Professional (₹0 / ₹199 / ₹399)</option>
+                    <option value="VENDOR">3. Vendors (₹0 / ₹999 / ₹2,499)</option>
+                    <option value="CASTING">4. Casting Agency &amp; Production House (₹0 / ₹999 / ₹2,499)</option>
+                    <option value="BRAND">5. Brands &amp; Advertisement Agencies (₹0 / ₹1,499 / ₹3,999)</option>
+                    <option value="EVENT_MANAGEMENT">6. Event Management (₹0 / ₹799 / ₹1,999)</option>
+                </select>
+                <button type="button" id="cycle-monthly" class="btn-sm btn-primary">Monthly</button>
+                <button type="button" id="cycle-annual" class="btn-sm btn-secondary">Yearly (20% off)</button>
+            </div>
+        </header>
+
+        <section id="pricing-cards" class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));"></section>
+    </main>
+
+    <script>
+        (() => {
+            const roleSelect = document.getElementById('pricing-role-select');
+            const cardsEl = document.getElementById('pricing-cards');
+            const btnM = document.getElementById('cycle-monthly');
+            const btnA = document.getElementById('cycle-annual');
+            let cycle = 'MONTHLY';
+
+            const loginLinks = {
+                ACTOR: '/actors-login.html',
+                CASTING: '/casting-login.html',
+                BRAND: '/brands-login.html',
+                EVENT_MANAGEMENT: '/events-login.html',
+                VENDOR: '/vendors-login.html'
+            };
+
+            async function loadPlans() {
+                const role = roleSelect.value;
+                const res = await fetch(`/api/subscriptions/plans?role=${encodeURIComponent(role)}`);
+                const plans = await res.json();
+                cardsEl.innerHTML = '';
+                plans.forEach((p) => {
+                    const price = cycle === 'ANNUAL' ? p.annualPrice : p.monthlyPrice;
+                    const suffix = cycle === 'ANNUAL' ? '/year' : '/month';
+                    const card = document.createElement('article');
+                    card.className = 'studio-work-card';
+                    if (p.tier === 'PREMIUM') card.style.borderColor = '#e11d48';
+                    const feats = (p.features || []).map((f) => `<li>${f}</li>`).join('');
+                    card.innerHTML = `
+                        <span class="module-tag">${p.tier}${p.tier === 'PREMIUM' ? ' &bull; Suggested' : ''}</span>
+                        <h3 style="font-size:1.2rem;">${p.planName}</h3>
+                        <p style="font-size:1.8rem; font-weight:800; color:#141219; margin:0.4rem 0;">INR ${price} <small style="font-size:0.85rem; color:#5c5966;">${suffix}</small></p>
+                        <p><small>Limit: ${p.usageLimit} | Team Accounts: ${p.teamAccountsLimit}</small></p>
+                        <ul style="margin:0.65rem 0; padding-left:1.1rem; color:#5c5966; font-size:0.86rem; line-height:1.55;">${feats}</ul>
+                        <a class="btn-sm btn-primary" style="margin-top:auto; justify-content:center;" href="${loginLinks[role] || '/index.html'}">Sign In to Subscribe</a>
+                    `;
+                    cardsEl.appendChild(card);
+                });
+            }
+
+            btnM.addEventListener('click', () => {
+                cycle = 'MONTHLY';
+                btnM.className = 'btn-sm btn-primary';
+                btnA.className = 'btn-sm btn-secondary';
+                loadPlans();
+            });
+            btnA.addEventListener('click', () => {
+                cycle = 'ANNUAL';
+                btnA.className = 'btn-sm btn-primary';
+                btnM.className = 'btn-sm btn-secondary';
+                loadPlans();
+            });
+            roleSelect.addEventListener('change', loadPlans);
+            loadPlans();
+        })();
+    </script>
+</body>
+</html>

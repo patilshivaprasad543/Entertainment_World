@@ -2,13 +2,19 @@ package com.example.demo.service;
 
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.LoginRequest;
+import com.example.demo.model.CategoryVendorProfile;
 import com.example.demo.model.UserAccount;
 import com.example.demo.model.UserRole;
+import com.example.demo.model.VendorProfile;
 import com.example.demo.model.VerificationStatus;
+import com.example.demo.repository.CategoryVendorProfileRepository;
 import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.repository.VendorProfileRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -47,9 +53,19 @@ public class RoleAuthService {
     public static final Path PHOTO_DIR = Paths.get("uploads", "profile-photos").toAbsolutePath().normalize();
 
     private final UserAccountRepository userAccountRepository;
+    private final VendorProfileRepository vendorProfileRepository;
+    private final CategoryVendorProfileRepository categoryVendorProfileRepository;
+    private final SessionAuthService sessionAuthService;
 
-    public RoleAuthService(UserAccountRepository userAccountRepository) {
+    public RoleAuthService(
+            UserAccountRepository userAccountRepository,
+            VendorProfileRepository vendorProfileRepository,
+            CategoryVendorProfileRepository categoryVendorProfileRepository,
+            SessionAuthService sessionAuthService) {
         this.userAccountRepository = userAccountRepository;
+        this.vendorProfileRepository = vendorProfileRepository;
+        this.categoryVendorProfileRepository = categoryVendorProfileRepository;
+        this.sessionAuthService = sessionAuthService;
     }
 
     public ResponseEntity<AuthResponse> registerProfessional(
@@ -104,9 +120,9 @@ public class RoleAuthService {
         UserAccount account = new UserAccount(fullName, email, password, UserRole.ACTOR);
         account.setProfessionalCategory(category);
         account.setActingStartAge(actingStartAge);
-        account.setDateOfBirth(dateOfBirth);
-        account.setExperienceCategory(experienceCategory);
-        account.setGender(gender);
+        account.setDateOfBirth(dateOfBirth.isEmpty() ? null : dateOfBirth);
+        account.setExperienceCategory(experienceCategory.isEmpty() ? null : experienceCategory);
+        account.setGender(gender.isEmpty() ? null : gender);
         account.setProfilePhotoFileName(storedPhoto);
         account.setPhone(phone);
         account.setCity(city);
@@ -127,6 +143,47 @@ public class RoleAuthService {
                 saved.getGender(),
                 buildPhotoUrl(saved.getProfilePhotoFileName()),
                 UserRole.ACTOR.getDashboardUrl()
+        ));
+    }
+
+    public ResponseEntity<AuthResponse> registerInfluencer(
+            String fullNameRaw,
+            String emailRaw,
+            String passwordRaw,
+            String phoneRaw,
+            String cityRaw,
+            String bioRaw
+    ) {
+        String fullName = trimOrEmpty(fullNameRaw);
+        String email = trimOrEmpty(emailRaw).toLowerCase();
+        String password = passwordRaw == null ? "" : passwordRaw;
+
+        ResponseEntity<AuthResponse> validationError = validateBaseCredentials(fullName, email, password, UserRole.INFLUENCER);
+        if (validationError != null) {
+            return validationError;
+        }
+
+        UserAccount account = new UserAccount(fullName, email, password, UserRole.INFLUENCER);
+        account.setProfessionalCategory("Influencer");
+        account.setPhone(trimOrNull(phoneRaw));
+        account.setCity(trimOrNull(cityRaw));
+        account.setPortfolioOrBio(trimOrNull(bioRaw));
+        account.setVerificationStatus(VerificationStatus.APPROVED);
+
+        UserAccount saved = userAccountRepository.save(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(
+                true,
+                "Influencer profile created successfully!",
+                saved.getFullName(),
+                saved.getEmail(),
+                UserRole.INFLUENCER.name(),
+                "Influencer",
+                null,
+                null,
+                null,
+                null,
+                null,
+                UserRole.INFLUENCER.getDashboardUrl()
         ));
     }
 
@@ -170,12 +227,16 @@ public class RoleAuthService {
         account.setDocumentType(documentType);
         account.setDocumentNumber(documentNumber);
         account.setDocumentFileName(storedFileName);
-        account.setVerificationStatus(VerificationStatus.PENDING);
+        boolean autoApproveVendor = (role == UserRole.VENDOR);
+        account.setVerificationStatus(autoApproveVendor ? VerificationStatus.APPROVED : VerificationStatus.PENDING);
 
         UserAccount saved = userAccountRepository.save(account);
+        String msg = autoApproveVendor
+                ? "Vendor registration successful! You can now sign in to Vendors Management Dashboard."
+                : "Registration submitted! Your documents are pending Admin verification before you can log in.";
         return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(
                 true,
-                "Registration submitted! Your documents are pending Admin verification before you can log in.",
+                msg,
                 saved.getFullName(),
                 saved.getEmail(),
                 role.name(),
@@ -187,6 +248,86 @@ public class RoleAuthService {
                 null,
                 role.getDashboardUrl()
         ));
+    }
+
+    public ResponseEntity<AuthResponse> registerVendorWithProfile(
+            String fullNameRaw,
+            String emailRaw,
+            String passwordRaw,
+            String organizationNameRaw,
+            String designationRaw,
+            String phoneRaw,
+            String alternatePhoneRaw,
+            Integer yearsInBusiness,
+            Integer venuesManaged,
+            String countryRaw,
+            String stateRaw,
+            String cityRaw,
+            String pincodeRaw,
+            String websiteUrlRaw,
+            String bioRaw,
+            String aboutUsRaw,
+            String documentTypeRaw,
+            String documentNumberRaw,
+            MultipartFile documentFile,
+            MultipartFile logoFile,
+            MultipartFile coverFile,
+            boolean acceptedTerms,
+            boolean acceptedPrivacyPolicy
+    ) {
+        if (!acceptedTerms || !acceptedPrivacyPolicy) {
+            return error(HttpStatus.BAD_REQUEST, "Please accept Terms & Conditions and Privacy Policy.");
+        }
+
+        ResponseEntity<AuthResponse> baseRes = registerWithDocuments(
+                UserRole.VENDOR, fullNameRaw, emailRaw, passwordRaw,
+                organizationNameRaw, documentTypeRaw, documentNumberRaw, documentFile);
+        if (!baseRes.getStatusCode().is2xxSuccessful() || baseRes.getBody() == null) {
+            return baseRes;
+        }
+
+        UserAccount savedVendor = userAccountRepository
+                .findByEmailAndRole(baseRes.getBody().email(), UserRole.VENDOR)
+                .orElseThrow();
+
+        VendorProfile profile = new VendorProfile();
+        profile.setUserAccount(savedVendor);
+        profile.setCompanyName(trimOrEmpty(organizationNameRaw));
+        profile.setContactPerson(trimOrEmpty(fullNameRaw));
+        profile.setBusinessEmail(savedVendor.getEmail());
+        profile.setDesignation(trimOrNull(designationRaw));
+        profile.setPhone(trimOrNull(phoneRaw));
+        profile.setAlternatePhone(trimOrNull(alternatePhoneRaw));
+        profile.setYearsInBusiness(yearsInBusiness);
+        profile.setVenuesManaged(venuesManaged);
+        profile.setCountry(trimOrNull(countryRaw));
+        profile.setState(trimOrNull(stateRaw));
+        profile.setCity(trimOrNull(cityRaw));
+        profile.setPincode(trimOrNull(pincodeRaw));
+        profile.setWebsiteUrl(trimOrNull(websiteUrlRaw));
+        profile.setBio(trimOrNull(bioRaw));
+        profile.setAboutUs(trimOrNull(aboutUsRaw));
+        profile.setAcceptedTerms(true);
+        profile.setAcceptedPrivacyPolicy(true);
+        profile.setUpdatedAt(java.time.LocalDateTime.now());
+
+        try {
+            if (logoFile != null && !logoFile.isEmpty()) {
+                profile.setLogoFileName(storeFile(logoFile, VendorPortalService.LOGO_DIR));
+            }
+            if (coverFile != null && !coverFile.isEmpty()) {
+                profile.setCoverImageFileName(storeFile(coverFile, VendorPortalService.COVER_DIR));
+            }
+        } catch (IOException ex) {
+            return error(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to store logo or cover image.");
+        }
+
+        vendorProfileRepository.save(profile);
+        return baseRes;
+    }
+
+    private static String trimOrNull(String value) {
+        return value == null || value.trim().isEmpty() ? null : value.trim();
     }
 
     public ResponseEntity<AuthResponse> login(UserRole role, LoginRequest request) {
@@ -205,14 +346,34 @@ public class RoleAuthService {
         }
 
         UserAccount user = found.get();
-        VerificationStatus status = user.getVerificationStatus();
-        if (status == VerificationStatus.PENDING) {
+        if (user.isSuspended()) {
             return error(HttpStatus.FORBIDDEN,
-                    "Your account and documents are pending Admin verification. You can log in once approved.");
+                    "Your account has been suspended by Admin. Please contact support.");
         }
-        if (status == VerificationStatus.REJECTED) {
-            return error(HttpStatus.FORBIDDEN,
-                    "Your verification request was rejected by Admin.");
+        VerificationStatus status = user.getVerificationStatus();
+        if (role != UserRole.VENDOR) {
+            if (status == VerificationStatus.PENDING) {
+                return error(HttpStatus.FORBIDDEN,
+                        "Your account and documents are pending Admin verification. You can log in once approved.");
+            }
+            if (status == VerificationStatus.REJECTED) {
+                return error(HttpStatus.FORBIDDEN,
+                        "Your verification request was rejected by Admin.");
+            }
+        }
+
+        if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attrs) {
+            sessionAuthService.establishSession(attrs.getRequest(), user);
+        }
+
+        String redirectUrl = role.getDashboardUrl();
+        String categoryLabel = user.getProfessionalCategory();
+        if (role == UserRole.VENDOR) {
+            Optional<CategoryVendorProfile> catProf = categoryVendorProfileRepository.findByUserAccount(user);
+            if (catProf.isPresent()) {
+                redirectUrl = "/dashboards/service-vendor.html";
+                categoryLabel = catProf.get().getVendorCategory();
+            }
         }
 
         return ResponseEntity.ok(new AuthResponse(
@@ -221,13 +382,13 @@ public class RoleAuthService {
                 user.getFullName(),
                 user.getEmail(),
                 role.name(),
-                user.getProfessionalCategory(),
+                categoryLabel,
                 user.getActingStartAge(),
                 user.getDateOfBirth(),
                 user.getExperienceCategory(),
                 user.getGender(),
                 buildPhotoUrl(user.getProfilePhotoFileName()),
-                role.getDashboardUrl()
+                redirectUrl
         ));
     }
 

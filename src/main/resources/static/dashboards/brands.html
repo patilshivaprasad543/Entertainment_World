@@ -4,21 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brand Promotions Dashboard — Entertainment World</title>
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/auth.css?v=4">
+    <link rel="stylesheet" href="/css/vendor-portal.css?v=4">
 </head>
 <body data-role="BRAND" data-login="/brands-login.html">
+    <nav class="ew-navbar">
+        <a href="/index.html" class="ew-brand">
+            <div class="ew-logo-box" aria-hidden="true">&#9733;</div>
+            <div class="ew-brand-text">
+                <strong>Entertainment World</strong>
+                <span>Brands &amp; Ad Agency Dashboard</span>
+            </div>
+        </a>
+        <div class="ew-nav-links">
+            <a href="/index.html">Main Modules</a>
+            <a href="/pricing.html">Agency Passes</a>
+            <a href="#vendor-marketplace-section">Vendor Services</a>
+            <a href="#ew-subscription-root">My Subscription</a>
+        </div>
+        <div class="ew-nav-actions">
+            <div class="ew-user-chip">
+                <span id="user-name" style="font-weight:700;"></span>
+                <span class="ew-verified-tick" title="Verified">&#10003;</span>
+            </div>
+            <button type="button" id="signout-btn" class="ew-pill-btn ew-btn-crimson">Sign Out</button>
+        </div>
+    </nav>
     <main class="dashboard-page">
         <header class="dashboard-topbar">
             <div>
-                <span class="module-tag">Marketing</span>
+                <span class="module-tag">Brands &amp; Advertisement Agencies</span>
                 <h1>Brand Promotions Dashboard</h1>
             </div>
             <div class="dashboard-user">
                 <div class="user-meta">
-                    <strong id="user-name"></strong>
                     <span id="user-email"></span>
                 </div>
-                <button type="button" id="signout-btn" class="signout-btn">Sign Out</button>
             </div>
         </header>
 
@@ -36,7 +57,99 @@
                 <p>Track campaign impressions, engagement, and conversion metrics.</p>
             </article>
         </section>
+
+        <section id="vendor-marketplace-section" class="verification-section" data-mode="booking">
+            <div class="panel-header">
+                <h2>Vendor Collaboration &amp; Promotional Production Services</h2>
+                <button type="button" id="mkt-refresh-btn" class="signout-btn">Refresh</button>
+            </div>
+            <div id="mkt-banner" class="status-banner" role="alert" hidden></div>
+
+            <div class="filter-bar">
+                <input type="text" id="mkt-search" placeholder="Search LED walls, photography, staging...">
+                <select id="mkt-category">
+                    <option value="">All Categories</option>
+                    <option value="LED Walls &amp; Displays">LED Walls &amp; Displays</option>
+                    <option value="Photography &amp; Videography">Photography &amp; Videography</option>
+                    <option value="Stage Equipment">Stage Equipment</option>
+                    <option value="Sound Systems">Sound Systems</option>
+                    <option value="Props &amp; Set Design">Props &amp; Set Design</option>
+                    <option value="Catering &amp; Event Supplies">Catering &amp; Event Supplies</option>
+                    <option value="Other Services">Other Services</option>
+                </select>
+                <input type="number" id="mkt-max-price" placeholder="Max Price/Day">
+                <input type="text" id="mkt-location" placeholder="Location / City">
+                <button type="button" id="mkt-filter-btn" class="btn-sm btn-primary">Filter</button>
+            </div>
+
+            <div id="mkt-services-grid" class="marketplace-grid"></div>
+
+            <div class="panel-card" style="margin-top:1.5rem;">
+                <div class="panel-header"><h3>Campaign Service Requests &amp; Settlements</h3></div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Booking</th>
+                                <th>Service</th>
+                                <th>Campaign Dates &amp; Venue</th>
+                                <th>Estimate</th>
+                                <th>Status</th>
+                                <th>Invoice &amp; Settlement</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mkt-bookings-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel-card">
+                <div class="panel-header"><h3>Campaign Vendor Notifications</h3></div>
+                <div id="mkt-notifications-list" class="verification-list"></div>
+            </div>
+        </section>
+        <div id="ew-subscription-root"></div>
+        <div id="ew-social-root"></div>
     </main>
+
+    <div id="mkt-book-modal" class="modal-backdrop" hidden>
+        <div class="modal-box">
+            <div class="panel-header">
+                <h3 id="mb-title">Request Campaign Service</h3>
+                <button type="button" id="mb-close" class="btn-sm btn-secondary">&times;</button>
+            </div>
+            <p id="mb-subtitle" class="brand-subtitle" style="margin-bottom:1rem;"></p>
+            <form id="mb-form" class="auth-form">
+                <input type="hidden" id="mb-service-id">
+                <div class="field-group">
+                    <label for="mb-qty">Required Quantity</label>
+                    <input type="number" id="mb-qty" min="1" required>
+                </div>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="mb-start">Campaign Start Date</label>
+                        <input type="date" id="mb-start" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="mb-end">Campaign End Date</label>
+                        <input type="date" id="mb-end" required>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="mb-location">Activation / Delivery Location</label>
+                    <input type="text" id="mb-location" placeholder="Mall, venue, or shoot city" required>
+                </div>
+                <div class="field-group">
+                    <label for="mb-notes">Campaign Requirements &amp; Deliverables</label>
+                    <textarea id="mb-notes" rows="2" placeholder="Branding specs, deliverables, setup SLA"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Campaign Request</button>
+            </form>
+        </div>
+    </div>
+
     <script src="/js/dashboard.js"></script>
+    <script src="/js/marketplace-client.js"></script>
+    <script src="/js/subscription-widget.js"></script>
 </body>
 </html>

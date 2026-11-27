@@ -34,6 +34,7 @@
             <button type="button" class="ew-topbar-link" data-goto-view="overview">Verifications</button>
             <button type="button" class="ew-topbar-link" data-goto-view="users">Users</button>
             <button type="button" class="ew-topbar-link" data-goto-view="plans">Revenue</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="subscriptions">Subscriptions</button>
             <button type="button" class="ew-topbar-link" data-goto-view="complaints">Complaints</button>
             <button type="button" class="ew-topbar-link" data-goto-view="announcements">Announcements</button>
         </nav>
@@ -184,6 +185,7 @@
                         </select>
                         <select id="admin-payment-status-filter" class="ew-select">
                             <option value="ALL">All Statuses</option>
+                            <option value="In Review">In Review</option>
                             <option value="Settled">Settled</option>
                             <option value="Paid">Paid</option>
                             <option value="Pending">Pending</option>
@@ -200,12 +202,38 @@
                                     <th>Amount</th>
                                     <th>Date &amp; Invoice</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-payments-tbody"></tbody>
                         </table>
                     </div>
                 </div>
+            </section>
+
+            <!-- 3b. Manage Subscriptions -->
+            <section class="ew-view" data-view-panel="subscriptions">
+                <div class="ew-page-header">
+                    <div>
+                        <h1>Manage Subscriptions</h1>
+                        <p class="ew-page-subtitle">Edit pricing, quotas, features, or add new plans for Professionals, Casting Productions, Brands, Events, and Vendors</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button type="button" id="admin-reset-plans-btn" class="ew-btn ew-btn-outline ew-btn-sm">Reset Defaults</button>
+                        <button type="button" id="admin-add-plan-btn" class="ew-btn ew-btn-primary ew-btn-sm">+ Add New Plan</button>
+                    </div>
+                </div>
+
+                <div id="admin-sub-portal-chips" class="ew-chip-row">
+                    <button type="button" class="ew-chip active" data-sub-portal-filter="ALL">All Portals</button>
+                    <button type="button" class="ew-chip" data-sub-portal-filter="Professionals">Professionals</button>
+                    <button type="button" class="ew-chip" data-sub-portal-filter="Casting">Casting Productions</button>
+                    <button type="button" class="ew-chip" data-sub-portal-filter="Brands">Brand Promotions</button>
+                    <button type="button" class="ew-chip" data-sub-portal-filter="Events">Event Management</button>
+                    <button type="button" class="ew-chip" data-sub-portal-filter="Vendors">Vendors Management</button>
+                </div>
+
+                <div id="admin-subscriptions-grid" class="ew-plans-grid"></div>
             </section>
 
             <!-- 4. Complaints & Support -->
@@ -317,6 +345,13 @@
                     </svg>
                     <span>Plans &amp; Revenue</span>
                 </button>
+                <button type="button" class="ew-nav-item" data-view="subscriptions">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                    <span>Manage Subscriptions</span>
+                </button>
                 <button type="button" class="ew-nav-item" data-view="complaints">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -347,6 +382,78 @@
                 <div>Core Platform Control</div>
             </div>
         </aside>
+    </div>
+
+    <div id="admin-verif-modal" class="ew-photo-modal" hidden>
+        <div class="ew-person-modal-card" role="dialog" aria-modal="true" aria-labelledby="admin-verif-modal-title">
+            <button type="button" id="admin-verif-modal-close" class="ew-person-modal-close" aria-label="Close details">&times;</button>
+            <div id="admin-verif-modal-content"></div>
+        </div>
+    </div>
+
+    <div id="admin-plan-modal" class="ew-photo-modal" hidden>
+        <div class="ew-person-modal-card" role="dialog" aria-modal="true" aria-labelledby="admin-plan-modal-title">
+            <button type="button" id="admin-plan-modal-close" class="ew-person-modal-close" aria-label="Close plan editor">&times;</button>
+            <div class="ew-person-modal-head">
+                <div>
+                    <h3 id="admin-plan-modal-title">Edit Subscription Plan</h3>
+                    <p class="ew-app-meta" style="margin: 0;">Changes apply immediately to portal subscription catalog</p>
+                </div>
+            </div>
+            <form id="admin-plan-form" class="ew-form-grid">
+                <input type="hidden" id="sub-plan-id">
+                <div class="ew-field">
+                    <label for="sub-plan-portal">Portal / Role</label>
+                    <select id="sub-plan-portal" class="ew-select" required>
+                        <option value="Professionals">Professionals (Actors &amp; Talent)</option>
+                        <option value="Casting">Casting Productions</option>
+                        <option value="Brands">Brand Promotions</option>
+                        <option value="Events">Event Management</option>
+                        <option value="Vendors">Vendors Management</option>
+                    </select>
+                </div>
+                <div class="ew-field">
+                    <label for="sub-plan-name">Plan Name</label>
+                    <input id="sub-plan-name" class="ew-input" type="text" placeholder="e.g., Studio Pro" required>
+                </div>
+                <div class="ew-field">
+                    <label for="sub-plan-price">Price (₹)</label>
+                    <input id="sub-plan-price" class="ew-input" type="number" min="0" step="1" placeholder="e.g., 1499" required>
+                </div>
+                <div class="ew-field">
+                    <label for="sub-plan-cycle">Billing Cycle</label>
+                    <select id="sub-plan-cycle" class="ew-select">
+                        <option value="Monthly">Monthly</option>
+                        <option value="Quarterly">Quarterly</option>
+                        <option value="Yearly">Yearly</option>
+                        <option value="One-time">One-time</option>
+                    </select>
+                </div>
+                <div class="ew-field">
+                    <label for="sub-plan-status">Availability Status</label>
+                    <select id="sub-plan-status" class="ew-select">
+                        <option value="Active">Active</option>
+                        <option value="Paused">Paused</option>
+                    </select>
+                </div>
+                <div class="ew-field">
+                    <label for="sub-plan-badge">Highlight Badge (Optional)</label>
+                    <input id="sub-plan-badge" class="ew-input" type="text" placeholder="e.g., Popular, Best Value">
+                </div>
+                <div class="ew-field full">
+                    <label for="sub-plan-quota">Quota / Limit Summary</label>
+                    <input id="sub-plan-quota" class="ew-input" type="text" placeholder="e.g., 250 contact views • 30 audition invites">
+                </div>
+                <div class="ew-field full">
+                    <label for="sub-plan-features">Plan Features (one per line)</label>
+                    <textarea id="sub-plan-features" class="ew-textarea" rows="4" placeholder="Verified badge&#10;Priority listing&#10;Dedicated support"></textarea>
+                </div>
+                <div class="ew-field full" style="flex-direction: row; justify-content: flex-end; gap: 10px;">
+                    <button type="button" id="admin-plan-cancel" class="ew-btn ew-btn-outline ew-btn-sm">Cancel</button>
+                    <button type="submit" class="ew-btn ew-btn-primary ew-btn-sm">Save Plan</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div id="ew-toast" class="ew-toast" hidden></div>

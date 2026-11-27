@@ -335,6 +335,54 @@
                     </form>
                 </div>
 
+                <div id="availability-calendar-panel" class="ew-panel ew-video-section">
+                    <div class="ew-section-head">
+                        <div>
+                            <h3 style="margin-bottom: 2px;">Availability &amp; Blocked Dates</h3>
+                            <p style="margin: 0;">Mark dates as Available or Blocked for shoots, auditions, and brand events. Click any date on the calendar to toggle.</p>
+                        </div>
+                        <span id="availability-summary-pill" class="ew-meta-note">0 Available • 0 Blocked</span>
+                    </div>
+
+                    <form id="avail-date-form" class="ew-toolbar" style="margin-top: 14px;">
+                        <input id="avail-date-input" class="ew-input" type="date" required style="max-width: 180px;">
+                        <select id="avail-date-status" class="ew-select" style="max-width: 160px;">
+                            <option value="available">Available</option>
+                            <option value="blocked">Blocked</option>
+                        </select>
+                        <input id="avail-date-note" class="ew-input ew-search-input" type="text" placeholder="Optional note (e.g., Web series shoot, Travel, Open for auditions)">
+                        <button type="submit" class="ew-btn ew-btn-primary ew-btn-sm">Mark Date</button>
+                    </form>
+
+                    <div class="ew-cal-wrap">
+                        <div class="ew-cal-header">
+                            <button type="button" id="avail-cal-prev" class="ew-btn ew-btn-outline ew-btn-sm">&larr; Prev</button>
+                            <strong id="avail-cal-month-label">November 2026</strong>
+                            <button type="button" id="avail-cal-next" class="ew-btn ew-btn-outline ew-btn-sm">Next &rarr;</button>
+                        </div>
+                        <div class="ew-cal-weekdays">
+                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                        </div>
+                        <div id="avail-calendar-grid" class="ew-cal-grid"></div>
+                        <div class="ew-cal-legend">
+                            <span><i class="ew-cal-dot available"></i> Available</span>
+                            <span><i class="ew-cal-dot blocked"></i> Blocked</span>
+                            <span><i class="ew-cal-dot unmarked"></i> Unmarked (click to toggle)</span>
+                        </div>
+                    </div>
+
+                    <div class="ew-grid-2" style="margin-top: 16px;">
+                        <div>
+                            <strong style="font-size: 0.86rem; color: #166534;">Available Dates</strong>
+                            <div id="avail-dates-list" class="ew-date-pill-list"></div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 0.86rem; color: #991b1b;">Blocked Dates</strong>
+                            <div id="blocked-dates-list" class="ew-date-pill-list"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="ew-panel ew-video-section">
                     <div class="ew-section-head">
                         <div>
@@ -542,12 +590,33 @@
             <section class="ew-view" data-view-panel="network">
                 <div class="ew-page-header">
                     <div>
-                        <h1>My Network</h1>
-                        <p class="ew-page-subtitle">Connect with casting directors, producers, and discover teammate suggestions</p>
+                        <h1>My Network &amp; Chat Inbox</h1>
+                        <p class="ew-page-subtitle">Permission-based conversations, audition/campaign/booking threads, and teammate discovery</p>
                     </div>
+                    <button type="button" id="chat-read-receipts-toggle" class="ew-btn ew-btn-outline ew-btn-sm">Read Receipts: On</button>
                 </div>
 
                 <div class="ew-section">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Chat Inbox &amp; Requests</h2>
+                        <span id="inbox-unread-pill" class="ew-meta-note">0 Unread</span>
+                    </div>
+                    <div class="ew-toolbar">
+                        <input id="inbox-search" class="ew-input ew-search-input" type="search" placeholder="Search conversations by name, context, or message...">
+                        <div class="ew-chip-row" style="margin-bottom: 0;">
+                            <button type="button" class="ew-chip active" data-inbox-filter="all">All</button>
+                            <button type="button" class="ew-chip" data-inbox-filter="unread">Unread</button>
+                            <button type="button" class="ew-chip" data-inbox-filter="requests">Requests</button>
+                            <button type="button" class="ew-chip" data-inbox-filter="Audition">Audition</button>
+                            <button type="button" class="ew-chip" data-inbox-filter="Campaign">Campaign</button>
+                            <button type="button" class="ew-chip" data-inbox-filter="Booking">Booking</button>
+                            <button type="button" class="ew-chip" data-inbox-filter="blocked">Blocked</button>
+                        </div>
+                    </div>
+                    <div id="network-inbox-list" class="ew-card-stack"></div>
+                </div>
+
+                <div class="ew-section" style="margin-top: 24px;">
                     <div class="ew-section-head">
                         <h2 class="ew-section-title">Your Connections</h2>
                         <span id="network-connections-summary" class="ew-meta-note">2 Mutually Connected</span>
@@ -871,6 +940,7 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                     <span>My Network</span>
+                    <span id="network-nav-badge" class="ew-nav-badge" hidden>0</span>
                 </button>
 
                 <button type="button" class="ew-nav-item" data-view="categories">
@@ -983,15 +1053,32 @@
         <div class="ew-person-modal-card ew-chat-modal-card">
             <button type="button" id="ew-chat-modal-close" class="ew-person-modal-close" aria-label="Close chat">&times;</button>
             <div class="ew-chat-head">
-                <div>
+                <div style="min-width: 0;">
                     <h3 id="ew-chat-name" style="margin: 0 0 2px;"></h3>
                     <div id="ew-chat-role" class="ew-app-meta"></div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                        <select id="ew-chat-context-select" class="ew-select" style="padding: 4px 8px; font-size: 0.76rem;" aria-label="Conversation context">
+                            <option value="Audition: Lead Role">Context: Audition</option>
+                            <option value="Campaign: Brand Collab">Context: Campaign</option>
+                            <option value="Booking: Live Event">Context: Booking</option>
+                            <option value="General Networking">Context: General</option>
+                        </select>
+                        <span id="ew-chat-security-badge" class="ew-badge accepted">Protected • Authorized</span>
+                    </div>
                 </div>
-                <span class="ew-badge accepted">Mutually Approved • Chat Active</span>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; padding-right: 28px;">
+                    <button type="button" id="ew-chat-report-btn" class="ew-btn ew-btn-outline ew-btn-sm">Report</button>
+                    <button type="button" id="ew-chat-block-btn" class="ew-btn ew-btn-outline ew-btn-sm">Block</button>
+                </div>
             </div>
             <div id="ew-chat-messages" class="ew-chat-messages"></div>
+            <div id="ew-chat-attach-preview" class="ew-chat-attach-preview" hidden></div>
             <form id="ew-chat-form" class="ew-chat-form">
-                <input id="ew-chat-input" class="ew-input" type="text" placeholder="Write a message..." required autocomplete="off">
+                <label class="ew-btn ew-btn-outline ew-btn-sm" for="ew-chat-attach" title="Attach image, PDF/DOC, or MP4/MP3 (max 10 MB)" style="cursor: pointer; white-space: nowrap;">
+                    Attach
+                    <input id="ew-chat-attach" type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.txt,.mp4,.webm,.mp3,.wav" hidden>
+                </label>
+                <input id="ew-chat-input" class="ew-input" type="text" placeholder="Write a message..." autocomplete="off">
                 <button type="submit" class="ew-btn ew-btn-primary ew-btn-sm">Send</button>
             </form>
         </div>

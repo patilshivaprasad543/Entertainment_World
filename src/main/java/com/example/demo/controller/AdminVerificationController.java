@@ -6,6 +6,9 @@ import com.example.demo.model.UserRole;
 import com.example.demo.model.VerificationStatus;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.RoleAuthService;
+import in.sp.main.entity.CastingCompany;
+import in.sp.main.repository.CastingCompanyRepository;
+import in.sp.main.service.NotificationService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +35,15 @@ public class AdminVerificationController {
             List.of(UserRole.VENDOR, UserRole.EVENT_MANAGEMENT, UserRole.CASTING, UserRole.BRAND);
 
     private final UserAccountRepository userAccountRepository;
+    private final CastingCompanyRepository castingCompanyRepository;
+    private final NotificationService notificationService;
 
-    public AdminVerificationController(UserAccountRepository userAccountRepository) {
+    public AdminVerificationController(UserAccountRepository userAccountRepository,
+                                       CastingCompanyRepository castingCompanyRepository,
+                                       NotificationService notificationService) {
         this.userAccountRepository = userAccountRepository;
+        this.castingCompanyRepository = castingCompanyRepository;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -52,7 +62,10 @@ public class AdminVerificationController {
                         user.getDocumentFileName(),
                         user.getVerificationStatus() == null
                                 ? VerificationStatus.APPROVED.name()
-                                : user.getVerificationStatus().name()
+                                : user.getVerificationStatus().name(),
+                        user.getPhone(),
+                        user.getCity(),
+                        user.getPortfolioOrBio()
                 ))
                 .toList();
     }
@@ -94,6 +107,24 @@ public class AdminVerificationController {
                 .map(user -> {
                     user.setVerificationStatus(status);
                     userAccountRepository.save(user);
+                    if (user.getRole() == UserRole.CASTING && user.getEmail() != null) {
+                        castingCompanyRepository.findByCompanyEmailIgnoreCase(user.getEmail()).ifPresent(company -> {
+                            boolean approved = status == VerificationStatus.APPROVED;
+                            company.setAccountStatus(approved ? "Approved" : "Rejected");
+                            company.setDocumentVerification(approved ? "Verified" : "Rejected");
+                            company.setEmailVerification("Verified");
+                            company.setVerifiedBadge(approved && "Active".equalsIgnoreCase(company.getAccountSuspension()));
+                            company.setVerificationDate(LocalDate.now());
+                            company.setVerifiedBy("Super Admin");
+                            CastingCompany savedCompany = castingCompanyRepository.save(company);
+                            notificationService.notifyCompany(
+                                    savedCompany.getId(),
+                                    savedCompany.getCompanyEmail(),
+                                    approved ? "Casting Studio Approved" : "Casting Studio Verification Rejected",
+                                    message
+                            );
+                        });
+                    }
                     return ResponseEntity.ok(Map.of("message", message, "status", status.name()));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface ProjectApplicationRepository extends JpaRepository<ProjectApplication, Long> {
     List<ProjectApplication> findByProjectIdOrderByAppliedAtDesc(Long projectId);
+    List<ProjectApplication> findByArtistIdOrderByAppliedAtDesc(Long artistId);
     long countByProjectId(Long projectId);
     Optional<ProjectApplication> findByProjectIdAndArtistId(Long projectId, Long artistId);
 }

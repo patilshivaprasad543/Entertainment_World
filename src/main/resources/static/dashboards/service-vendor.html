@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor SaaS Dashboard — Entertainment World</title>
+    <link rel="stylesheet" href="/css/auth.css?v=4">
+    <link rel="stylesheet" href="/css/vendor-portal.css?v=4">
+</head>
+<body class="vendor-shell" data-role="VENDOR" data-login="/vendors-login.html">
+    <nav class="ew-navbar">
+        <a href="/index.html" class="ew-brand">
+            <span class="ew-logo-box">★</span>
+            <span class="ew-brand-text">
+                <strong id="cv-nav-biz">Entertainment World</strong>
+                <span id="cv-nav-subtitle">SERVICE VENDOR PORTAL</span>
+            </span>
+        </a>
+        <div class="ew-nav-links">
+            <a href="/index.html">All Modules</a>
+            <a href="#" data-jump="services">Services</a>
+            <a href="#" data-jump="enquiries">Enquiries</a>
+            <a href="#" data-jump="projects">Projects</a>
+            <a href="#" data-jump="invoices">Invoices</a>
+            <a href="#" data-jump="subscription">Subscription</a>
+        </div>
+        <div class="ew-nav-actions">
+            <input type="search" id="cv-global-search" placeholder="Search services, clients..." style="padding:0.35rem 0.65rem;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:0.8rem;width:170px;">
+            <button type="button" class="ew-btn-outline" data-jump="notifications" title="Notifications">🔔 <span id="cv-top-notif-count">0</span></button>
+            <button type="button" class="ew-btn-outline" data-jump="messages" title="Messages">💬</button>
+            <button type="button" class="ew-btn-outline" data-jump="support" title="Help">?</button>
+            <span class="ew-user-chip"><strong id="user-name"></strong> <span class="ew-verified-tick" title="Verified">✓</span></span>
+            <button type="button" class="ew-btn-signout" onclick="document.getElementById('signout-btn').click()">Sign Out</button>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+        <aside id="cv-sidebar" class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-badge">SV</div>
+                <div><h2 id="cv-cat-title">Vendor Studio</h2><span id="cv-plan-badge">Free Plan</span></div>
+            </div>
+            <nav class="sidebar-nav">
+                <button type="button" class="nav-item active" data-view="overview"><span class="nav-item-label">🏠 Dashboard Overview</span></button>
+                <button type="button" class="nav-item" data-view="profile"><span class="nav-item-label">👤 Business Profile</span></button>
+                <button type="button" class="nav-item" data-view="verification"><span class="nav-item-label">✅ Verification Center</span></button>
+                <button type="button" class="nav-item" data-view="services"><span class="nav-item-label">🎬 My &amp; Add Services</span></button>
+                <button type="button" class="nav-item" data-view="pricing"><span class="nav-item-label">💰 Pricing &amp; Packages</span></button>
+                <button type="button" class="nav-item" data-view="portfolio"><span class="nav-item-label">🖼️ Portfolio &amp; Media</span></button>
+                <button type="button" class="nav-item" data-view="availability"><span class="nav-item-label">📅 Availability Calendar</span></button>
+                <button type="button" class="nav-item" data-view="enquiries"><span class="nav-item-label">📩 Enquiries &amp; Leads</span></button>
+                <button type="button" class="nav-item" data-view="quotations"><span class="nav-item-label">📄 Quotations</span></button>
+                <button type="button" class="nav-item" data-view="bookings"><span class="nav-item-label">📋 Booking Management</span></button>
+                <button type="button" class="nav-item" data-view="projects"><span class="nav-item-label">🚀 Project Management</span></button>
+                <button type="button" class="nav-item" data-view="documents"><span class="nav-item-label">📁 Contracts &amp; Documents</span></button>
+                <button type="button" class="nav-item" data-view="invoices"><span class="nav-item-label">💳 Payments &amp; Invoices</span></button>
+                <button type="button" class="nav-item" data-view="messages"><span class="nav-item-label">💬 Messages &amp; Chat</span></button>
+                <button type="button" class="nav-item" data-view="clients"><span class="nav-item-label">🤝 Customers / Clients</span></button>
+                <button type="button" class="nav-item" data-view="team"><span class="nav-item-label">👥 Team Management</span></button>
+                <button type="button" class="nav-item" data-view="reviews"><span class="nav-item-label">🌟 Reviews &amp; Ratings</span></button>
+                <button type="button" class="nav-item" data-view="notifications"><span class="nav-item-label">🔔 Notifications</span></button>
+                <button type="button" class="nav-item" data-view="marketing"><span class="nav-item-label">📣 Marketing &amp; Growth</span></button>
+                <button type="button" class="nav-item" data-view="reports"><span class="nav-item-label">📊 Analytics &amp; Reports</span></button>
+                <button type="button" class="nav-item" data-view="subscription"><span class="nav-item-label">⭐ Subscription &amp; Plans</span></button>
+                <button type="button" class="nav-item" data-view="support"><span class="nav-item-label">🆘 Help &amp; Support</span></button>
+                <button type="button" class="nav-item" data-view="settings"><span class="nav-item-label">⚙️ Account Settings</span></button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-status-chip"><span class="status-dot"></span><span>Category Portal Active</span></div>
+                <button type="button" id="signout-btn" class="signout-btn">Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <header class="studio-topbar">
+                <div>
+                    <button type="button" id="cv-mobile-btn" class="mobile-menu-btn">&#9776; Menu</button>
+                    <span class="module-tag" id="cv-category-pill">Service Vendor</span>
+                    <h1 id="cv-main-heading">Category Vendor Dashboard</h1>
+                </div>
+                <div class="topbar-actions">
+                    <button type="button" class="cta-glow-btn" data-jump="services">+ Add New Service</button>
+                    <div class="dashboard-user"><div class="user-meta"><span id="user-email"></span></div></div>
+                </div>
+            </header>
+
+            <div id="cv-banner" class="status-banner" role="alert" hidden></div>
+
+            <!-- 1. OVERVIEW -->
+            <section id="view-overview" class="view-section">
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span>Total Services</span><strong id="k-tot-svc">0</strong></div>
+                    <div class="kpi-card"><span>Active Services</span><strong id="k-act-svc">0</strong></div>
+                    <div class="kpi-card"><span>New Enquiries</span><strong id="k-enq">0</strong></div>
+                    <div class="kpi-card"><span>Pending Quotations</span><strong id="k-qtn">0</strong></div>
+                    <div class="kpi-card"><span>Confirmed Bookings</span><strong id="k-conf">0</strong></div>
+                    <div class="kpi-card"><span>Active Projects</span><strong id="k-act-prj">0</strong></div>
+                    <div class="kpi-card"><span>Completed Projects</span><strong id="k-cmp-prj">0</strong></div>
+                    <div class="kpi-card"><span>Revenue Collected</span><strong id="k-rev">₹0</strong></div>
+                    <div class="kpi-card"><span>Pending Payments</span><strong id="k-pend-pay">₹0</strong></div>
+                    <div class="kpi-card"><span>Conversion Rate</span><strong id="k-conv">0%</strong></div>
+                    <div class="kpi-card"><span>Profile Completion</span><strong id="k-prof-pct">0%</strong></div>
+                    <div class="kpi-card"><span>Current Plan</span><strong id="k-plan">FREE</strong></div>
+                </div>
+                <div class="dashboard-grid" style="margin-bottom:1.25rem;">
+                    <article class="panel-card" style="margin-bottom:0;"><div class="panel-header"><h3>Monthly Revenue Chart</h3></div><div id="cv-rev-chart" class="bar-chart"></div></article>
+                    <article class="panel-card" style="margin-bottom:0;"><div class="panel-header"><h3>Monthly Bookings Chart</h3></div><div id="cv-bk-chart" class="bar-chart"></div></article>
+                </div>
+                <div class="dashboard-grid">
+                    <article class="panel-card" style="margin-bottom:0;"><div class="panel-header"><h3>Recent Enquiries &amp; Bookings</h3></div><div id="cv-recent-bookings"></div></article>
+                    <article class="panel-card" style="margin-bottom:0;"><div class="panel-header"><h3>Top Performing Services</h3></div><div id="cv-top-services"></div></article>
+                </div>
+            </section>
+
+            <!-- 2. PROFILE -->
+            <section id="view-profile" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div><h2>Business Profile Management</h2><span class="brand-subtitle" id="cp-completion-lbl">Profile Completion: 0%</span></div>
+                        <button type="button" id="cp-preview-btn" class="btn-sm btn-secondary">Preview Public Profile</button>
+                    </div>
+                    <form id="cv-profile-form" class="form-grid">
+                        <div class="field-group"><label for="cp-biz">Business Name *</label><input type="text" id="cp-biz" required></div>
+                        <div class="field-group"><label for="cp-person">Contact Person *</label><input type="text" id="cp-person" required></div>
+                        <div class="field-group"><label for="cp-phone">Mobile Number *</label><input type="text" id="cp-phone" required></div>
+                        <div class="field-group"><label for="cp-alt-phone">Alternate Phone</label><input type="text" id="cp-alt-phone"></div>
+                        <div class="field-group"><label for="cp-exp">Experience (Years)</label><input type="number" id="cp-exp" min="0"></div>
+                        <div class="field-group"><label for="cp-web">Website URL</label><input type="url" id="cp-web"></div>
+                        <div class="field-group"><label for="cp-country">Country</label><input type="text" id="cp-country"></div>
+                        <div class="field-group"><label for="cp-state">State</label><input type="text" id="cp-state"></div>
+                        <div class="field-group"><label for="cp-city">City</label><input type="text" id="cp-city"></div>
+                        <div class="field-group"><label for="cp-area">Area / Locality</label><input type="text" id="cp-area"></div>
+                        <div class="field-group"><label for="cp-pin">PIN Code</label><input type="text" id="cp-pin"></div>
+                        <div class="field-group"><label for="cp-hours">Working Hours</label><input type="text" id="cp-hours"></div>
+                        <div class="field-group"><label for="cp-areas">Service Areas</label><input type="text" id="cp-areas" placeholder="Hyderabad, Bengaluru, Pan-India"></div>
+                        <div class="field-group"><label for="cp-langs">Languages Supported</label><input type="text" id="cp-langs"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="cp-addr">Complete Address</label><input type="text" id="cp-addr"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="cp-social">Social Media Links</label><input type="text" id="cp-social"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="cp-about">Business Description</label><textarea id="cp-about" rows="3"></textarea></div>
+                        <div style="grid-column:1/-1;"><button type="submit" class="btn-sm btn-primary">Save Business Profile</button></div>
+                    </form>
+                    <div class="dashboard-grid" style="margin-top:1rem;">
+                        <form id="cp-logo-form" class="field-group"><label for="cp-logo-file">Upload Business Logo</label><div class="btn-row"><input type="file" id="cp-logo-file" accept="image/*"><button type="submit" class="btn-sm btn-secondary">Upload Logo</button></div></form>
+                        <form id="cp-cover-form" class="field-group"><label for="cp-cover-file">Upload Cover Banner</label><div class="btn-row"><input type="file" id="cp-cover-file" accept="image/*"><button type="submit" class="btn-sm btn-secondary">Upload Cover</button></div></form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. VERIFICATION -->
+            <section id="view-verification" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Verification Center</h2><span id="cv-ver-badge" class="pill pill-APPROVED">APPROVED</span></div>
+                    <p>Your account is verified under <strong id="cv-ver-cat"></strong>. Upload compliance or GST documents in Contracts &amp; Documents.</p>
+                </div>
+            </section>
+
+            <!-- 4. SERVICES & 5. PRICING & 6. PORTFOLIO -->
+            <section id="view-services" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2 id="cs-form-title">Add Category Service / Package</h2></div>
+                    <form id="cv-service-form" class="form-grid">
+                        <input type="hidden" id="cs-id">
+                        <div class="field-group"><label for="cs-name">Service / Package Name *</label><input type="text" id="cs-name" required></div>
+                        <div class="field-group"><label for="cs-sub" id="cs-sub-lbl">Sub-Category / Equipment</label><input type="text" id="cs-sub"></div>
+                        <div class="field-group"><label for="cs-price">Price (₹) *</label><input type="number" id="cs-price" value="15000" required></div>
+                        <div class="field-group"><label for="cs-unit">Pricing Unit</label><select id="cs-unit"><option value="PER_DAY">Per Day</option><option value="PER_HOUR">Per Hour</option><option value="PER_PROJECT">Per Project</option><option value="PACKAGE">Package</option></select></div>
+                        <div class="field-group"><label for="cs-qty" id="cs-qty-lbl">Available Quantity / Crew</label><input type="number" id="cs-qty" value="1"></div>
+                        <div class="field-group"><label for="cs-loc">Service Location</label><input type="text" id="cs-loc"></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="cs-port">Portfolio Video / Image URL</label><input type="url" id="cs-port" placeholder="https://..."></div>
+                        <div class="field-group" style="grid-column:1/-1;"><label for="cs-desc">Service Description &amp; Specifications</label><textarea id="cs-desc" rows="3"></textarea></div>
+                        <div style="grid-column:1/-1;" class="btn-row"><button type="submit" class="btn-sm btn-primary">Save Service</button><button type="button" id="cs-reset" class="btn-sm btn-secondary">Reset</button></div>
+                    </form>
+                </div>
+                <div class="panel-card"><div class="panel-header"><h2>My Category Services</h2></div><div id="cv-services-grid" class="dashboard-grid"></div></div>
+            </section>
+
+            <section id="view-pricing" class="view-section" hidden>
+                <div class="panel-card"><div class="panel-header"><h2>Pricing &amp; Packages</h2></div><div id="cv-pricing-list"></div></div>
+            </section>
+
+            <section id="view-portfolio" class="view-section" hidden>
+                <div class="panel-card"><div class="panel-header"><h2>Portfolio &amp; Media</h2></div><div id="cv-portfolio-list" class="dashboard-grid"></div></div>
+            </section>
+
+            <!-- 7. AVAILABILITY CALENDAR -->
+            <section id="view-availability" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Availability Calendar</h2></div>
+                    <form id="cv-avail-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="ca-date">Date *</label><input type="date" id="ca-date" required></div>
+                        <div class="field-group"><label for="ca-status">Status</label><select id="ca-status"><option value="AVAILABLE">Available</option><option value="BLOCKED">Blocked</option></select></div>
+                        <div class="field-group"><label for="ca-note">Note / Time Slot</label><input type="text" id="ca-note" placeholder="10:00 AM - 06:00 PM"></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Save Date</button></div>
+                    </form>
+                    <div id="cv-avail-list"></div>
+                </div>
+            </section>
+
+            <!-- 8. ENQUIRIES & 9. QUOTATIONS & 10. BOOKINGS -->
+            <section id="view-enquiries" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Record New Business Enquiry / Lead</h2></div>
+                    <form id="cv-bk-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="cb-cust">Customer Name *</label><input type="text" id="cb-cust" required></div>
+                        <div class="field-group"><label for="cb-email">Email *</label><input type="email" id="cb-email" required></div>
+                        <div class="field-group"><label for="cb-ev">Project / Event Name</label><input type="text" id="cb-ev"></div>
+                        <div class="field-group"><label for="cb-loc">Location</label><input type="text" id="cb-loc"></div>
+                        <div class="field-group"><label for="cb-date">Project Date *</label><input type="date" id="cb-date" required></div>
+                        <div class="field-group"><label for="cb-amt">Budget / Quote (₹)</label><input type="number" id="cb-amt" value="25000"></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Add Enquiry</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Code</th><th>Customer</th><th>Project</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody id="cv-enq-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="view-quotations" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Create Professional Quotation</h2></div>
+                    <form id="cv-qt-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="cq-cust">Customer Name *</label><input type="text" id="cq-cust" required></div>
+                        <div class="field-group"><label for="cq-email">Email</label><input type="email" id="cq-email"></div>
+                        <div class="field-group"><label for="cq-svc">Service Name *</label><input type="text" id="cq-svc" required></div>
+                        <div class="field-group"><label for="cq-qty">Qty</label><input type="number" id="cq-qty" value="1"></div>
+                        <div class="field-group"><label for="cq-price">Unit Price (₹)</label><input type="number" id="cq-price" value="25000"></div>
+                        <div class="field-group"><label for="cq-tax">Tax (₹)</label><input type="number" id="cq-tax" value="0"></div>
+                        <div class="field-group"><label for="cq-disc">Discount (₹)</label><input type="number" id="cq-disc" value="0"></div>
+                        <div class="field-group"><label for="cq-valid">Valid Until</label><input type="date" id="cq-valid"></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Create &amp; Send Quotation</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Code</th><th>Customer</th><th>Service</th><th>Grand Total</th><th>Status</th><th>PDF</th></tr></thead><tbody id="cv-qt-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="view-bookings" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Booking Management</h2></div>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Code</th><th>Customer</th><th>Project</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody id="cv-bk-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <!-- 11. PROJECT MANAGEMENT -->
+            <section id="view-projects" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Project &amp; Task Tracking</h2></div>
+                    <form id="cv-prj-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="cpj-name">Project Name *</label><input type="text" id="cpj-name" required></div>
+                        <div class="field-group"><label for="cpj-client">Client Name</label><input type="text" id="cpj-client"></div>
+                        <div class="field-group"><label for="cpj-start">Start Date</label><input type="date" id="cpj-start"></div>
+                        <div class="field-group"><label for="cpj-dead">Deadline</label><input type="date" id="cpj-dead"></div>
+                        <div class="field-group"><label for="cpj-team">Assigned Team</label><input type="text" id="cpj-team"></div>
+                        <div class="field-group"><label for="cpj-pct">Progress (%)</label><input type="number" id="cpj-pct" min="0" max="100" value="25"></div>
+                        <div class="field-group"><label for="cpj-status">Status</label><select id="cpj-status"><option value="TO_DO">To Do</option><option value="IN_PROGRESS">In Progress</option><option value="REVIEW">Review</option><option value="COMPLETED">Completed</option></select></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Save Project</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Code</th><th>Project</th><th>Client</th><th>Deadline</th><th>Progress</th><th>Status</th></tr></thead><tbody id="cv-prj-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <!-- 12. CONTRACTS & DOCUMENTS -->
+            <section id="view-documents" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Contracts &amp; Documents</h2></div>
+                    <form id="cv-doc-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="cd-title">Document Title *</label><input type="text" id="cd-title" required></div>
+                        <div class="field-group"><label for="cd-type">Document Type</label><select id="cd-type"><option value="SERVICE_AGREEMENT">Service Agreement</option><option value="CUSTOMER_CONTRACT">Customer Contract</option><option value="BUSINESS_DOC">Business Document</option><option value="PROJECT_DOC">Project Document</option></select></div>
+                        <div class="field-group"><label for="cd-exp">Expiry Date</label><input type="date" id="cd-exp"></div>
+                        <div class="field-group"><label for="cd-file">File *</label><input type="file" id="cd-file" required></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Upload Document</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Title</th><th>Type</th><th>Expiry</th><th>Actions</th></tr></thead><tbody id="cv-doc-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <!-- 13. PAYMENTS & INVOICES -->
+            <section id="view-invoices" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Payments &amp; Invoices</h2></div>
+                    <form id="cv-inv-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="ci-cust">Customer Name *</label><input type="text" id="ci-cust" required></div>
+                        <div class="field-group"><label for="ci-svc">Service *</label><input type="text" id="ci-svc" required></div>
+                        <div class="field-group"><label for="ci-sub">Subtotal (₹)</label><input type="number" id="ci-sub" value="25000"></div>
+                        <div class="field-group"><label for="ci-tax">Tax (₹)</label><input type="number" id="ci-tax" value="4500"></div>
+                        <div class="field-group"><label for="ci-paid">Paid Amount (₹)</label><input type="number" id="ci-paid" value="29500"></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Create Invoice</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Invoice #</th><th>Customer</th><th>Service</th><th>Total</th><th>Paid</th><th>Status</th><th>PDF</th></tr></thead><tbody id="cv-inv-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <!-- 14. MESSAGES & 15. CLIENTS & 16. TEAM & 17. REVIEWS & 18. NOTIFICATIONS -->
+            <section id="view-messages" class="view-section" hidden><div id="ew-social-root"></div></section>
+
+            <section id="view-clients" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Customers / Clients CRM</h2></div>
+                    <form id="cv-cl-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="ccl-name">Client Name *</label><input type="text" id="ccl-name" required></div>
+                        <div class="field-group"><label for="ccl-comp">Company</label><input type="text" id="ccl-comp"></div>
+                        <div class="field-group"><label for="ccl-email">Email</label><input type="email" id="ccl-email"></div>
+                        <div class="field-group"><label for="ccl-phone">Phone</label><input type="text" id="ccl-phone"></div>
+                        <div class="field-group"><label for="ccl-fup">Follow-up Date</label><input type="date" id="ccl-fup"></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Save Client</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Client</th><th>Company</th><th>Contact</th><th>Business Value</th><th>Follow-up</th></tr></thead><tbody id="cv-cl-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="view-team" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Team &amp; Crew Management</h2></div>
+                    <form id="cv-tm-form" class="form-grid" style="margin-bottom:1rem;">
+                        <div class="field-group"><label for="ctm-name">Member Name *</label><input type="text" id="ctm-name" required></div>
+                        <div class="field-group"><label for="ctm-role">Role / Designation</label><input type="text" id="ctm-role" placeholder="DOP / Sound Engineer / Editor"></div>
+                        <div class="field-group"><label for="ctm-email">Email</label><input type="email" id="ctm-email"></div>
+                        <div class="field-group"><label for="ctm-phone">Phone</label><input type="text" id="ctm-phone"></div>
+                        <div class="field-group"><label for="ctm-skills">Skills</label><input type="text" id="ctm-skills"></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Add Team Member</button></div>
+                    </form>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Name</th><th>Role</th><th>Skills</th><th>Availability</th><th>Action</th></tr></thead><tbody id="cv-tm-tbody"></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="view-reviews" class="view-section" hidden><div class="panel-card"><div class="panel-header"><h2>Customer Reviews &amp; Ratings</h2></div><p class="brand-subtitle">Genuine customer reviews submitted for your services will appear here.</p></div></section>
+            <section id="view-notifications" class="view-section" hidden><div class="panel-card"><div class="panel-header"><h2>Notifications &amp; Reminders</h2></div><div id="cv-notifs"></div></div></section>
+
+            <!-- 19. MARKETING & 20. REPORTS & 21. SUBSCRIPTION & 22. SUPPORT & 23. SETTINGS -->
+            <section id="view-marketing" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Marketing &amp; Business Growth</h2></div>
+                    <label style="display:flex;align-items:center;gap:0.5rem;font-weight:600;"><input type="checkbox" id="mk-featured"> Feature my Business Profile &amp; Services in Marketplace</label>
+                    <button type="button" id="mk-save-btn" class="btn-sm btn-primary" style="margin-top:0.75rem;">Save Promotion Settings</button>
+                </div>
+            </section>
+
+            <section id="view-reports" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Analytics &amp; Reports</h2><button type="button" id="cv-export-csv" class="btn-sm btn-primary">Export Bookings CSV</button></div>
+                    <div id="cv-reports-box"></div>
+                </div>
+            </section>
+
+            <section id="view-subscription" class="view-section" hidden><div id="ew-subscription-root"></div></section>
+
+            <section id="view-support" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Help Center &amp; FAQs</h2></div>
+                    <p><strong>How do I receive enquiries?</strong> Publish services under My Services and keep Profile Visibility enabled.</p>
+                    <p><strong>How do I export invoices?</strong> Use Payments &amp; Invoices and click Download PDF.</p>
+                </div>
+            </section>
+
+            <section id="view-settings" class="view-section" hidden>
+                <div class="panel-card">
+                    <div class="panel-header"><h2>Account Settings &amp; Security</h2></div>
+                    <form id="cv-pass-form" class="form-grid">
+                        <div class="field-group"><label for="pw-cur">Current Password *</label><input type="password" id="pw-cur" required></div>
+                        <div class="field-group"><label for="pw-new">New Password *</label><input type="password" id="pw-new" minlength="6" required></div>
+                        <div style="display:flex;align-items:flex-end;"><button type="submit" class="btn-sm btn-primary">Update Password</button></div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="cv-modal" class="ew-modal-backdrop" hidden>
+        <div class="ew-modal-card">
+            <div class="panel-header"><h3 id="cv-modal-title" style="margin:0;">Preview</h3><button type="button" id="cv-modal-close" class="btn-sm btn-secondary">Close</button></div>
+            <div id="cv-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js?v=4"></script>
+    <script src="/js/subscription-widget.js?v=4"></script>
+    <script src="/js/service-vendor-dashboard.js?v=2"></script>
+</body>
+</html>

@@ -78,6 +78,8 @@ public class UserAccount {
     @Column(length = 20)
     private VerificationStatus verificationStatus;
 
+    private Boolean suspended = false;
+
     protected UserAccount() {
     }
 
@@ -103,6 +105,10 @@ public class UserAccount {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public UserRole getRole() {
@@ -219,5 +225,13 @@ public class UserAccount {
 
     public void setVerificationStatus(VerificationStatus verificationStatus) {
         this.verificationStatus = verificationStatus;
+    }
+
+    public boolean isSuspended() {
+        return Boolean.TRUE.equals(suspended);
+    }
+
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
     }
 }

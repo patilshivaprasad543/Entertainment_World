@@ -34,11 +34,32 @@ public class VendorAuthController {
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam String organizationName,
+            @RequestParam(required = false) String designation,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String alternatePhone,
+            @RequestParam(required = false) Integer yearsInBusiness,
+            @RequestParam(required = false) Integer venuesManaged,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String pincode,
+            @RequestParam(required = false) String websiteUrl,
+            @RequestParam(required = false) String bio,
+            @RequestParam(required = false) String aboutUs,
             @RequestParam String documentType,
             @RequestParam String documentNumber,
-            @RequestParam MultipartFile documentFile
+            @RequestParam MultipartFile documentFile,
+            @RequestParam(required = false) MultipartFile logoFile,
+            @RequestParam(required = false) MultipartFile coverFile,
+            @RequestParam(defaultValue = "false") boolean acceptedTerms,
+            @RequestParam(defaultValue = "false") boolean acceptedPrivacyPolicy
     ) {
-        return roleAuthService.registerWithDocuments(
-                UserRole.VENDOR, fullName, email, password, organizationName, documentType, documentNumber, documentFile);
+        return roleAuthService.registerVendorWithProfile(
+                fullName, email, password, organizationName,
+                designation, phone, alternatePhone, yearsInBusiness, venuesManaged,
+                country, state, city, pincode, websiteUrl, bio, aboutUs,
+                documentType, documentNumber, documentFile, logoFile, coverFile,
+                acceptedTerms, acceptedPrivacyPolicy
+        );
     }
 }

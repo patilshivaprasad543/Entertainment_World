@@ -1,5 +1,8 @@
 package in.sp.main.controller;
 
+import com.example.demo.model.UserRole;
+import com.example.demo.model.VerificationStatus;
+import com.example.demo.repository.UserAccountRepository;
 import in.sp.main.entity.CastingCompany;
 import in.sp.main.entity.SuperAdmin;
 import in.sp.main.repository.CastingCompanyRepository;
@@ -29,15 +32,18 @@ public class AdminController {
     private final SubscriptionPaymentRepository paymentRepo;
     private final SessionAuthHelper authHelper;
     private final NotificationService notificationService;
+    private final UserAccountRepository userAccountRepository;
 
     public AdminController(CastingCompanyRepository companyRepo,
                            SubscriptionPaymentRepository paymentRepo,
                            SessionAuthHelper authHelper,
-                           NotificationService notificationService) {
+                           NotificationService notificationService,
+                           UserAccountRepository userAccountRepository) {
         this.companyRepo = companyRepo;
         this.paymentRepo = paymentRepo;
         this.authHelper = authHelper;
         this.notificationService = notificationService;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @GetMapping("/stats")
@@ -133,6 +139,19 @@ public class AdminController {
         company.setVerifiedBadge("Approved".equals(accountStatus) && "Active".equals(accountSuspension));
 
         CastingCompany saved = companyRepo.save(company);
+
+        if (saved.getCompanyEmail() != null) {
+            userAccountRepository.findByEmailAndRole(saved.getCompanyEmail().toLowerCase(Locale.ROOT), UserRole.CASTING).ifPresent(user -> {
+                if ("Approved".equalsIgnoreCase(accountStatus)) {
+                    user.setVerificationStatus(VerificationStatus.APPROVED);
+                } else if ("Rejected".equalsIgnoreCase(accountStatus)) {
+                    user.setVerificationStatus(VerificationStatus.REJECTED);
+                } else {
+                    user.setVerificationStatus(VerificationStatus.PENDING);
+                }
+                userAccountRepository.save(user);
+            });
+        }
 
         String notifyTitle;
         String notifyMsg;

@@ -39,7 +39,12 @@
         return;
     }
 
-    document.getElementById('signout-btn').addEventListener('click', () => {
+    document.getElementById('signout-btn').addEventListener('click', async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (e) {
+            // ignore network errors on sign out
+        }
         sessionStorage.removeItem(sessionKey);
         window.location.href = loginUrl;
     });
