@@ -24,7 +24,7 @@ public class ProjectApplication {
     private String roleName;
 
     @Column(nullable = false, length = 30)
-    private String status = "APPLIED"; // APPLIED, SHORTLISTED, INVITED, SUGGESTED
+    private String status = "APPLIED"; // APPLIED, SHORTLISTED, INVITED, SUGGESTED, SELECTED, REJECTED
 
     @Column(length = 180)
     private String auditionSubmissionTitle;
@@ -32,8 +32,21 @@ public class ProjectApplication {
     @Column(length = 400)
     private String auditionVideoUrl;
 
+    private Integer rating; // 1 to 5 internal rating
+
+    @Column(columnDefinition = "TEXT")
+    private String internalComment;
+
+    @Column(length = 140)
+    private String assignedRole;
+
+    @Column(nullable = false)
+    private boolean backupCandidate = false;
+
     @Column(nullable = false)
     private LocalDateTime appliedAt = LocalDateTime.now();
+
+    private LocalDateTime updatedAt;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -58,4 +71,19 @@ public class ProjectApplication {
 
     public LocalDateTime getAppliedAt() { return appliedAt; }
     public void setAppliedAt(LocalDateTime appliedAt) { this.appliedAt = appliedAt; }
+
+    public Integer getRating() { return rating; }
+    public void setRating(Integer rating) { this.rating = rating; }
+
+    public String getInternalComment() { return internalComment; }
+    public void setInternalComment(String internalComment) { this.internalComment = internalComment; }
+
+    public String getAssignedRole() { return assignedRole; }
+    public void setAssignedRole(String assignedRole) { this.assignedRole = assignedRole; }
+
+    public boolean isBackupCandidate() { return backupCandidate; }
+    public void setBackupCandidate(boolean backupCandidate) { this.backupCandidate = backupCandidate; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

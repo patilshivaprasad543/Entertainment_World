@@ -27,6 +27,11 @@ public class DataSeedService implements CommandLineRunner {
     private final ArtistFolderItemRepository folderItemRepo;
     private final SubscriptionPaymentRepository paymentRepo;
     private final ContactPortfolioHistoryRepository historyRepo;
+    private final AuditionScheduleRepository auditionRepo;
+    private final CommunicationMessageRepository messageRepo;
+    private final CastingTeamMemberRepository teamRepo;
+    private final ArtistContractRepository contractRepo;
+    private final ProductionExpenseRepository expenseRepo;
     private final NotificationService notificationService;
     private final PasswordService passwordService;
 
@@ -40,6 +45,11 @@ public class DataSeedService implements CommandLineRunner {
                            ArtistFolderItemRepository folderItemRepo,
                            SubscriptionPaymentRepository paymentRepo,
                            ContactPortfolioHistoryRepository historyRepo,
+                           AuditionScheduleRepository auditionRepo,
+                           CommunicationMessageRepository messageRepo,
+                           CastingTeamMemberRepository teamRepo,
+                           ArtistContractRepository contractRepo,
+                           ProductionExpenseRepository expenseRepo,
                            NotificationService notificationService,
                            PasswordService passwordService) {
         this.adminRepo = adminRepo;
@@ -52,6 +62,11 @@ public class DataSeedService implements CommandLineRunner {
         this.folderItemRepo = folderItemRepo;
         this.paymentRepo = paymentRepo;
         this.historyRepo = historyRepo;
+        this.auditionRepo = auditionRepo;
+        this.messageRepo = messageRepo;
+        this.teamRepo = teamRepo;
+        this.contractRepo = contractRepo;
+        this.expenseRepo = expenseRepo;
         this.notificationService = notificationService;
         this.passwordService = passwordService;
     }
@@ -62,6 +77,7 @@ public class DataSeedService implements CommandLineRunner {
         seedPasses();
         List<ArtistProfile> artists = seedArtists();
         seedDemoCompanies(artists);
+        seedCastingOperations(artists);
     }
 
     private void seedSuperAdmin() {
@@ -523,5 +539,258 @@ public class DataSeedService implements CommandLineRunner {
             f.setFolderName(name);
             return folderRepo.save(f);
         }).toList();
+    }
+
+    private void seedCastingOperations(List<ArtistProfile> artists) {
+        if (artists == null || artists.isEmpty()) return;
+
+        // 1. Backfill actor skills, portfolio URLs, and initial verification flags idempotently
+        boolean artistUpdated = false;
+        for (int i = 0; i < artists.size(); i++) {
+            ArtistProfile a = artists.get(i);
+            boolean dirty = false;
+            if (a.getSkills() == null || a.getSkills().isBlank()) {
+                a.setSkills(defaultSkillsForCategory(a.getCategory()));
+                dirty = true;
+            }
+            if (a.getPortfolioUrl() == null || a.getPortfolioUrl().isBlank()) {
+                a.setPortfolioUrl("https://portfolio.entertainmentworld.in/talent/" + a.getId());
+                dirty = true;
+            }
+            if (a.getVerificationStatus() == null || a.getVerificationStatus().isBlank()
+                    || (i < 6 && !a.isProfileVerified() && a.getVerificationNotes() == null)) {
+                if (i < 6 || a.isProfileVerified()) {
+                    a.setProfileVerified(true);
+                    a.setVerificationStatus("Verified");
+                    a.setVerificationNotes("Identity & showreel verified by Entertainment World Casting Desk.");
+                } else {
+                    a.setVerificationStatus("Pending");
+                }
+                dirty = true;
+            }
+            if (dirty) {
+                artistRepo.save(a);
+                artistUpdated = true;
+            }
+        }
+        if (artistUpdated) {
+            artists = artistRepo.findAll();
+        }
+
+        CastingCompany active = companyRepo.findByCompanyEmailIgnoreCase("studio@moonlightcinema.in").orElse(null);
+        if (active == null) return;
+
+        List<CastingProject> projects = projectRepo.findByCompanyIdOrderByPostedDateDescIdDesc(active.getId());
+        if (projects.isEmpty()) return;
+        CastingProject primaryProject = projects.get(0);
+        CastingProject secondaryProject = projects.size() > 1 ? projects.get(1) : primaryProject;
+
+        // 2. Enrich existing seeded applications with ratings, selection & backup flags
+        List<ProjectApplication> existingApps = appRepo.findByProjectIdInOrderByAppliedAtDesc(
+                projects.stream().map(CastingProject::getId).toList());
+        for (int i = 0; i < existingApps.size(); i++) {
+            ProjectApplication pa = existingApps.get(i);
+            if (pa.getRating() == null) {
+                pa.setRating(i % 2 == 0 ? 5 : 4);
+                pa.setAssignedRole(pa.getRoleName());
+                if (i == 0) {
+                    pa.setStatus("SELECTED");
+                    pa.setInternalComment("Strong screen presence and crisp voice modulation; locked as primary choice.");
+                } else if (i == 1) {
+                    pa.setStatus("SHORTLISTED");
+                    pa.setBackupCandidate(true);
+                    pa.setInternalComment("Excellent delivery; keep ready as backup lead option.");
+                } else if ("SHORTLISTED".equalsIgnoreCase(pa.getStatus())) {
+                    pa.setInternalComment("Shortlisted after self-tape review.");
+                }
+                appRepo.save(pa);
+            }
+        }
+
+        // 3. Audition Schedules
+        if (auditionRepo.count() == 0 && artists.size() >= 4) {
+            AuditionSchedule au1 = new AuditionSchedule();
+            au1.setCompanyId(active.getId());
+            au1.setProjectId(primaryProject.getId());
+            au1.setArtistId(artists.get(0).getId());
+            au1.setRoleName(primaryProject.getTargetCategory());
+            au1.setAuditionMode("Online");
+            au1.setAuditionDate(LocalDate.now().plusDays(2));
+            au1.setAuditionTime("11:30 AM");
+            au1.setLocationOrLink("https://meet.entertainmentworld.in/moonlight-r1");
+            au1.setInvitationMessage("Screen test Round 2 for " + primaryProject.getProjectTitle());
+            au1.setAuditionVideoUrl(artists.get(0).getVideoUrl());
+            au1.setStatus("SCHEDULED");
+            au1.setRating(5);
+            au1.setFeedback("Compelling dramatic intensity in cold read.");
+
+            AuditionSchedule au2 = new AuditionSchedule();
+            au2.setCompanyId(active.getId());
+            au2.setProjectId(secondaryProject.getId());
+            au2.setArtistId(artists.get(1).getId());
+            au2.setRoleName("Co-Lead / Model");
+            au2.setAuditionMode("Offline");
+            au2.setAuditionDate(LocalDate.now().plusDays(4));
+            au2.setAuditionTime("03:00 PM");
+            au2.setLocationOrLink("Moonlight Studio Stage 2, Goregaon East, Mumbai");
+            au2.setInvitationMessage("In-person look test & wardrobe camera trial.");
+            au2.setAuditionVideoUrl(artists.get(1).getVideoUrl());
+            au2.setStatus("SCHEDULED");
+
+            AuditionSchedule au3 = new AuditionSchedule();
+            au3.setCompanyId(active.getId());
+            au3.setProjectId(primaryProject.getId());
+            au3.setArtistId(artists.get(3).getId());
+            au3.setRoleName("Voice-over Artist");
+            au3.setAuditionMode("Online");
+            au3.setAuditionDate(LocalDate.now().minusDays(2));
+            au3.setAuditionTime("05:00 PM");
+            au3.setLocationOrLink("https://meet.entertainmentworld.in/vo-booth-04");
+            au3.setInvitationMessage("Bilingual narration & promo trailer read.");
+            au3.setAuditionVideoUrl(artists.get(3).getVideoUrl());
+            au3.setStatus("COMPLETED");
+            au3.setRating(5);
+            au3.setFeedback("Studio-grade mic discipline; recommended for final contract.");
+
+            AuditionSchedule au4 = new AuditionSchedule();
+            au4.setCompanyId(active.getId());
+            au4.setProjectId(secondaryProject.getId());
+            au4.setArtistId(artists.get(2).getId());
+            au4.setRoleName("Music Sequence Artist");
+            au4.setAuditionMode("Offline");
+            au4.setAuditionDate(LocalDate.now().plusDays(6));
+            au4.setAuditionTime("04:30 PM");
+            au4.setLocationOrLink("Andheri Sound Lab, Suite 4B");
+            au4.setInvitationMessage("Acoustic rehearsal & lip-sync camera test.");
+            au4.setAuditionVideoUrl(artists.get(2).getVideoUrl());
+            au4.setStatus("RESCHEDULED");
+
+            auditionRepo.saveAll(List.of(au1, au2, au3, au4));
+        }
+
+        // 4. Communication History
+        if (messageRepo.count() == 0 && artists.size() >= 3) {
+            CommunicationMessage m1 = new CommunicationMessage();
+            m1.setCompanyId(active.getId());
+            m1.setArtistId(artists.get(0).getId());
+            m1.setProjectId(primaryProject.getId());
+            m1.setChannel("SELECTION_NOTICE");
+            m1.setSubject("Shortlist & Selection Confirmation - " + primaryProject.getProjectTitle());
+            m1.setMessageBody("Congratulations! Our casting panel has selected you for final look-test & contract review.");
+            m1.setSenderName("Tess Kapoor (Moonlight Cinema Casting)");
+            m1.setReadByRecipient(true);
+            m1.setSentAt(LocalDateTime.now().minusDays(1));
+
+            CommunicationMessage m2 = new CommunicationMessage();
+            m2.setCompanyId(active.getId());
+            m2.setArtistId(artists.get(1).getId());
+            m2.setProjectId(secondaryProject.getId());
+            m2.setChannel("AUDITION_INVITE");
+            m2.setSubject("Studio Audition Slot Confirmed");
+            m2.setMessageBody("Please report 15 minutes early at Moonlight Studio Stage 2 with your portfolio.");
+            m2.setSenderName("Tess Kapoor (Moonlight Cinema Casting)");
+            m2.setSentAt(LocalDateTime.now().minusHours(10));
+
+            messageRepo.saveAll(List.of(m1, m2));
+        }
+
+        // 5. Team Members
+        if (teamRepo.count() == 0) {
+            String pIds = primaryProject.getId() + "," + secondaryProject.getId();
+            String pNames = primaryProject.getProjectTitle() + ", " + secondaryProject.getProjectTitle();
+
+            CastingTeamMember tm1 = new CastingTeamMember();
+            tm1.setCompanyId(active.getId());
+            tm1.setFullName("Nandini Verma");
+            tm1.setEmail("nandini@moonlightcinema.in");
+            tm1.setPhone("+91 98209 55111");
+            tm1.setRoleTitle("Casting Coordinator");
+            tm1.setAssignedProjectIds(pIds);
+            tm1.setAssignedProjectNames(pNames);
+            tm1.setPermissionsJson("VIEW_APPLICATIONS,SHORTLIST_ARTISTS,SCHEDULE_AUDITIONS");
+
+            CastingTeamMember tm2 = new CastingTeamMember();
+            tm2.setCompanyId(active.getId());
+            tm2.setFullName("Kabir Khanna");
+            tm2.setEmail("kabir.k@moonlightcinema.in");
+            tm2.setPhone("+91 98209 55112");
+            tm2.setRoleTitle("Casting Assistant");
+            tm2.setAssignedProjectIds(String.valueOf(primaryProject.getId()));
+            tm2.setAssignedProjectNames(primaryProject.getProjectTitle());
+            tm2.setPermissionsJson("VIEW_APPLICATIONS,VERIFY_ACTORS");
+
+            teamRepo.saveAll(List.of(tm1, tm2));
+        }
+
+        // 6. Contracts
+        if (contractRepo.count() == 0 && artists.size() >= 2) {
+            ArtistContract c1 = new ArtistContract();
+            c1.setCompanyId(active.getId());
+            c1.setProjectId(primaryProject.getId());
+            c1.setArtistId(artists.get(0).getId());
+            c1.setRoleName(primaryProject.getTargetCategory());
+            c1.setContractTitle("Lead Artist Agreement - " + artists.get(0).getFullName());
+            c1.setCompensationAmount(new BigDecimal("125000.00"));
+            c1.setPaymentTerms("40% signing, 40% principal shoot, 20% dubbing");
+            c1.setContractStatus("SIGNED");
+            c1.setStartDate(LocalDate.now().plusDays(10));
+            c1.setEndDate(LocalDate.now().plusDays(40));
+            c1.setNotes("Includes travel and hotel accommodation in Mumbai.");
+
+            ArtistContract c2 = new ArtistContract();
+            c2.setCompanyId(active.getId());
+            c2.setProjectId(secondaryProject.getId());
+            c2.setArtistId(artists.get(3).getId());
+            c2.setRoleName("Voice-over Artist");
+            c2.setContractTitle("VO Talent Engagement - " + artists.get(3).getFullName());
+            c2.setCompensationAmount(new BigDecimal("45000.00"));
+            c2.setPaymentTerms("100% upon final master studio delivery");
+            c2.setContractStatus("SENT");
+            c2.setStartDate(LocalDate.now().plusDays(5));
+            c2.setEndDate(LocalDate.now().plusDays(15));
+            c2.setNotes("3 episodes trailer + promo voiceover buyout.");
+
+            contractRepo.saveAll(List.of(c1, c2));
+        }
+
+        // 7. Production Expenses
+        if (expenseRepo.count() == 0) {
+            ProductionExpense e1 = new ProductionExpense();
+            e1.setCompanyId(active.getId());
+            e1.setProjectId(primaryProject.getId());
+            e1.setCategory("AUDITION_VENUE");
+            e1.setTitle("Goregaon Studio Stage 2 Audition Rig & Camera Setup");
+            e1.setAmountInr(new BigDecimal("18500.00"));
+            e1.setPaymentStatus("PAID");
+            e1.setPaymentMethod("NEFT");
+            e1.setExpenseDate(LocalDate.now().minusDays(2));
+
+            ProductionExpense e2 = new ProductionExpense();
+            e2.setCompanyId(active.getId());
+            e2.setProjectId(primaryProject.getId());
+            e2.setArtistId(artists.get(0).getId());
+            e2.setCategory("ARTIST_FEE");
+            e2.setTitle("Signing Advance - " + artists.get(0).getFullName());
+            e2.setAmountInr(new BigDecimal("50000.00"));
+            e2.setPaymentStatus("PENDING");
+            e2.setPaymentMethod("Bank Transfer");
+            e2.setExpenseDate(LocalDate.now());
+
+            expenseRepo.saveAll(List.of(e1, e2));
+        }
+    }
+
+    private String defaultSkillsForCategory(String category) {
+        if (category == null) return "Camera Facing, Script Analysis";
+        return switch (category) {
+            case "Actor", "Actress" -> "Method Acting, Dialogue Delivery, Action Choreography, Theatre";
+            case "Model" -> "Editorial Posing, Runway Walk, Commercial Print, Brand Campaigns";
+            case "Singer" -> "Playback Singing, Classical Vocal, Live Stage, Harmonies";
+            case "Voice-over Artist" -> "Dubbing, Narration, Commercial Promo, Accent Control";
+            case "Dancer" -> "Contemporary, Hip-Hop, Bollywood Choreography, Stamina";
+            case "Photographer" -> "Editorial Portraits, Studio Lighting, Lookbooks, Color Grading";
+            case "Musician" -> "Acoustic Guitar, Background Score, Sound Design, Mixing";
+            default -> "On-Set Collaboration, Audition Cold Read, Creative Production";
+        };
     }
 }
