@@ -16,14 +16,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Implements every feature shown in the Recruiter Dashboard walkthrough video:
- * Verified Profile + Showreels, Post Project + Online Audition Script, Project History + Promote/Social Share,
- * View Applications (ALL/Shortlisted/Invited/Suggested), Smart Search Artists + Bulk Invite/Tag/Excel Download,
- * My Artists Custom Folders, Recommended Platinum Artists, Get Package, and Transaction History.
+ * Implements Casting Company Dashboard capabilities:
+ * Verified Profile + Showreels, Analytics Overview, Post Project + 8-Section Brief, Project Management,
+ * Application Pipeline + Ratings/Comments, Smart Search + Actor Verification, Custom Folders,
+ * AI & Tier Recommendations, Get Package, and Transaction History.
  */
 @RestController
 @RequestMapping("/api/dashboard")
@@ -40,6 +43,10 @@ public class RecruiterDashboardController {
     private final SubscriptionPaymentRepository paymentRepo;
     private final CompanyNotificationRepository notificationRepo;
     private final SearchHistoryEntryRepository searchHistoryRepo;
+    private final AuditionScheduleRepository auditionRepo;
+    private final CastingTeamMemberRepository teamRepo;
+    private final ArtistContractRepository contractRepo;
+    private final ProductionExpenseRepository expenseRepo;
     private final FileStorageService fileStorage;
     private final NotificationService notificationService;
     private final SessionAuthHelper authHelper;
@@ -55,6 +62,10 @@ public class RecruiterDashboardController {
                                       SubscriptionPaymentRepository paymentRepo,
                                       CompanyNotificationRepository notificationRepo,
                                       SearchHistoryEntryRepository searchHistoryRepo,
+                                      AuditionScheduleRepository auditionRepo,
+                                      CastingTeamMemberRepository teamRepo,
+                                      ArtistContractRepository contractRepo,
+                                      ProductionExpenseRepository expenseRepo,
                                       FileStorageService fileStorage,
                                       NotificationService notificationService,
                                       SessionAuthHelper authHelper) {
@@ -69,6 +80,10 @@ public class RecruiterDashboardController {
         this.paymentRepo = paymentRepo;
         this.notificationRepo = notificationRepo;
         this.searchHistoryRepo = searchHistoryRepo;
+        this.auditionRepo = auditionRepo;
+        this.teamRepo = teamRepo;
+        this.contractRepo = contractRepo;
+        this.expenseRepo = expenseRepo;
         this.fileStorage = fileStorage;
         this.notificationService = notificationService;
         this.authHelper = authHelper;
@@ -84,16 +99,101 @@ public class RecruiterDashboardController {
         List<CompanyNotification> notifications = notificationRepo.findByCompanyIdOrderByCreatedAtDesc(company.getId());
         long unreadCount = notificationRepo.countByCompanyIdAndReadFlagFalse(company.getId());
 
+        List<ArtistProfile> allArtists = artistRepo.findAll();
+        long verifiedActors = allArtists.stream().filter(ArtistProfile::isProfileVerified).count();
+        List<Long> projectIds = projects.stream().map(CastingProject::getId).toList();
+        List<ProjectApplication> allApps = projectIds.isEmpty() ? List.of() : appRepo.findByProjectIdInOrderByAppliedAtDesc(projectIds);
+        long shortlistedCount = allApps.stream().filter(pa -> "SHORTLISTED".equalsIgnoreCase(pa.getStatus())).count();
+        long selectedCount = allApps.stream().filter(pa -> "SELECTED".equalsIgnoreCase(pa.getStatus()) && !pa.isBackupCandidate()).count();
+
+        List<AuditionSchedule> auditions = auditionRepo.findByCompanyIdOrderByAuditionDateAscIdDesc(company.getId());
+        long upcomingAuditionsCount = auditions.stream()
+                .filter(au -> "SCHEDULED".equalsIgnoreCase(au.getStatus()) || "RESCHEDULED".equalsIgnoreCase(au.getStatus()))
+                .filter(au -> au.getAuditionDate() != null && !au.getAuditionDate().isBefore(LocalDate.now()))
+                .count();
+        long favoriteActorsCount = folderItemRepo.findByCompanyIdOrderBySavedAtDesc(company.getId())
+                .stream().map(ArtistFolderItem::getArtistId).distinct().count();
+        long teamMembersCount = teamRepo.findByCompanyIdOrderByIdDesc(company.getId()).size();
+        long activeContractsCount = contractRepo.findByCompanyIdOrderByIdDesc(company.getId())
+                .stream().filter(c -> !"TERMINATED".equalsIgnoreCase(c.getContractStatus())).count();
+
+        Map<Long, ArtistProfile> artistById = allArtists.stream()
+                .collect(Collectors.toMap(ArtistProfile::getId, a -> a));
+        Map<Long, CastingProject> projectById = projects.stream()
+                .collect(Collectors.toMap(CastingProject::getId, p -> p));
+
+        List<Map<String, Object>> recentActivities = new ArrayList<>();
+        allApps.stream().limit(4).forEach(pa -> {
+            ArtistProfile a = artistById.get(pa.getArtistId());
+            CastingProject p = projectById.get(pa.getProjectId());
+            Map<String, Object> act = new LinkedHashMap<>();
+            act.put("type", "APPLICATION");
+            act.put("title", (a != null ? a.getFullName() : "Artist") + " — " + pa.getStatus());
+            act.put("subtitle", (p != null ? p.getProjectTitle() : "Project") + " (" + pa.getRoleName() + ")");
+            act.put("timestamp", pa.getAppliedAt() != null ? pa.getAppliedAt().toString() : LocalDate.now().toString());
+            recentActivities.add(act);
+        });
+        auditions.stream().limit(3).forEach(au -> {
+            ArtistProfile a = artistById.get(au.getArtistId());
+            CastingProject p = projectById.get(au.getProjectId());
+            Map<String, Object> act = new LinkedHashMap<>();
+            act.put("type", "AUDITION");
+            act.put("title", au.getAuditionMode() + " Audition (" + au.getStatus() + "): " + (a != null ? a.getFullName() : "Artist"));
+            act.put("subtitle", (p != null ? p.getProjectTitle() : "Project") + " on " + au.getAuditionDate() + " at " + au.getAuditionTime());
+            act.put("timestamp", au.getAuditionDate() != null ? au.getAuditionDate().toString() : "");
+            recentActivities.add(act);
+        });
+
+        List<Map<String, Object>> monthlyChart = new ArrayList<>();
+        DateTimeFormatter mFmt = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH);
+        YearMonth nowYm = YearMonth.now();
+        for (int i = 5; i >= 0; i--) {
+            YearMonth ym = nowYm.minusMonths(i);
+            long appsInMonth = allApps.stream().filter(a -> a.getAppliedAt() != null && YearMonth.from(a.getAppliedAt()).equals(ym)).count();
+            long audsInMonth = auditions.stream().filter(a -> a.getAuditionDate() != null && YearMonth.from(a.getAuditionDate()).equals(ym)).count();
+            monthlyChart.add(Map.of(
+                    "label", ym.format(mFmt),
+                    "applications", appsInMonth,
+                    "auditions", audsInMonth
+            ));
+        }
+
+        Map<String, Long> appsByStatus = new LinkedHashMap<>();
+        appsByStatus.put("APPLIED", allApps.stream().filter(a -> "APPLIED".equalsIgnoreCase(a.getStatus())).count());
+        appsByStatus.put("SHORTLISTED", shortlistedCount);
+        appsByStatus.put("INVITED", allApps.stream().filter(a -> "INVITED".equalsIgnoreCase(a.getStatus())).count());
+        appsByStatus.put("SELECTED", selectedCount);
+        appsByStatus.put("REJECTED", allApps.stream().filter(a -> "REJECTED".equalsIgnoreCase(a.getStatus())).count());
+
+        Map<String, Long> actorsByCategory = allArtists.stream()
+                .collect(Collectors.groupingBy(a -> a.getCategory() != null ? a.getCategory() : "Other", LinkedHashMap::new, Collectors.counting()));
+
         List<Map<String, Object>> projectSummaries = projects.stream().map(p -> toProjectSummary(p, company)).toList();
 
-        return ResponseEntity.ok(Map.of(
-                "company", authHelper.toSafeCompanyMap(company),
-                "activeProjectsCount", activeProjects,
-                "profilesViewedCount", profilesViewed,
-                "unreadNotifications", unreadCount,
-                "notifications", notifications.stream().limit(12).toList(),
-                "recentProjects", projectSummaries.stream().limit(5).toList()
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("company", authHelper.toSafeCompanyMap(company));
+        response.put("activeProjectsCount", activeProjects);
+        response.put("totalProjectsCount", projects.size());
+        response.put("profilesViewedCount", profilesViewed);
+        response.put("totalActorsCount", allArtists.size());
+        response.put("verifiedActorsCount", verifiedActors);
+        response.put("totalApplicationsCount", allApps.size());
+        response.put("shortlistedCount", shortlistedCount);
+        response.put("selectedCount", selectedCount);
+        response.put("upcomingAuditionsCount", upcomingAuditionsCount);
+        response.put("favoriteActorsCount", favoriteActorsCount);
+        response.put("teamMembersCount", teamMembersCount);
+        response.put("activeContractsCount", activeContractsCount);
+        response.put("unreadNotifications", unreadCount);
+        response.put("notifications", notifications.stream().limit(12).toList());
+        response.put("recentProjects", projectSummaries.stream().limit(6).toList());
+        response.put("recentActivities", recentActivities.stream().limit(8).toList());
+        response.put("chartData", Map.of(
+                "monthlyActivity", monthlyChart,
+                "applicationsByStatus", appsByStatus,
+                "actorsByCategory", actorsByCategory
         ));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/profile")
@@ -119,14 +219,14 @@ public class RecruiterDashboardController {
     }
 
     @GetMapping("/projects")
-    public ResponseEntity<?> listProjects(@RequestParam(required = false, defaultValue = "ALL") String filter,
+    public ResponseEntity<?> listProjects(@RequestParam(value = "filter", required = false, defaultValue = "ALL") String filter,
                                           HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         List<CastingProject> projects = projectRepo.findByCompanyIdOrderByPostedDateDescIdDesc(company.getId());
         List<Map<String, Object>> filtered = projects.stream()
                 .filter(p -> "ALL".equalsIgnoreCase(filter)
                         || ("PROMOTED".equalsIgnoreCase(filter) && p.isPromoted())
-                        || p.getStatus().equalsIgnoreCase(filter))
+                        || (p.getStatus() != null && p.getStatus().equalsIgnoreCase(filter)))
                 .map(p -> toProjectSummary(p, company))
                 .toList();
         return ResponseEntity.ok(filtered);
@@ -135,69 +235,69 @@ public class RecruiterDashboardController {
     @PostMapping(value = "/projects", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postProject(
             // 1. Basic project information
-            @RequestParam String projectTitle,
-            @RequestParam String projectType,
-            @RequestParam String productionHouseName,
-            @RequestParam String castingCompanyName,
-            @RequestParam String projectDetails,
-            @RequestParam String projectLanguage,
-            @RequestParam String projectStage,
+            @RequestParam("projectTitle") String projectTitle,
+            @RequestParam("projectType") String projectType,
+            @RequestParam("productionHouseName") String productionHouseName,
+            @RequestParam("castingCompanyName") String castingCompanyName,
+            @RequestParam("projectDetails") String projectDetails,
+            @RequestParam("projectLanguage") String projectLanguage,
+            @RequestParam("projectStage") String projectStage,
             // 2. Talent requirements
-            @RequestParam String targetCategory,
-            @RequestParam(defaultValue = "Any") String targetGender,
-            @RequestParam(defaultValue = "18") int ageMin,
-            @RequestParam(defaultValue = "35") int ageMax,
-            @RequestParam(required = false) String heightRequirement,
-            @RequestParam(required = false) String preferredAppearance,
-            @RequestParam(defaultValue = "Both") String experienceLevel,
-            @RequestParam(defaultValue = "1") int artistsRequiredCount,
-            @RequestParam(required = false) String roleDescription,
-            @RequestParam(required = false) String characterName,
+            @RequestParam("targetCategory") String targetCategory,
+            @RequestParam(value = "targetGender", defaultValue = "Any") String targetGender,
+            @RequestParam(value = "ageMin", defaultValue = "18") int ageMin,
+            @RequestParam(value = "ageMax", defaultValue = "35") int ageMax,
+            @RequestParam(value = "heightRequirement", required = false) String heightRequirement,
+            @RequestParam(value = "preferredAppearance", required = false) String preferredAppearance,
+            @RequestParam(value = "experienceLevel", defaultValue = "Both") String experienceLevel,
+            @RequestParam(value = "artistsRequiredCount", defaultValue = "1") int artistsRequiredCount,
+            @RequestParam(value = "roleDescription", required = false) String roleDescription,
+            @RequestParam(value = "characterName", required = false) String characterName,
             // 3. Project location and schedule
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String auditionLocation,
-            @RequestParam(required = false) String auditionDate,
-            @RequestParam(defaultValue = "Online") String auditionType,
-            @RequestParam(required = false) String shootingStartDate,
-            @RequestParam(required = false) String shootingEndDate,
-            @RequestParam(required = false) String shootingDuration,
-            @RequestParam(required = false) String availabilityRequirements,
-            @RequestParam(defaultValue = "Full-Time") String durationType,
+            @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "auditionLocation", required = false) String auditionLocation,
+            @RequestParam(value = "auditionDate", required = false) String auditionDate,
+            @RequestParam(value = "auditionType", defaultValue = "Online") String auditionType,
+            @RequestParam(value = "shootingStartDate", required = false) String shootingStartDate,
+            @RequestParam(value = "shootingEndDate", required = false) String shootingEndDate,
+            @RequestParam(value = "shootingDuration", required = false) String shootingDuration,
+            @RequestParam(value = "availabilityRequirements", required = false) String availabilityRequirements,
+            @RequestParam(value = "durationType", defaultValue = "Full-Time") String durationType,
             // 4. Payment details
-            @RequestParam(defaultValue = "Paid") String paymentType,
-            @RequestParam(required = false) String budget,
-            @RequestParam(defaultValue = "Per day") String paymentBasis,
-            @RequestParam(defaultValue = "No") String accommodationProvided,
-            @RequestParam(defaultValue = "No") String foodProvided,
-            @RequestParam(defaultValue = "No") String travelExpensesCovered,
+            @RequestParam(value = "paymentType", defaultValue = "Paid") String paymentType,
+            @RequestParam(value = "budget", required = false) String budget,
+            @RequestParam(value = "paymentBasis", defaultValue = "Per day") String paymentBasis,
+            @RequestParam(value = "accommodationProvided", defaultValue = "No") String accommodationProvided,
+            @RequestParam(value = "foodProvided", defaultValue = "No") String foodProvided,
+            @RequestParam(value = "travelExpensesCovered", defaultValue = "No") String travelExpensesCovered,
             // 5. Audition details
-            @RequestParam(required = false) String auditionProcess,
-            @RequestParam(required = false) String auditionInstructions,
-            @RequestParam(defaultValue = "Yes") String selfIntroVideoRequired,
-            @RequestParam(defaultValue = "Yes") String portfolioRequired,
-            @RequestParam(required = false) String auditionScript,
-            @RequestParam(required = false) String lastDateToApply,
-            @RequestParam(defaultValue = "true") boolean onlineAuditionEnabled,
+            @RequestParam(value = "auditionProcess", required = false) String auditionProcess,
+            @RequestParam(value = "auditionInstructions", required = false) String auditionInstructions,
+            @RequestParam(value = "selfIntroVideoRequired", defaultValue = "Yes") String selfIntroVideoRequired,
+            @RequestParam(value = "portfolioRequired", defaultValue = "Yes") String portfolioRequired,
+            @RequestParam(value = "auditionScript", required = false) String auditionScript,
+            @RequestParam(value = "lastDateToApply", required = false) String lastDateToApply,
+            @RequestParam(value = "onlineAuditionEnabled", defaultValue = "true") boolean onlineAuditionEnabled,
             // 6. Application requirements
-            @RequestParam(required = false) String requiredPhotographs,
-            @RequestParam(required = false) String introVideoRequirement,
-            @RequestParam(required = false) String actingPortfolioRequirement,
-            @RequestParam(required = false) String previousWorkLinksReq,
-            @RequestParam(required = false) String applicantContactReq,
-            @RequestParam(required = false) String additionalDocumentsReq,
+            @RequestParam(value = "requiredPhotographs", required = false) String requiredPhotographs,
+            @RequestParam(value = "introVideoRequirement", required = false) String introVideoRequirement,
+            @RequestParam(value = "actingPortfolioRequirement", required = false) String actingPortfolioRequirement,
+            @RequestParam(value = "previousWorkLinksReq", required = false) String previousWorkLinksReq,
+            @RequestParam(value = "applicantContactReq", required = false) String applicantContactReq,
+            @RequestParam(value = "additionalDocumentsReq", required = false) String additionalDocumentsReq,
             // 7. Contact information
-            @RequestParam(required = false) String castingDirectorName,
-            @RequestParam(required = false) String contactEmail,
-            @RequestParam(required = false) String contactNumber,
-            @RequestParam(required = false) String whatsappNumber,
-            @RequestParam(required = false) String websiteOrSocialLinks,
+            @RequestParam(value = "castingDirectorName", required = false) String castingDirectorName,
+            @RequestParam(value = "contactEmail", required = false) String contactEmail,
+            @RequestParam(value = "contactNumber", required = false) String contactNumber,
+            @RequestParam(value = "whatsappNumber", required = false) String whatsappNumber,
+            @RequestParam(value = "websiteOrSocialLinks", required = false) String websiteOrSocialLinks,
             // 8. Media and attachments
             @RequestParam(value = "projectPoster", required = false) MultipartFile projectPoster,
             @RequestParam(value = "referenceImages", required = false) MultipartFile[] referenceImages,
             @RequestParam(value = "characterLookReferences", required = false) MultipartFile[] characterLookReferences,
             @RequestParam(value = "auditionScriptPdf", required = false) MultipartFile auditionScriptPdf,
             @RequestParam(value = "projectPromotionalImage", required = false) MultipartFile projectPromotionalImage,
-            @RequestParam(required = false) String tags,
+            @RequestParam(value = "tags", required = false) String tags,
             HttpSession session
     ) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
@@ -314,7 +414,7 @@ public class RecruiterDashboardController {
     }
 
     @PostMapping("/projects/{id}/promote")
-    public ResponseEntity<?> promoteProject(@PathVariable Long id, HttpSession session) {
+    public ResponseEntity<?> promoteProject(@PathVariable("id") Long id, HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         CastingProject project = projectRepo.findByIdAndCompanyId(id, company.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Project not found"));
@@ -334,19 +434,114 @@ public class RecruiterDashboardController {
         return ResponseEntity.ok(Map.of("message", "Project promoted!", "project", toProjectSummary(project, company)));
     }
 
+    @PutMapping("/projects/{id}")
+    public ResponseEntity<?> updateProject(@PathVariable("id") Long id,
+                                           @RequestBody Map<String, Object> body,
+                                           HttpSession session) {
+        CastingCompany company = authHelper.requirePaidDashboardCompany(session);
+        CastingProject p = projectRepo.findByIdAndCompanyId(id, company.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Project not found"));
+
+        if (body.containsKey("projectTitle") && !String.valueOf(body.get("projectTitle")).isBlank()) {
+            p.setProjectTitle(String.valueOf(body.get("projectTitle")).trim());
+        }
+        if (body.containsKey("projectType")) p.setProjectType(String.valueOf(body.get("projectType")).trim());
+        if (body.containsKey("productionHouseName")) p.setProductionHouseName(trimOrNull(String.valueOf(body.get("productionHouseName"))));
+        if (body.containsKey("castingCompanyName")) p.setCastingCompanyName(trimOrNull(String.valueOf(body.get("castingCompanyName"))));
+        if (body.containsKey("projectDetails") && !String.valueOf(body.get("projectDetails")).isBlank()) {
+            p.setProjectDetails(String.valueOf(body.get("projectDetails")).trim());
+        }
+        if (body.containsKey("projectLanguage")) p.setProjectLanguage(String.valueOf(body.get("projectLanguage")).trim());
+        if (body.containsKey("projectStage")) p.setProjectStage(String.valueOf(body.get("projectStage")).trim());
+        if (body.containsKey("targetCategory")) p.setTargetCategory(String.valueOf(body.get("targetCategory")).trim());
+        if (body.containsKey("targetGender")) p.setTargetGender(String.valueOf(body.get("targetGender")).trim());
+        if (body.containsKey("ageMin") && body.get("ageMin") != null && !String.valueOf(body.get("ageMin")).isBlank()) {
+            p.setAgeMin(Integer.parseInt(String.valueOf(body.get("ageMin"))));
+        }
+        if (body.containsKey("ageMax") && body.get("ageMax") != null && !String.valueOf(body.get("ageMax")).isBlank()) {
+            p.setAgeMax(Integer.parseInt(String.valueOf(body.get("ageMax"))));
+        }
+        if (body.containsKey("artistsRequiredCount") && body.get("artistsRequiredCount") != null && !String.valueOf(body.get("artistsRequiredCount")).isBlank()) {
+            p.setArtistsRequiredCount(Math.max(1, Integer.parseInt(String.valueOf(body.get("artistsRequiredCount")))));
+        }
+        if (body.containsKey("experienceLevel")) p.setExperienceLevel(String.valueOf(body.get("experienceLevel")).trim());
+        if (body.containsKey("roleDescription")) p.setRoleDescription(trimOrNull(String.valueOf(body.get("roleDescription"))));
+        if (body.containsKey("characterName")) p.setCharacterName(trimOrNull(String.valueOf(body.get("characterName"))));
+        if (body.containsKey("location")) p.setLocation(trimOrNull(String.valueOf(body.get("location"))));
+        if (body.containsKey("auditionLocation")) p.setAuditionLocation(trimOrNull(String.valueOf(body.get("auditionLocation"))));
+        if (body.containsKey("auditionType")) p.setAuditionType(String.valueOf(body.get("auditionType")).trim());
+        if (body.containsKey("auditionDate")) p.setAuditionDate(parseDateOrNull(String.valueOf(body.get("auditionDate"))));
+        if (body.containsKey("shootingStartDate")) p.setShootingStartDate(parseDateOrNull(String.valueOf(body.get("shootingStartDate"))));
+        if (body.containsKey("shootingEndDate")) p.setShootingEndDate(parseDateOrNull(String.valueOf(body.get("shootingEndDate"))));
+        if (body.containsKey("lastDateToApply")) {
+            LocalDate deadline = parseDateOrNull(String.valueOf(body.get("lastDateToApply")));
+            p.setLastDateToApply(deadline);
+            if (deadline != null) p.setExpiryDate(deadline);
+        }
+        if (body.containsKey("budget")) p.setBudget(trimOrNull(String.valueOf(body.get("budget"))));
+        if (body.containsKey("paymentType")) p.setPaymentType(String.valueOf(body.get("paymentType")).trim());
+        if (body.containsKey("paymentBasis")) p.setPaymentBasis(String.valueOf(body.get("paymentBasis")).trim());
+        if (body.containsKey("auditionInstructions")) p.setAuditionInstructions(trimOrNull(String.valueOf(body.get("auditionInstructions"))));
+        if (body.containsKey("status")) p.setStatus(String.valueOf(body.get("status")).trim().toUpperCase(Locale.ROOT));
+        if (body.containsKey("tags")) p.setTags(trimOrNull(String.valueOf(body.get("tags"))));
+
+        CastingProject saved = projectRepo.save(p);
+        notificationService.notifyCompany(company.getId(), company.getCompanyEmail(),
+                "Project Updated", "'" + saved.getProjectTitle() + "' details were updated.");
+        return ResponseEntity.ok(Map.of("message", "Project updated successfully.", "project", toProjectSummary(saved, company)));
+    }
+
+    @PatchMapping("/projects/{id}/status")
+    public ResponseEntity<?> updateProjectStatus(@PathVariable("id") Long id,
+                                                 @RequestBody Map<String, String> body,
+                                                 HttpSession session) {
+        CastingCompany company = authHelper.requirePaidDashboardCompany(session);
+        CastingProject p = projectRepo.findByIdAndCompanyId(id, company.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Project not found"));
+        String nextStatus = body.getOrDefault("status", "ACTIVE").trim().toUpperCase(Locale.ROOT);
+        if (!Set.of("ACTIVE", "PAUSED", "CLOSED").contains(nextStatus)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Status must be ACTIVE, PAUSED, or CLOSED."));
+        }
+        p.setStatus(nextStatus);
+        if ("CLOSED".equals(nextStatus)) {
+            p.setProjectStage("Closed");
+        } else if ("ACTIVE".equals(nextStatus) && "Closed".equalsIgnoreCase(p.getProjectStage())) {
+            p.setProjectStage("Casting Open");
+        }
+        CastingProject saved = projectRepo.save(p);
+        notificationService.notifyCompany(company.getId(), company.getCompanyEmail(),
+                "Casting Status Changed", "'" + saved.getProjectTitle() + "' is now " + nextStatus + ".");
+        return ResponseEntity.ok(Map.of("message", "Project status changed to " + nextStatus, "project", toProjectSummary(saved, company)));
+    }
+
+    @DeleteMapping("/projects/{id}")
+    @Transactional
+    public ResponseEntity<?> deleteProject(@PathVariable("id") Long id, HttpSession session) {
+        CastingCompany company = authHelper.requirePaidDashboardCompany(session);
+        CastingProject p = projectRepo.findByIdAndCompanyId(id, company.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Project not found"));
+        String title = p.getProjectTitle();
+        appRepo.deleteByProjectId(id);
+        auditionRepo.deleteByProjectIdAndCompanyId(id, company.getId());
+        projectRepo.delete(p);
+        notificationService.notifyCompany(company.getId(), company.getCompanyEmail(),
+                "Project Deleted", "'" + title + "' and its applications were removed.");
+        return ResponseEntity.ok(Map.of("message", "Project deleted successfully."));
+    }
+
     @GetMapping("/applications")
     public ResponseEntity<?> viewApplications(
-            @RequestParam(required = false) Long projectId,
-            @RequestParam(required = false, defaultValue = "ALL") String tab,
-            @RequestParam(required = false, defaultValue = "ALL") String role,
-            @RequestParam(required = false, defaultValue = "") String q,
-            @RequestParam(required = false, defaultValue = "RELEVANCE") String sort,
+            @RequestParam(value = "projectId", required = false) Long projectId,
+            @RequestParam(value = "tab", required = false, defaultValue = "ALL") String tab,
+            @RequestParam(value = "role", required = false, defaultValue = "ALL") String role,
+            @RequestParam(value = "q", required = false, defaultValue = "") String q,
+            @RequestParam(value = "sort", required = false, defaultValue = "RELEVANCE") String sort,
             HttpSession session
     ) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         List<CastingProject> projects = projectRepo.findByCompanyIdOrderByPostedDateDescIdDesc(company.getId());
         if (projects.isEmpty()) {
-            return ResponseEntity.ok(Map.of("projects", List.of(), "applications", List.of(), "roles", List.of()));
+            return ResponseEntity.ok(Map.of("projects", List.of(), "applications", List.of(), "roles", List.of(), "statusCounts", Map.of()));
         }
         Long activeProjectId = projectId != null ? projectId : projects.get(0).getId();
         CastingProject activeProject = projectRepo.findByIdAndCompanyId(activeProjectId, company.getId())
@@ -360,25 +555,43 @@ public class RecruiterDashboardController {
         Set<Long> savedIds = getSavedArtistIds(company.getId());
 
         List<ProjectApplication> rawApps = appRepo.findByProjectIdOrderByAppliedAtDesc(activeProject.getId());
-        List<String> roles = rawApps.stream().map(ProjectApplication::getRoleName).distinct().toList();
+        List<String> roles = rawApps.stream().map(ProjectApplication::getRoleName).filter(Objects::nonNull).distinct().toList();
         String query = q.trim().toLowerCase(Locale.ROOT);
 
+        Map<String, Long> statusCounts = new LinkedHashMap<>();
+        statusCounts.put("ALL", (long) rawApps.size());
+        statusCounts.put("APPLIED", rawApps.stream().filter(pa -> "APPLIED".equalsIgnoreCase(pa.getStatus())).count());
+        statusCounts.put("SHORTLISTED", rawApps.stream().filter(pa -> "SHORTLISTED".equalsIgnoreCase(pa.getStatus())).count());
+        statusCounts.put("INVITED", rawApps.stream().filter(pa -> "INVITED".equalsIgnoreCase(pa.getStatus())).count());
+        statusCounts.put("SUGGESTED", rawApps.stream().filter(pa -> "SUGGESTED".equalsIgnoreCase(pa.getStatus())).count());
+        statusCounts.put("SELECTED", rawApps.stream().filter(pa -> "SELECTED".equalsIgnoreCase(pa.getStatus())).count());
+        statusCounts.put("REJECTED", rawApps.stream().filter(pa -> "REJECTED".equalsIgnoreCase(pa.getStatus())).count());
+        statusCounts.put("BACKUPS", rawApps.stream().filter(ProjectApplication::isBackupCandidate).count());
+
         List<Map<String, Object>> items = rawApps.stream()
-                .filter(pa -> "ALL".equalsIgnoreCase(tab) || pa.getStatus().equalsIgnoreCase(tab))
-                .filter(pa -> "ALL".equalsIgnoreCase(role) || pa.getRoleName().equalsIgnoreCase(role))
+                .filter(pa -> "ALL".equalsIgnoreCase(tab)
+                        || ("BACKUPS".equalsIgnoreCase(tab) && pa.isBackupCandidate())
+                        || (pa.getStatus() != null && pa.getStatus().equalsIgnoreCase(tab)))
+                .filter(pa -> "ALL".equalsIgnoreCase(role) || (pa.getRoleName() != null && pa.getRoleName().equalsIgnoreCase(role)))
                 .map(pa -> {
                     ArtistProfile a = artistById.get(pa.getArtistId());
                     if (a == null) return null;
-                    if (!query.isEmpty() && !a.getFullName().toLowerCase(Locale.ROOT).contains(query)
-                            && !a.getCity().toLowerCase(Locale.ROOT).contains(query)
-                            && !a.getCategory().toLowerCase(Locale.ROOT).contains(query)) {
+                    if (!query.isEmpty()
+                            && !(a.getFullName() != null && a.getFullName().toLowerCase(Locale.ROOT).contains(query))
+                            && !(a.getCity() != null && a.getCity().toLowerCase(Locale.ROOT).contains(query))
+                            && !(a.getCategory() != null && a.getCategory().toLowerCase(Locale.ROOT).contains(query))) {
                         return null;
                     }
                     Map<String, Object> m = new LinkedHashMap<>();
                     m.put("applicationId", pa.getId());
                     m.put("projectId", pa.getProjectId());
                     m.put("roleName", pa.getRoleName());
+                    m.put("assignedRole", pa.getAssignedRole());
                     m.put("applicationStatus", pa.getStatus());
+                    m.put("rating", pa.getRating());
+                    m.put("internalComment", pa.getInternalComment());
+                    m.put("backupCandidate", pa.isBackupCandidate());
+                    m.put("updatedAt", pa.getUpdatedAt());
                     m.put("auditionSubmissionTitle", pa.getAuditionSubmissionTitle());
                     m.put("auditionVideoUrl", pa.getAuditionVideoUrl());
                     m.put("appliedAt", pa.getAppliedAt());
@@ -398,12 +611,13 @@ public class RecruiterDashboardController {
                 "projects", projects.stream().map(p -> toProjectSummary(p, company)).toList(),
                 "activeProject", toProjectSummary(activeProject, company),
                 "roles", roles,
+                "statusCounts", statusCounts,
                 "applications", items
         ));
     }
 
     @PostMapping("/applications/{id}/status")
-    public ResponseEntity<?> updateApplicationStatus(@PathVariable Long id,
+    public ResponseEntity<?> updateApplicationStatus(@PathVariable("id") Long id,
                                                    @RequestBody Map<String, String> body,
                                                    HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
@@ -413,8 +627,54 @@ public class RecruiterDashboardController {
                 .orElseThrow(() -> new IllegalArgumentException("Unauthorized project access"));
         String status = body.getOrDefault("status", "SHORTLISTED").toUpperCase(Locale.ROOT);
         pa.setStatus(status);
+        pa.setUpdatedAt(LocalDateTime.now());
         appRepo.save(pa);
         return ResponseEntity.ok(pa);
+    }
+
+    @PostMapping("/applications/{id}/review")
+    public ResponseEntity<?> reviewApplication(@PathVariable("id") Long id,
+                                               @RequestBody Map<String, Object> body,
+                                               HttpSession session) {
+        CastingCompany company = authHelper.requirePaidDashboardCompany(session);
+        ProjectApplication pa = appRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
+        CastingProject project = projectRepo.findByIdAndCompanyId(pa.getProjectId(), company.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Unauthorized project access"));
+
+        if (body.containsKey("status") && body.get("status") != null && !String.valueOf(body.get("status")).isBlank()) {
+            String st = String.valueOf(body.get("status")).trim().toUpperCase(Locale.ROOT);
+            if (!Set.of("APPLIED", "SHORTLISTED", "INVITED", "SUGGESTED", "SELECTED", "REJECTED").contains(st)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Unsupported application status: " + st));
+            }
+            pa.setStatus(st);
+        }
+        if (body.containsKey("rating") && body.get("rating") != null && !String.valueOf(body.get("rating")).isBlank()) {
+            int rating = Integer.parseInt(String.valueOf(body.get("rating")));
+            pa.setRating(Math.max(1, Math.min(5, rating)));
+        }
+        if (body.containsKey("internalComment")) {
+            Object rawComment = body.get("internalComment");
+            pa.setInternalComment(rawComment == null ? null : trimOrNull(String.valueOf(rawComment)));
+        }
+        if (body.containsKey("assignedRole")) {
+            Object rawRole = body.get("assignedRole");
+            pa.setAssignedRole(rawRole == null ? null : trimOrNull(String.valueOf(rawRole)));
+        }
+        if (body.containsKey("backupCandidate") && body.get("backupCandidate") != null) {
+            pa.setBackupCandidate(Boolean.parseBoolean(String.valueOf(body.get("backupCandidate"))));
+        }
+        pa.setUpdatedAt(LocalDateTime.now());
+        ProjectApplication saved = appRepo.save(pa);
+
+        ArtistProfile artist = artistRepo.findById(saved.getArtistId()).orElse(null);
+        if (artist != null && ("SELECTED".equalsIgnoreCase(saved.getStatus()) || "REJECTED".equalsIgnoreCase(saved.getStatus()))) {
+            notificationService.notifyCompany(company.getId(), company.getCompanyEmail(),
+                    "Application " + saved.getStatus(),
+                    artist.getFullName() + " marked " + saved.getStatus() + " for '" + project.getProjectTitle() + "'.");
+        }
+
+        return ResponseEntity.ok(Map.of("application", saved, "message", "Application review saved."));
     }
 
     @PostMapping("/artists/search")
@@ -430,16 +690,18 @@ public class RecruiterDashboardController {
         String city = String.valueOf(filters.getOrDefault("city", "")).trim();
         String expertise = String.valueOf(filters.getOrDefault("expertise", "All"));
         String language = String.valueOf(filters.getOrDefault("language", "")).trim();
+        String skills = String.valueOf(filters.getOrDefault("skills", "")).trim();
         String keyword = String.valueOf(filters.getOrDefault("keyword", "")).trim();
         boolean videoOnly = Boolean.parseBoolean(String.valueOf(filters.getOrDefault("videoOnly", false)));
+        boolean verifiedOnly = Boolean.parseBoolean(String.valueOf(filters.getOrDefault("verifiedOnly", false)));
         boolean recordHistory = Boolean.parseBoolean(String.valueOf(filters.getOrDefault("recordHistory", true)));
 
-        if (recordHistory && (!"All".equalsIgnoreCase(category) || !city.isBlank() || !keyword.isBlank())) {
+        if (recordHistory && (!"All".equalsIgnoreCase(category) || !city.isBlank() || !keyword.isBlank() || !skills.isBlank())) {
             SearchHistoryEntry she = new SearchHistoryEntry();
             she.setCompanyId(company.getId());
             she.setCategory("All".equalsIgnoreCase(category) ? null : category);
             she.setCity(city.isBlank() ? null : city);
-            she.setKeyword(keyword.isBlank() ? null : keyword);
+            she.setKeyword(!keyword.isBlank() ? keyword : (skills.isBlank() ? null : skills));
             searchHistoryRepo.save(she);
         }
 
@@ -447,20 +709,27 @@ public class RecruiterDashboardController {
         Set<Long> savedIds = getSavedArtistIds(company.getId());
         String cityLc = city.toLowerCase(Locale.ROOT);
         String langLc = language.toLowerCase(Locale.ROOT);
+        String skillsLc = skills.toLowerCase(Locale.ROOT);
         String kwLc = keyword.toLowerCase(Locale.ROOT);
 
         List<ArtistProfile> matched = artistRepo.findAll().stream()
-                .filter(a -> "All".equalsIgnoreCase(category) || a.getCategory().equalsIgnoreCase(category)
+                .filter(a -> "All".equalsIgnoreCase(category)
+                        || (a.getCategory() != null && a.getCategory().equalsIgnoreCase(category))
                         || (a.getSecondaryRoles() != null && a.getSecondaryRoles().toLowerCase(Locale.ROOT).contains(category.toLowerCase(Locale.ROOT))))
-                .filter(a -> "All".equalsIgnoreCase(gender) || a.getGender().equalsIgnoreCase(gender))
-                .filter(a -> "All".equalsIgnoreCase(agency) || a.getAgencyName().equalsIgnoreCase(agency))
+                .filter(a -> "All".equalsIgnoreCase(gender) || (a.getGender() != null && a.getGender().equalsIgnoreCase(gender)))
+                .filter(a -> "All".equalsIgnoreCase(agency) || (a.getAgencyName() != null && a.getAgencyName().equalsIgnoreCase(agency)))
                 .filter(a -> a.getAge() >= ageMin && a.getAge() <= ageMax)
-                .filter(a -> cityLc.isEmpty() || "any".equals(cityLc) || a.getCity().toLowerCase(Locale.ROOT).contains(cityLc))
-                .filter(a -> "All".equalsIgnoreCase(expertise) || a.getExpertise().equalsIgnoreCase(expertise))
-                .filter(a -> langLc.isEmpty() || a.getLanguages().toLowerCase(Locale.ROOT).contains(langLc))
+                .filter(a -> cityLc.isEmpty() || "any".equals(cityLc) || (a.getCity() != null && a.getCity().toLowerCase(Locale.ROOT).contains(cityLc)))
+                .filter(a -> "All".equalsIgnoreCase(expertise) || (a.getExpertise() != null && a.getExpertise().equalsIgnoreCase(expertise)))
+                .filter(a -> langLc.isEmpty() || (a.getLanguages() != null && a.getLanguages().toLowerCase(Locale.ROOT).contains(langLc)))
+                .filter(a -> skillsLc.isEmpty()
+                        || (a.getSkills() != null && a.getSkills().toLowerCase(Locale.ROOT).contains(skillsLc))
+                        || (a.getKeywords() != null && a.getKeywords().toLowerCase(Locale.ROOT).contains(skillsLc)))
                 .filter(a -> !videoOnly || a.isHasVideo())
+                .filter(a -> !verifiedOnly || a.isProfileVerified())
                 .filter(a -> kwLc.isEmpty()
-                        || a.getFullName().toLowerCase(Locale.ROOT).contains(kwLc)
+                        || (a.getFullName() != null && a.getFullName().toLowerCase(Locale.ROOT).contains(kwLc))
+                        || (a.getSkills() != null && a.getSkills().toLowerCase(Locale.ROOT).contains(kwLc))
                         || (a.getKeywords() != null && a.getKeywords().toLowerCase(Locale.ROOT).contains(kwLc))
                         || (a.getBio() != null && a.getBio().toLowerCase(Locale.ROOT).contains(kwLc)))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -482,8 +751,40 @@ public class RecruiterDashboardController {
         ));
     }
 
+    @PostMapping("/artists/{artistId}/verify")
+    public ResponseEntity<?> verifyArtistProfile(@PathVariable("artistId") Long artistId,
+                                                 @RequestBody Map<String, String> body,
+                                                 HttpSession session) {
+        CastingCompany company = authHelper.requirePaidDashboardCompany(session);
+        ArtistProfile artist = artistRepo.findById(artistId)
+                .orElseThrow(() -> new IllegalArgumentException("Artist not found"));
+
+        String status = body.getOrDefault("status", "Verified").trim();
+        if (!Set.of("Verified", "Rejected", "Pending").contains(status)) {
+            status = "Verified".equalsIgnoreCase(status) ? "Verified"
+                    : ("Rejected".equalsIgnoreCase(status) ? "Rejected" : "Pending");
+        }
+        artist.setVerificationStatus(status);
+        artist.setProfileVerified("Verified".equals(status));
+        if (body.containsKey("notes")) {
+            artist.setVerificationNotes(trimOrNull(body.get("notes")));
+        }
+        ArtistProfile saved = artistRepo.save(artist);
+        notificationService.notifyCompany(company.getId(), company.getCompanyEmail(),
+                "Actor Verification Updated",
+                saved.getFullName() + " profile marked as " + saved.getVerificationStatus() + ".");
+
+        boolean unlocked = getUnlockedContactIds(company.getId()).contains(saved.getId());
+        boolean savedFlag = getSavedArtistIds(company.getId()).contains(saved.getId());
+        return ResponseEntity.ok(Map.of(
+                "artist", toArtistView(saved, unlocked, savedFlag),
+                "message", saved.getFullName() + " verification set to " + saved.getVerificationStatus()
+        ));
+    }
+
     @GetMapping("/artists/recommended")
-    public ResponseEntity<?> getRecommendedArtists(@RequestParam(defaultValue = "PLATINUM") String tier,
+    public ResponseEntity<?> getRecommendedArtists(@RequestParam(value = "tier", defaultValue = "PLATINUM") String tier,
+                                                   @RequestParam(value = "projectId", required = false) Long projectId,
                                                    HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         Set<Long> unlockedIds = getUnlockedContactIds(company.getId());
@@ -495,28 +796,82 @@ public class RecruiterDashboardController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
+        List<CastingProject> projects = projectRepo.findByCompanyIdOrderByPostedDateDescIdDesc(company.getId());
+        CastingProject refProject = projectId != null
+                ? projectRepo.findByIdAndCompanyId(projectId, company.getId()).orElse(projects.isEmpty() ? null : projects.get(0))
+                : (projects.isEmpty() ? null : projects.get(0));
+
         List<ArtistProfile> all = artistRepo.findAll();
-        List<ArtistProfile> filtered = all.stream()
-                .filter(a -> "FEATURED".equalsIgnoreCase(tier) ? a.isFeaturedTier() : a.isPlatinumTier())
-                .sorted((a, b) -> {
-                    int scoreA = preferredCats.contains(a.getCategory()) ? 1 : 0;
-                    int scoreB = preferredCats.contains(b.getCategory()) ? 1 : 0;
-                    return scoreB != scoreA ? Integer.compare(scoreB, scoreA)
-                            : Integer.compare(b.getViewsCount(), a.getViewsCount());
-                })
-                .toList();
-        if (filtered.isEmpty()) filtered = all.stream().limit(8).toList();
+        List<ArtistProfile> candidates;
+        if ("AI_MATCH".equalsIgnoreCase(tier)) {
+            candidates = all;
+        } else {
+            candidates = all.stream()
+                    .filter(a -> "FEATURED".equalsIgnoreCase(tier) ? a.isFeaturedTier() : a.isPlatinumTier())
+                    .toList();
+            if (candidates.isEmpty()) candidates = all.stream().limit(8).toList();
+        }
+
+        record ScoredArtist(ArtistProfile artist, int score, List<String> reasons) {}
+        List<ScoredArtist> scored = candidates.stream().map(a -> {
+            int score = 56;
+            List<String> reasons = new ArrayList<>();
+            if (refProject != null) {
+                if (refProject.getTargetCategory() != null && (refProject.getTargetCategory().equalsIgnoreCase(a.getCategory())
+                        || (a.getSecondaryRoles() != null && a.getSecondaryRoles().toLowerCase(Locale.ROOT).contains(refProject.getTargetCategory().toLowerCase(Locale.ROOT))))) {
+                    score += 18;
+                    reasons.add("Role match: " + refProject.getTargetCategory());
+                }
+                if (refProject.getTargetGender() != null && ("Any".equalsIgnoreCase(refProject.getTargetGender()) || refProject.getTargetGender().equalsIgnoreCase(a.getGender()))) {
+                    score += 5;
+                }
+                if (a.getAge() >= refProject.getAgeMin() && a.getAge() <= refProject.getAgeMax()) {
+                    score += 8;
+                    reasons.add("Age " + a.getAge() + " fits (" + refProject.getAgeMin() + "-" + refProject.getAgeMax() + ")");
+                }
+                if (refProject.getProjectLanguage() != null && a.getLanguages() != null && a.getLanguages().toLowerCase(Locale.ROOT).contains(refProject.getProjectLanguage().toLowerCase(Locale.ROOT))) {
+                    score += 7;
+                    reasons.add("Speaks " + refProject.getProjectLanguage());
+                }
+                if (refProject.getLocation() != null && a.getCity() != null && refProject.getLocation().toLowerCase(Locale.ROOT).contains(a.getCity().toLowerCase(Locale.ROOT))) {
+                    score += 5;
+                    reasons.add("Based in " + a.getCity());
+                }
+            }
+            if (preferredCats.contains(a.getCategory())) {
+                score += 6;
+                reasons.add("Recent search match");
+            }
+            if (a.isProfileVerified()) {
+                score += 4;
+                reasons.add("Verified profile");
+            }
+            if (a.isHasVideo()) {
+                score += 3;
+                reasons.add("Has showreel video");
+            }
+            return new ScoredArtist(a, Math.min(99, score), reasons);
+        }).sorted((x, y) -> {
+            int cmp = Integer.compare(y.score(), x.score());
+            return cmp != 0 ? cmp : Integer.compare(y.artist().getViewsCount(), x.artist().getViewsCount());
+        }).toList();
 
         ArtistProfile rising = all.stream().filter(ArtistProfile::isRisingStar).findFirst().orElse(all.get(0));
+        List<Map<String, Object>> artistViews = scored.stream().map(sa -> {
+            Map<String, Object> v = toArtistView(sa.artist(), unlockedIds.contains(sa.artist().getId()), savedIds.contains(sa.artist().getId()));
+            v.put("matchScore", sa.score());
+            v.put("matchReasons", sa.reasons());
+            return v;
+        }).toList();
 
-        return ResponseEntity.ok(Map.of(
-                "tier", tier,
-                "risingStar", toArtistView(rising, unlockedIds.contains(rising.getId()), savedIds.contains(rising.getId())),
-                "searchSignals", history,
-                "artists", filtered.stream()
-                        .map(a -> toArtistView(a, unlockedIds.contains(a.getId()), savedIds.contains(a.getId())))
-                        .toList()
-        ));
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("tier", tier);
+        result.put("risingStar", toArtistView(rising, unlockedIds.contains(rising.getId()), savedIds.contains(rising.getId())));
+        result.put("searchSignals", history);
+        result.put("projects", projects.stream().map(p -> Map.of("id", p.getId(), "projectTitle", p.getProjectTitle())).toList());
+        result.put("activeProjectId", refProject != null ? refProject.getId() : null);
+        result.put("artists", artistViews);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/artists/bulk-action")
@@ -582,7 +937,7 @@ public class RecruiterDashboardController {
     }
 
     @GetMapping("/artists/export-excel")
-    public ResponseEntity<byte[]> exportExcel(@RequestParam(required = false) String ids, HttpSession session) {
+    public ResponseEntity<byte[]> exportExcel(@RequestParam(value = "ids", required = false) String ids, HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         Set<Long> unlockedIds = getUnlockedContactIds(company.getId());
         Set<Long> filterIds = (ids == null || ids.isBlank()) ? Set.of() :
@@ -622,7 +977,7 @@ public class RecruiterDashboardController {
     }
 
     @PostMapping("/artists/{artistId}/view-portfolio")
-    public ResponseEntity<?> viewPortfolio(@PathVariable Long artistId, HttpSession session) {
+    public ResponseEntity<?> viewPortfolio(@PathVariable("artistId") Long artistId, HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         ArtistProfile artist = artistRepo.findById(artistId)
                 .orElseThrow(() -> new IllegalArgumentException("Artist not found"));
@@ -652,7 +1007,7 @@ public class RecruiterDashboardController {
     }
 
     @PostMapping("/artists/{artistId}/unlock-contact")
-    public ResponseEntity<?> unlockContact(@PathVariable Long artistId, HttpSession session) {
+    public ResponseEntity<?> unlockContact(@PathVariable("artistId") Long artistId, HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         ArtistProfile artist = artistRepo.findById(artistId)
                 .orElseThrow(() -> new IllegalArgumentException("Artist not found"));
@@ -683,9 +1038,9 @@ public class RecruiterDashboardController {
 
     @GetMapping("/folders")
     public ResponseEntity<?> getFoldersAndArtists(
-            @RequestParam(required = false) Long folderId,
-            @RequestParam(required = false, defaultValue = "All") String category,
-            @RequestParam(required = false, defaultValue = "") String city,
+            @RequestParam(value = "folderId", required = false) Long folderId,
+            @RequestParam(value = "category", required = false, defaultValue = "All") String category,
+            @RequestParam(value = "city", required = false, defaultValue = "") String city,
             HttpSession session
     ) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
@@ -707,14 +1062,14 @@ public class RecruiterDashboardController {
         }
 
         List<Map<String, Object>> artists = orderedUnique.values().stream()
-                .filter(a -> "All".equalsIgnoreCase(category) || a.getCategory().equalsIgnoreCase(category))
-                .filter(a -> cityLc.isEmpty() || a.getCity().toLowerCase(Locale.ROOT).contains(cityLc))
+                .filter(a -> "All".equalsIgnoreCase(category) || (a.getCategory() != null && a.getCategory().equalsIgnoreCase(category)))
+                .filter(a -> cityLc.isEmpty() || (a.getCity() != null && a.getCity().toLowerCase(Locale.ROOT).contains(cityLc)))
                 .map(a -> toArtistView(a, unlockedIds.contains(a.getId()), true))
                 .toList();
 
         List<Map<String, Object>> folderViews = folders.stream().map(f -> Map.<String, Object>of(
                 "id", f.getId(),
-                "folderName", f.getFolderName(),
+                "folderName", f.getFolderName() != null ? f.getFolderName() : "Saved",
                 "count", folderItemRepo.findByCompanyIdAndFolderIdOrderBySavedAtDesc(company.getId(), f.getId()).size()
         )).toList();
 
@@ -743,7 +1098,7 @@ public class RecruiterDashboardController {
 
     @DeleteMapping("/folders/{id}")
     @Transactional
-    public ResponseEntity<?> deleteFolder(@PathVariable Long id, HttpSession session) {
+    public ResponseEntity<?> deleteFolder(@PathVariable("id") Long id, HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         ArtistFolder folder = folderRepo.findByIdAndCompanyId(id, company.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Folder not found"));
@@ -754,8 +1109,8 @@ public class RecruiterDashboardController {
 
     @PostMapping("/folders/toggle/{artistId}")
     @Transactional
-    public ResponseEntity<?> toggleArtistSave(@PathVariable Long artistId,
-                                              @RequestParam(required = false) Long folderId,
+    public ResponseEntity<?> toggleArtistSave(@PathVariable("artistId") Long artistId,
+                                              @RequestParam(value = "folderId", required = false) Long folderId,
                                               HttpSession session) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
         List<ArtistFolder> folders = folderRepo.findByCompanyIdOrderByIdAsc(company.getId());
@@ -780,9 +1135,9 @@ public class RecruiterDashboardController {
 
     @GetMapping("/transactions")
     public ResponseEntity<?> getTransactions(
-            @RequestParam(defaultValue = "CONTACT_VIEW") String viewType,
-            @RequestParam(defaultValue = "PAID") String tier,
-            @RequestParam(defaultValue = "RECENT") String sort,
+            @RequestParam(value = "viewType", defaultValue = "CONTACT_VIEW") String viewType,
+            @RequestParam(value = "tier", defaultValue = "PAID") String tier,
+            @RequestParam(value = "sort", defaultValue = "RECENT") String sort,
             HttpSession session
     ) {
         CastingCompany company = authHelper.requirePaidDashboardCompany(session);
@@ -962,6 +1317,11 @@ public class RecruiterDashboardController {
         m.put("featuredTier", a.isFeaturedTier());
         m.put("risingStar", a.isRisingStar());
         m.put("viewsCount", a.getViewsCount());
+        m.put("profileVerified", a.isProfileVerified());
+        m.put("verificationStatus", a.getVerificationStatus());
+        m.put("verificationNotes", a.getVerificationNotes());
+        m.put("portfolioUrl", a.getPortfolioUrl());
+        m.put("skills", a.getSkills());
         m.put("contactUnlocked", contactUnlocked);
         m.put("saved", saved);
         m.put("email", contactUnlocked ? a.getEmail() : maskEmail(a.getEmail()));

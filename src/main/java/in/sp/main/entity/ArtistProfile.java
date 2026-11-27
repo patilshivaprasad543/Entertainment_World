@@ -79,6 +79,21 @@ public class ArtistProfile {
     @Column(length = 300)
     private String keywords;
 
+    @Column(nullable = false)
+    private boolean profileVerified = false;
+
+    @Column(length = 120)
+    private String verificationStatus = "Pending"; // Pending, Verified, Rejected
+
+    @Column(length = 400)
+    private String verificationNotes;
+
+    @Column(length = 400)
+    private String portfolioUrl;
+
+    @Column(length = 300)
+    private String skills;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -147,4 +162,19 @@ public class ArtistProfile {
 
     public String getKeywords() { return keywords; }
     public void setKeywords(String keywords) { this.keywords = keywords; }
+
+    public boolean isProfileVerified() { return profileVerified; }
+    public void setProfileVerified(boolean profileVerified) { this.profileVerified = profileVerified; }
+
+    public String getVerificationStatus() { return verificationStatus; }
+    public void setVerificationStatus(String verificationStatus) { this.verificationStatus = verificationStatus; }
+
+    public String getVerificationNotes() { return verificationNotes; }
+    public void setVerificationNotes(String verificationNotes) { this.verificationNotes = verificationNotes; }
+
+    public String getPortfolioUrl() { return portfolioUrl; }
+    public void setPortfolioUrl(String portfolioUrl) { this.portfolioUrl = portfolioUrl; }
+
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
 }

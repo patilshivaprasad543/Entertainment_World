@@ -3,27 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recruiter Dashboard — Entertainment World</title>
+  <title>Casting Company Dashboard — Entertainment World</title>
   <link rel="stylesheet" href="/css/ew-theme.css">
   <style>
     .dash-shell {
       display: grid;
-      grid-template-columns: 1fr 270px;
+      grid-template-columns: 268px 1fr;
       gap: 24px;
-      max-width: 1380px;
-      margin: 24px auto 60px;
+      max-width: 1440px;
+      margin: 22px auto 64px;
       padding: 0 22px;
       align-items: start;
     }
     .dash-main { min-width: 0; }
     .dash-sidebar {
       position: sticky;
-      top: 90px;
-      background: #FFFFFF;
-      border: 1px solid var(--border-light);
+      top: 84px;
+      background: linear-gradient(180deg, #16151F 0%, #201C2B 100%);
+      color: #F4EFE7;
+      border: 1px solid rgba(229, 169, 60, 0.22);
       border-radius: 20px;
-      padding: 14px;
-      box-shadow: var(--shadow-sm);
+      padding: 16px 12px;
+      box-shadow: var(--shadow-lg);
+    }
+    .side-group-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding: 10px 12px 5px;
+      opacity: 0.9;
     }
     .side-link {
       width: 100%;
@@ -31,27 +41,120 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 11px 14px;
+      padding: 10px 12px;
       border-radius: 12px;
-      border: none;
+      border: 1px solid transparent;
       background: transparent;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.87rem;
       font-weight: 600;
-      color: var(--text-body);
+      color: rgba(255, 255, 255, 0.82);
       cursor: pointer;
       text-align: left;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
+      transition: all 0.15s ease;
     }
-    .side-link:hover { background: var(--bg-ivory); color: var(--text-dark); }
-    .side-link.active { background: var(--crimson-soft); color: var(--crimson-dark); font-weight: 800; }
+    .side-link-left { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .side-link:hover { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+    .side-link.active {
+      background: linear-gradient(90deg, var(--crimson), #C92A47);
+      border-color: rgba(229, 169, 60, 0.35);
+      color: #FFFFFF;
+      font-weight: 800;
+      box-shadow: 0 6px 16px rgba(178, 30, 58, 0.32);
+    }
+    .side-icon {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+
+    /* Page Headings, KPI Cards & Tables */
+    .dash-page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .dash-page-head h2 { margin: 0; font-size: 1.5rem; }
+    .dash-sub { margin: 3px 0 0; color: var(--text-muted); font-size: 0.88rem; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-sm);
+      border-top: 3px solid var(--crimson);
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .kpi-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .kpi-val {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--bg-obsidian);
+      line-height: 1.1;
+    }
+    .kpi-sub {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    .ew-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .ew-table th {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 2px solid var(--border-light);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .ew-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .ew-spinner {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 3px solid #EAE4D8;
+      border-top-color: var(--crimson);
+      animation: ewSpin 0.8s linear infinite;
+    }
+    @keyframes ewSpin { to { transform: rotate(360deg); } }
 
     /* Profile Card & Blue Tick */
     .profile-hero {
-      background: #FFFFFF;
+      background: linear-gradient(135deg, #FFFFFF 0%, #FAF5EC 100%);
       border: 1px solid var(--border-light);
       border-radius: 20px;
-      padding: 26px;
+      padding: 24px 26px;
       display: flex;
       justify-content: space-between;
       gap: 20px;
@@ -60,8 +163,8 @@
       box-shadow: var(--shadow-sm);
     }
     .profile-logo {
-      width: 104px;
-      height: 104px;
+      width: 98px;
+      height: 98px;
       border-radius: 18px;
       object-fit: cover;
       border: 1px solid var(--border-light);
@@ -113,6 +216,17 @@
       border-radius: 6px;
       letter-spacing: 0.05em;
     }
+    .verified-corner {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #0D7F44;
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 999px;
+    }
     .video-pill {
       position: absolute;
       bottom: 8px;
@@ -131,6 +245,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 4px;
       padding-top: 8px;
       margin-top: auto;
       border-top: 1px solid var(--border-light);
@@ -139,9 +254,9 @@
       border: 1px solid var(--border-light);
       background: var(--bg-ivory);
       border-radius: 8px;
-      padding: 5px 9px;
+      padding: 5px 8px;
       cursor: pointer;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
     }
     .icon-btn.active { background: var(--crimson-soft); border-color: var(--crimson); color: var(--crimson); }
@@ -149,7 +264,7 @@
     /* Split layout for Search, My Artists, View Applications */
     .split-2 {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 270px 1fr;
       gap: 20px;
       align-items: start;
     }
@@ -206,43 +321,48 @@
       transition: width 0.35s ease;
     }
 
-    @media (max-width: 1180px) {
+    @media (max-width: 1240px) {
+      .kpi-grid { grid-template-columns: repeat(3, 1fr) !important; }
       .artists-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 980px) {
       .dash-shell { grid-template-columns: 1fr; }
-      .dash-sidebar { position: static; order: -1; display: flex; flex-wrap: wrap; gap: 6px; }
+      .dash-sidebar { position: static; display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; }
+      .side-group-label { width: 100%; padding: 4px 6px 2px; }
       .side-link { width: auto; }
       .split-2 { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
       .artists-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
   <header class="ew-navbar">
-    <div class="container ew-navbar-inner" style="max-width:1380px;">
+    <div class="container ew-navbar-inner" style="max-width:1440px;">
       <a href="/" class="ew-brand">
         <div class="ew-brand-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#E5A93C"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <div>
           <div class="ew-brand-title">Entertainment World</div>
-          <div class="ew-brand-sub">Casting Recruiter Dashboard</div>
+          <div class="ew-brand-sub">Casting Company Workspace</div>
         </div>
       </a>
 
       <nav class="ew-nav-links">
+        <a href="#" onclick="switchSection('dashboard'); return false;">Overview</a>
         <a href="#" onclick="switchSection('projects'); return false;">Projects</a>
+        <a href="#" onclick="switchSection('auditions'); return false;">Auditions</a>
+        <a href="#" onclick="switchSection('selection'); return false;">Selection</a>
         <a href="#" onclick="switchSection('search'); return false;">Hire Artists</a>
-        <a href="#" onclick="switchSection('package'); return false;">Recruiter Packages</a>
-        <a href="#" onclick="switchSection('recommended'); return false;">Recommended</a>
-        <a href="#" onclick="switchSection('transactions'); return false;">Transactions</a>
+        <a href="#" onclick="switchSection('reports'); return false;">Reports</a>
       </nav>
 
       <div class="ew-nav-actions">
         <div class="notif-wrap">
-          <button type="button" onclick="toggleNotifications()" class="btn btn-outline-light btn-sm">
-            🔔 <span id="notif-badge" class="badge badge-showcase" style="padding:1px 6px;">0</span>
+          <button type="button" onclick="toggleNotifications()" class="btn btn-outline-light btn-sm" title="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span id="notif-badge" class="badge badge-showcase" style="padding:1px 6px;">0</span>
           </button>
           <div id="notif-panel" class="notif-panel"></div>
         </div>
@@ -253,30 +373,120 @@
   </header>
 
   <div class="dash-shell">
-    <main class="dash-main" id="dash-view">
-      <div class="card" style="padding:42px; text-align:center;">Loading Entertainment World Recruiter Dashboard...</div>
-    </main>
-
     <aside class="dash-sidebar">
-      <button class="side-link active" data-sec="dashboard" onclick="switchSection('dashboard')">🏠 Dashboard</button>
-      <button class="side-link" data-sec="post-project" onclick="switchSection('post-project')">➕ Post Project</button>
-      <button class="side-link" data-sec="projects" onclick="switchSection('projects')">
-        <span>💼 Projects</span><span class="badge badge-rejected" style="font-size:0.62rem;">New</span>
+      <div class="side-group-label">Casting Desk</div>
+      <button class="side-link active" data-sec="dashboard" onclick="switchSection('dashboard')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard Overview</span>
+        </span>
       </button>
-      <button class="side-link" data-sec="applications" onclick="switchSection('applications')">📥 View Applications</button>
-      <button class="side-link" data-sec="my-artists" onclick="switchSection('my-artists')">❤️ My Artists</button>
-      <button class="side-link" data-sec="search" onclick="switchSection('search')">🔎 Search Artists</button>
-      <button class="side-link" data-sec="recommended" onclick="switchSection('recommended')">👍 Recommended Artists</button>
-      <button class="side-link" data-sec="package" onclick="switchSection('package')">🎟️ Get Package</button>
-      <button class="side-link" data-sec="transactions" onclick="switchSection('transactions')">🧾 Transaction History</button>
+      <button class="side-link" data-sec="post-project" onclick="switchSection('post-project')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>Post Casting Call</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="projects" onclick="switchSection('projects')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          <span>Casting Projects</span>
+        </span>
+        <span id="side-badge-projects" class="badge badge-showcase" style="font-size:0.65rem; padding:2px 6px;">0</span>
+      </button>
+      <button class="side-link" data-sec="applications" onclick="switchSection('applications')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Applications</span>
+        </span>
+        <span id="side-badge-apps" class="badge badge-neutral" style="font-size:0.65rem; padding:2px 6px;">0</span>
+      </button>
+
+      <div class="side-group-label">Talent &amp; Auditions</div>
+      <button class="side-link" data-sec="auditions" onclick="switchSection('auditions')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          <span>Audition Management</span>
+        </span>
+        <span id="side-badge-auds" class="badge badge-neutral" style="font-size:0.65rem; padding:2px 6px;">0</span>
+      </button>
+      <button class="side-link" data-sec="selection" onclick="switchSection('selection')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
+          <span>Shortlist &amp; Selection</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="search" onclick="switchSection('search')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Actor Directory</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="my-artists" onclick="switchSection('my-artists')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>My Saved Artists</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="recommended" onclick="switchSection('recommended')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          <span>AI &amp; Recommended</span>
+        </span>
+      </button>
+
+      <div class="side-group-label">Operations &amp; Billing</div>
+      <button class="side-link" data-sec="messages" onclick="switchSection('messages')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Messages &amp; Invites</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="reports" onclick="switchSection('reports')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Reports &amp; Analytics</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="team" onclick="switchSection('team')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Casting Team</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="contracts" onclick="switchSection('contracts')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span>Contracts &amp; Expenses</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="package" onclick="switchSection('package')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/><polyline points="12 17 12 3"/><polyline points="7 8 12 3 17 8"/></svg>
+          <span>Get Package</span>
+        </span>
+      </button>
+      <button class="side-link" data-sec="transactions" onclick="switchSection('transactions')">
+        <span class="side-link-left">
+          <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16l4-2 4 2 4-2 4 2V8z"/></svg>
+          <span>Transaction History</span>
+        </span>
+      </button>
     </aside>
+
+    <main class="dash-main" id="dash-view">
+      <div class="card" style="padding:48px; text-align:center;">
+        <div class="ew-spinner" style="margin:0 auto 12px;"></div>
+        <div style="font-weight:700;">Loading Entertainment World Casting Dashboard...</div>
+      </div>
+    </main>
   </div>
 
-  <!-- Artist Portfolio / Audition / Contact Modal -->
+  <!-- Shared Modal: Artist Portfolio / Project Brief / Review / Audition -->
   <div id="artist-modal" class="modal-backdrop">
-    <div class="modal-box" style="max-width:740px;">
+    <div class="modal-box" style="max-width:780px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <h3 id="am-title">Artist Portfolio</h3>
+        <h3 id="am-title">Details</h3>
         <button type="button" onclick="closeArtistModal()" class="btn btn-outline-dark btn-sm">✕</button>
       </div>
       <div id="am-body"></div>
@@ -357,6 +567,7 @@
   </div>
 
   <script src="/js/ew-core.js"></script>
+  <script src="/js/ew-dashboard-ops.js"></script>
   <script src="/js/ew-dashboard.js"></script>
 </body>
 </html>
