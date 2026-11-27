@@ -17,8 +17,26 @@
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
-            <span class="ew-brand">ENTERTAINMENT WORLD</span>
+            <div class="ew-brand-lockup">
+                <span class="ew-brand-logo" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </span>
+                <div class="ew-brand-stack">
+                    <span class="ew-brand">Entertainment World</span>
+                    <span class="ew-brand-sub">SUPER ADMIN DASHBOARD</span>
+                </div>
+            </div>
         </div>
+
+        <nav class="ew-topbar-nav" aria-label="Admin quick navigation">
+            <button type="button" class="ew-topbar-link" data-goto-view="overview">Verifications</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="users">Users</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="plans">Revenue</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="complaints">Complaints</button>
+            <button type="button" class="ew-topbar-link" data-goto-view="announcements">Announcements</button>
+        </nav>
 
         <div class="ew-topbar-right">
             <button type="button" id="user-menu-btn" class="ew-avatar-btn" aria-label="Admin menu">
@@ -29,6 +47,8 @@
                 </span>
                 <span id="topbar-admin-name" class="ew-avatar-name">Super Admin</span>
             </button>
+
+            <button type="button" class="ew-topbar-signout" onclick="document.getElementById('signout-btn')?.click()">Sign Out</button>
 
             <div id="user-menu-popover" class="ew-popover" hidden>
                 <div class="ew-user-menu-head">
@@ -47,67 +67,42 @@
     <div class="ew-shell">
         <div id="ew-sidebar-backdrop" class="ew-sidebar-backdrop"></div>
 
-        <!-- Streamlined Super Admin Sidebar -->
-        <aside id="ew-sidebar" class="ew-sidebar" aria-label="Super Admin navigation">
-            <h2 class="ew-sidebar-title">SUPER ADMIN PANEL</h2>
-            <nav class="ew-nav">
-                <button type="button" class="ew-nav-item active" data-view="overview">
-                    <span>Dashboard Overview</span>
-                    <span id="pending-verif-badge" class="ew-nav-badge">0</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="users">
-                    <span>Users &amp; Partners</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="plans">
-                    <span>Plans &amp; Revenue</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="complaints">
-                    <span>Complaints &amp; Support</span>
-                    <span id="admin-complaints-badge" class="ew-nav-badge">0</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="announcements">
-                    <span>Announcements</span>
-                </button>
-                <button type="button" class="ew-nav-item" data-view="settings">
-                    <span>Settings &amp; Security</span>
-                </button>
-            </nav>
-
-            <div class="ew-sidebar-footer">
-                <span class="ew-category-pill">Super Admin</span>
-                <div>Core Platform Control</div>
-            </div>
-        </aside>
-
-        <!-- Main Workspace -->
+        <!-- Main Workspace (Left / Center Column) -->
         <main class="ew-main">
             <!-- 1. Dashboard Overview & Document Verification Queue -->
             <section class="ew-view active" data-view-panel="overview">
-                <div class="ew-page-header">
-                    <div>
-                        <h1>Dashboard Overview</h1>
-                        <p class="ew-page-subtitle">Live document verification queue &amp; key platform metrics</p>
-                    </div>
-                    <button type="button" id="refresh-verifications" class="ew-btn ew-btn-primary ew-btn-sm">Refresh Queue</button>
+                <div class="ew-pass-banner">
+                    <span class="ew-pass-pill">
+                        <span class="ew-plan-dot"></span>
+                        <span>Super Admin Governance • Active</span>
+                    </span>
+                    <span class="ew-pass-meta">Core Platform Control • Entertainment World</span>
                 </div>
 
-                <div class="ew-kpi-grid">
-                    <article class="ew-kpi-card">
-                        <div id="admin-kpi-pending" class="ew-kpi-value">0</div>
-                        <div class="ew-kpi-label">Pending Verifications</div>
-                    </article>
-                    <article class="ew-kpi-card">
-                        <div id="admin-kpi-approved" class="ew-kpi-value">0</div>
-                        <div class="ew-kpi-label">Approved Partners</div>
-                    </article>
-                    <article class="ew-kpi-card">
-                        <div class="ew-kpi-value">₹1.42L</div>
-                        <div class="ew-kpi-label">Monthly Revenue</div>
-                    </article>
-                    <article class="ew-kpi-card">
-                        <div id="admin-kpi-complaints" class="ew-kpi-value">0</div>
-                        <div class="ew-kpi-label">Open Complaints</div>
-                    </article>
+                <div class="ew-hero-card">
+                    <div class="ew-hero-left">
+                        <div class="ew-hero-avatar-box">
+                            <span class="ew-hero-avatar-fallback">SA</span>
+                        </div>
+                        <div class="ew-hero-info">
+                            <div class="ew-hero-title-row">
+                                <h1>Super Admin Control</h1>
+                                <span class="ew-verified-tick" title="Verified Administrator">✓</span>
+                                <span class="ew-verified-pill">System Governance</span>
+                            </div>
+                            <p class="ew-hero-sub">Live document verification queue &amp; platform operations</p>
+                            <div class="ew-hero-stats">
+                                <span><strong id="admin-kpi-pending">0</strong> Pending Verifications</span>
+                                <span><strong id="admin-kpi-approved">0</strong> Approved Partners</span>
+                                <span><strong>₹1.42L</strong> Monthly Revenue</span>
+                                <span><strong id="admin-kpi-complaints">0</strong> Open Complaints</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ew-hero-actions">
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-goto-view="settings">SETTINGS &amp; SECURITY</button>
+                        <button type="button" id="refresh-verifications" class="ew-btn ew-btn-primary ew-btn-sm">Refresh Queue</button>
+                    </div>
                 </div>
 
                 <section class="ew-section">
@@ -257,6 +252,66 @@
                 </div>
             </section>
         </main>
+
+        <!-- Right Floating Navigation Card (Matches Professional Dashboard) -->
+        <aside id="ew-sidebar" class="ew-sidebar" aria-label="Super Admin navigation">
+            <h2 class="ew-sidebar-title">SUPER ADMIN PANEL</h2>
+            <nav class="ew-nav">
+                <button type="button" class="ew-nav-item active" data-view="overview">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    </svg>
+                    <span>Dashboard Overview</span>
+                    <span id="pending-verif-badge" class="ew-nav-badge">0</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="users">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Users &amp; Partners</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="plans">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    <span>Plans &amp; Revenue</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="complaints">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Complaints &amp; Support</span>
+                    <span id="admin-complaints-badge" class="ew-nav-badge">0</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="announcements">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span>Announcements</span>
+                </button>
+                <button type="button" class="ew-nav-item" data-view="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Settings &amp; Security</span>
+                </button>
+            </nav>
+
+            <div class="ew-sidebar-footer">
+                <span class="ew-category-pill">Super Admin</span>
+                <div>Core Platform Control</div>
+            </div>
+        </aside>
     </div>
 
     <div id="ew-toast" class="ew-toast" hidden></div>

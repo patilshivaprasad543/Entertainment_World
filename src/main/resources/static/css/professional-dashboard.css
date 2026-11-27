@@ -1884,7 +1884,7 @@ body {
     border: 1px solid var(--ew-border);
     border-radius: 16px;
     padding: 24px;
-    width: min(500px, 94vw);
+    width: min(600px, 94vw);
     max-height: 86vh;
     overflow-y: auto;
     color: var(--ew-text);
@@ -1941,6 +1941,39 @@ body {
 .ew-person-modal-close:hover {
     background: #181a1f;
     color: #ffffff;
+}
+
+.ew-profile-videos-section {
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ew-border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ew-profile-videos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.ew-profile-videos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.ew-profile-videos-grid .ew-video-placeholder,
+.ew-profile-videos-grid .ew-video-player {
+    height: 120px;
+}
+
+@media (max-width: 560px) {
+    .ew-profile-videos-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Event & Brand Invitation Modules */

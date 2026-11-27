@@ -554,23 +554,37 @@
                 </div>
             </section>
 
-            <!-- 7. Search for Actors (Follow / Unfollow Categories) -->
+            <!-- 7. Search for Actors (Name-wise Directory & Filters) -->
             <section class="ew-view" data-view-panel="categories">
                 <div class="ew-page-header">
                     <div>
                         <h1>Search for Actors</h1>
-                        <p class="ew-page-subtitle">Follow or unfollow actor and industry categories to personalize your feed</p>
+                        <p class="ew-page-subtitle">Browse actors name-wise and filter by follow status, city, or plan tier</p>
                     </div>
-                    <span id="categories-following-summary" class="ew-meta-note">Following 3 categories</span>
+                    <span id="categories-following-summary" class="ew-meta-note">Following 2 actors</span>
                 </div>
                 <div class="ew-toolbar">
-                    <input id="category-search" class="ew-input ew-search-input" type="search" placeholder="Search categories (e.g., Actors, Directors, Editors)...">
+                    <input id="category-search" class="ew-input ew-search-input" type="search" placeholder="Search actors by name (e.g., Aarav, Diya, Kabir)...">
+                    <select id="actor-dir-city-filter" class="ew-select">
+                        <option value="all">All Cities</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi NCR">Delhi NCR</option>
+                        <option value="Bengaluru">Bengaluru</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                    </select>
+                    <select id="actor-dir-plan-filter" class="ew-select">
+                        <option value="all">All Plans</option>
+                        <option value="pro">Pro Elite (₹399)</option>
+                        <option value="premium">Premium (₹199)</option>
+                        <option value="free">Basic (Free)</option>
+                    </select>
                     <div class="ew-chip-row" style="margin-bottom: 0;">
                         <button type="button" class="ew-chip active" data-cat-filter="all">All</button>
                         <button type="button" class="ew-chip" data-cat-filter="following">Following</button>
                     </div>
                 </div>
-                <div id="categories-grid" class="ew-grid-3"></div>
+                <div id="categories-grid" class="ew-card-stack"></div>
             </section>
 
             <!-- 7. My Career -->

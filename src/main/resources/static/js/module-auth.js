@@ -293,6 +293,7 @@
     const tourPlayBtn = document.getElementById('tour-play-btn');
     const tourPrevBtn = document.getElementById('tour-prev-btn');
     const tourNextBtn = document.getElementById('tour-next-btn');
+    const tourSoundBtn = document.getElementById('tour-sound-btn');
     const tourFullscreenBtn = document.getElementById('tour-fullscreen-btn');
     const tourDemoBtn = document.getElementById('tour-try-demo');
 
@@ -302,6 +303,7 @@
             imageUrl: '/images/tour/tour-step1.jpg',
             title: 'Create Your Verified Talent Portfolio',
             subtitle: 'Register as Actor, Model, Singer, Dancer, Anchor, or Influencer. Upload headshots, showreels & audio clips.',
+            narration: 'Step one: Create your verified talent portfolio. Register as an actor, model, singer, dancer, anchor, or influencer, and upload your headshots, showreels, and audio clips.',
             cards: [
                 { label: 'Verified Profile', desc: 'Shareable digital resume' },
                 { label: '5–50 Showreels', desc: 'Video & monologue reels' },
@@ -313,6 +315,7 @@
             imageUrl: '/images/tour/tour-step2.jpg',
             title: 'Audition, Event & Brand Invitations',
             subtitle: 'Browse open casting calls and receive direct invitations for films, live events & brand campaigns.',
+            narration: 'Step two: Discover audition, event, and brand invitations. Browse open casting calls and receive direct invitations for films, live events, and brand campaigns.',
             cards: [
                 { label: 'Audition Invites', desc: 'In-person, Self-Tape, Live' },
                 { label: 'Event Invites', desc: 'Award nights & premieres' },
@@ -324,6 +327,7 @@
             imageUrl: '/images/tour/tour-step3.jpg',
             title: 'One-Click Apply & Online Auditions',
             subtitle: 'Submit self-tapes directly and track real-time status: Viewed, Shortlisted, or Audition Scheduled.',
+            narration: 'Step three: Apply in one click and track your status. Submit self-tapes directly and follow real-time updates from viewed to shortlisted or audition scheduled.',
             cards: [
                 { label: 'One-Click Apply', desc: 'Instant casting submission' },
                 { label: 'Live Status', desc: 'Viewed → Shortlisted' },
@@ -335,6 +339,7 @@
             imageUrl: '/images/tour/tour-step4.jpg',
             title: 'Mutual Network Chat & Career Tools',
             subtitle: 'Connect with casting directors & producers—chat unlocks after both ends approve. Plus AI Portfolio & Media Kit.',
+            narration: 'Step four: Connect with casting directors and producers in your mutual network. Direct chat unlocks after both sides approve, along with AI portfolio and media kit tools.',
             cards: [
                 { label: '2-Way Approval', desc: 'Mutual consent before chat' },
                 { label: 'Direct Chat', desc: 'Message verified recruiters' },
@@ -356,6 +361,42 @@
     let tourRafId = null;
     let lastFrameTs = 0;
     let streamAttached = false;
+    let tourSoundEnabled = true;
+    let lastSpokenChapter = -1;
+
+    function stopTourVoiceover() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+        lastSpokenChapter = -1;
+    }
+
+    function speakTourChapter(chIdx, force = false) {
+        if (!tourSoundEnabled || !tourPlaying) return;
+        if (!('speechSynthesis' in window)) return;
+        if (!force && chIdx === lastSpokenChapter) return;
+        const ch = TOUR_CHAPTERS[chIdx];
+        if (!ch || !ch.narration) return;
+
+        lastSpokenChapter = chIdx;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(ch.narration);
+        utterance.lang = 'en-US';
+        utterance.rate = 1.02;
+        utterance.pitch = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find((v) => /en[-_](IN|US|GB)/i.test(v.lang)) || voices.find((v) => /^en/i.test(v.lang));
+        if (preferred) utterance.voice = preferred;
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function updateSoundBtn() {
+        if (!tourSoundBtn) return;
+        tourSoundBtn.textContent = tourSoundEnabled ? 'Sound: On' : 'Sound: Off';
+        tourSoundBtn.setAttribute('aria-pressed', String(tourSoundEnabled));
+    }
 
     function drawRoundRect(ctx, x, y, w, h, r) {
         ctx.beginPath();
@@ -552,6 +593,12 @@
         }
         drawTourVideoFrame(ts);
         updateTourChrome();
+        if (tourPlaying) {
+            const chIdx = Math.min(TOUR_CHAPTERS.length - 1, Math.floor(tourGlobalTime / CHAPTER_DURATION));
+            if (chIdx !== lastSpokenChapter) {
+                speakTourChapter(chIdx);
+            }
+        }
         if (tourModal && !tourModal.hidden) {
             tourRafId = requestAnimationFrame(tickTourVideo);
         }
@@ -559,6 +606,7 @@
 
     function stopTourVideo() {
         tourPlaying = false;
+        stopTourVoiceover();
         if (tourRafId) {
             cancelAnimationFrame(tourRafId);
             tourRafId = null;
@@ -576,11 +624,14 @@
         tourGlobalTime = 0;
         tourPlaying = true;
         lastFrameTs = 0;
+        lastSpokenChapter = -1;
         tourModal.hidden = false;
         drawTourVideoFrame(0);
         attachVideoStream();
         if (tourVideo && tourVideo.paused) tourVideo.play().catch(() => {});
+        updateSoundBtn();
         updateTourChrome();
+        speakTourChapter(0, true);
         if (!tourRafId) tourRafId = requestAnimationFrame(tickTourVideo);
     });
 
@@ -595,7 +646,24 @@
             if (tourPlaying) tourVideo.play().catch(() => {});
             else tourVideo.pause();
         }
+        if (tourPlaying) {
+            const chIdx = Math.min(TOUR_CHAPTERS.length - 1, Math.floor(tourGlobalTime / CHAPTER_DURATION));
+            speakTourChapter(chIdx, true);
+        } else {
+            stopTourVoiceover();
+        }
         updateTourChrome();
+    });
+
+    tourSoundBtn?.addEventListener('click', () => {
+        tourSoundEnabled = !tourSoundEnabled;
+        updateSoundBtn();
+        if (tourSoundEnabled && tourPlaying) {
+            const chIdx = Math.min(TOUR_CHAPTERS.length - 1, Math.floor(tourGlobalTime / CHAPTER_DURATION));
+            speakTourChapter(chIdx, true);
+        } else {
+            stopTourVoiceover();
+        }
     });
 
     tourPrevBtn?.addEventListener('click', () => {
@@ -604,6 +672,7 @@
         tourGlobalTime = prevIdx * CHAPTER_DURATION;
         drawTourVideoFrame(performance.now());
         updateTourChrome();
+        speakTourChapter(prevIdx, true);
     });
 
     tourNextBtn?.addEventListener('click', () => {
@@ -612,14 +681,17 @@
         tourGlobalTime = nextIdx * CHAPTER_DURATION;
         drawTourVideoFrame(performance.now());
         updateTourChrome();
+        speakTourChapter(nextIdx, true);
     });
 
     tourProgressTrack?.addEventListener('click', (e) => {
         const rect = tourProgressTrack.getBoundingClientRect();
         const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
         tourGlobalTime = ratio * TOTAL_DURATION;
+        const chIdx = Math.min(TOUR_CHAPTERS.length - 1, Math.floor(tourGlobalTime / CHAPTER_DURATION));
         drawTourVideoFrame(performance.now());
         updateTourChrome();
+        speakTourChapter(chIdx, true);
     });
 
     tourFullscreenBtn?.addEventListener('click', () => {
@@ -634,6 +706,7 @@
         tourGlobalTime = idx * CHAPTER_DURATION;
         drawTourVideoFrame(performance.now());
         updateTourChrome();
+        speakTourChapter(idx, true);
     });
 
     tourDemoBtn?.addEventListener('click', () => {

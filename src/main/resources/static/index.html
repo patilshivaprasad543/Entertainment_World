@@ -6,50 +6,223 @@
     <title>Entertainment World — Select Login Module</title>
     <link rel="stylesheet" href="/css/auth.css">
 </head>
-<body>
-    <main class="portal-page">
-        <header class="brand-header">
-            <div class="brand-badge" aria-hidden="true">EW</div>
-            <h1>Entertainment World</h1>
-            <p class="brand-subtitle">Choose your portal module to sign in or register</p>
-        </header>
+<body class="ew-portal-home">
+    <header class="ew-home-topbar">
+        <div class="ew-home-topbar-inner">
+            <div class="pro-brand-lockup">
+                <span class="pro-brand-logo" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </span>
+                <div>
+                    <span class="pro-brand-name">Entertainment World</span>
+                    <span class="pro-brand-sub">FIND STARDOM. FIND STARS.</span>
+                </div>
+            </div>
 
-        <section class="module-grid" aria-label="Dashboard Login Modules">
-            <a class="module-card" href="/admin-login.html" style="--accent: #ef4444;">
-                <span class="module-tag">Predefined Login</span>
-                <h2>Admin</h2>
-                <p>Verify submitted documents, approve accounts, and oversee all portals.</p>
-                <span class="module-cta">Admin Login &rarr;</span>
-            </a>
+            <nav class="ew-home-nav" aria-label="Portal navigation">
+                <a href="#portal-modules" class="ew-home-nav-link">Portals</a>
+                <a href="#how-it-works" class="ew-home-nav-link">How It Works</a>
+                <a href="/admin-login.html" class="ew-home-nav-outline">Super Admin</a>
+                <a href="/actors-login.html" class="ew-home-nav-cta">Professionals Login</a>
+            </nav>
+        </div>
+    </header>
 
-            <a class="module-card" href="/actors-login.html" style="--accent: #ec4899;">
-                <span class="module-tag">Actor &bull; Actress &bull; Influencer</span>
-                <h2>Professionals</h2>
-                <p>Create your talent profile, upload photo, and manage auditions.</p>
-                <span class="module-cta">Professionals Login &rarr;</span>
-            </a>
+    <section class="ew-home-hero">
+        <div class="ew-home-hero-card">
+            <div class="ew-home-hero-bg" aria-hidden="true"></div>
+            <div class="ew-home-hero-grid">
+                <div class="ew-home-hero-content">
+                    <span class="pro-eyebrow">ENTERTAINMENT WORLD NETWORK</span>
+                    <h1>Step into your next <em>star</em> moment today.</h1>
+                    <p>An enterprise-grade workspace connecting verified actors, influencers, event organizers, brand sponsors, equipment vendors, and administrators.</p>
+                    <div class="ew-home-hero-actions">
+                        <a href="/actors-login.html" class="ew-home-btn-primary">Enter Professionals Portal</a>
+                        <a href="#portal-modules" class="ew-home-btn-ghost">Explore All Modules</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <a class="module-card" href="/vendors-login.html" style="--accent: #f59e0b;">
-                <span class="module-tag">Equipment &amp; Supply</span>
-                <h2>Vendors Management</h2>
-                <p>Manage equipment rentals, lighting, sound, and crew supply (Admin verification required).</p>
-                <span class="module-cta">Vendors Login &rarr;</span>
-            </a>
+    <main id="portal-modules" class="ew-home-modules-wrap">
+        <div class="ew-home-container">
+            <div class="ew-home-section-head">
+                <div>
+                    <span class="ew-home-kicker">UNIFIED PORTAL DIRECTORY</span>
+                    <h2>Choose your workspace module</h2>
+                </div>
+                <p>Select your role to sign in, register, or submit verification documents.</p>
+            </div>
 
-            <a class="module-card" href="/events-login.html" style="--accent: #06b6d4;">
-                <span class="module-tag">Shows &amp; Premieres</span>
-                <h2>Event Management</h2>
-                <p>Organize live shows, award nights, concerts, and premieres (Admin verification required).</p>
-                <span class="module-cta">Event Management Login &rarr;</span>
-            </a>
+            <section class="module-grid ew-home-grid" aria-label="Dashboard Login Modules">
+                <a class="module-card" href="/admin-login.html" style="--accent: #ef4444;">
+                    <div class="ew-card-top">
+                        <span class="ew-card-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </span>
+                        <span class="module-tag">Predefined Login</span>
+                    </div>
+                    <h2>Admin</h2>
+                    <p>Verify submitted documents, approve accounts, and oversee all portals.</p>
+                    <span class="module-cta">Admin Login &rarr;</span>
+                </a>
 
-            <a class="module-card" href="/brands-login.html" style="--accent: #10b981;">
-                <span class="module-tag">Marketing</span>
-                <h2>Brand Promotions</h2>
-                <p>Launch sponsorships and brand campaigns (Admin verification required).</p>
-                <span class="module-cta">Brand Login &rarr;</span>
-            </a>
-        </section>
+                <a class="module-card" href="/actors-login.html" style="--accent: #e11d48;">
+                    <div class="ew-card-top">
+                        <span class="ew-card-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </span>
+                        <span class="module-tag">Actor &bull; Actress &bull; Influencer</span>
+                    </div>
+                    <h2>Professionals</h2>
+                    <p>Create your talent profile, upload showreels, and manage auditions &amp; invites.</p>
+                    <span class="module-cta">Professionals Login &rarr;</span>
+                </a>
+
+                <a class="module-card" href="/vendors-login.html" style="--accent: #f59e0b;">
+                    <div class="ew-card-top">
+                        <span class="ew-card-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </span>
+                        <span class="module-tag">Equipment &amp; Supply</span>
+                    </div>
+                    <h2>Vendors Management</h2>
+                    <p>Manage equipment rentals, lighting, sound, and crew supply (Admin verification required).</p>
+                    <span class="module-cta">Vendors Login &rarr;</span>
+                </a>
+
+                <a class="module-card" href="/events-login.html" style="--accent: #06b6d4;">
+                    <div class="ew-card-top">
+                        <span class="ew-card-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </span>
+                        <span class="module-tag">Shows &amp; Premieres</span>
+                    </div>
+                    <h2>Event Management</h2>
+                    <p>Organize live shows, award nights, concerts, and premieres (Admin verification required).</p>
+                    <span class="module-cta">Event Management Login &rarr;</span>
+                </a>
+
+                <a class="module-card" href="/dashboards/casting.html" style="--accent: #6366f1;">
+                    <div class="ew-card-top">
+                        <span class="ew-card-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                        </span>
+                        <span class="module-tag">Studios</span>
+                    </div>
+                    <h2>Casting Productions</h2>
+                    <p>Publish casting calls, review auditions, and shortlist talent (Admin verification required).</p>
+                    <span class="module-cta">Casting Productions &rarr;</span>
+                </a>
+
+                <a class="module-card" href="/brands-login.html" style="--accent: #10b981;">
+                    <div class="ew-card-top">
+                        <span class="ew-card-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </span>
+                        <span class="module-tag">Marketing</span>
+                    </div>
+                    <h2>Brand Promotions</h2>
+                    <p>Launch sponsorships and brand campaigns (Admin verification required).</p>
+                    <span class="module-cta">Brand Login &rarr;</span>
+                </a>
+            </section>
+        </div>
     </main>
+
+    <section id="talent-directory" class="ew-home-talent-section">
+        <div class="ew-home-container">
+            <div class="ew-home-section-head">
+                <div>
+                    <span class="ew-home-kicker">CURATED TALENT DIRECTORY</span>
+                    <h2>Starting a project? Find artists</h2>
+                </div>
+                <a href="/actors-login.html" class="ew-home-dir-btn">Join as Talent &rarr;</a>
+            </div>
+
+            <div class="ew-talent-grid">
+                <a href="/actors-login.html" class="ew-talent-card">
+                    <div class="ew-talent-photo-wrap">
+                        <img src="/images/talent-actor.jpg" alt="Actor talent category" class="ew-talent-photo">
+                    </div>
+                    <div class="ew-talent-foot">
+                        <strong>Actor</strong>
+                        <span aria-hidden="true">&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/actors-login.html" class="ew-talent-card">
+                    <div class="ew-talent-photo-wrap">
+                        <img src="/images/talent-model.jpg" alt="Model talent category" class="ew-talent-photo">
+                    </div>
+                    <div class="ew-talent-foot">
+                        <strong>Model</strong>
+                        <span aria-hidden="true">&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/actors-login.html" class="ew-talent-card">
+                    <div class="ew-talent-photo-wrap">
+                        <img src="/images/talent-singer.jpg" alt="Singer talent category" class="ew-talent-photo">
+                    </div>
+                    <div class="ew-talent-foot">
+                        <strong>Singer</strong>
+                        <span aria-hidden="true">&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/actors-login.html" class="ew-talent-card">
+                    <div class="ew-talent-photo-wrap">
+                        <img src="/images/tour/tour-step4.jpg" alt="Influencer and Host category" class="ew-talent-photo">
+                    </div>
+                    <div class="ew-talent-foot">
+                        <strong>Host &amp; Influencer</strong>
+                        <span aria-hidden="true">&rarr;</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="ew-home-steps-section">
+        <div class="ew-home-container">
+            <span class="pro-eyebrow">THE FULL PICTURE</span>
+            <h2>How Entertainment World Works</h2>
+            <div class="ew-home-steps-grid">
+                <article class="ew-home-step-card">
+                    <span class="ew-step-num">01</span>
+                    <h3>Choose &amp; Register</h3>
+                    <p>Pick your portal—Professionals, Vendors, Event Management, Brands, or Admin—and submit your profile details.</p>
+                </article>
+                <article class="ew-home-step-card featured">
+                    <span class="ew-step-num">02</span>
+                    <h3>Admin Verification</h3>
+                    <p>Partner organizations upload KYC documents for Super Admin review, unlocking verified access across the platform.</p>
+                </article>
+                <article class="ew-home-step-card">
+                    <span class="ew-step-num">03</span>
+                    <h3>Connect &amp; Collaborate</h3>
+                    <p>Manage audition, event, and brand invitations, build mutually approved connections, and chat directly.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <footer class="ew-home-footer">
+        <div class="ew-home-footer-inner">
+            <span>&copy; 2026 Entertainment World &bull; Unified Talent, Event &amp; Brand Network</span>
+            <div class="ew-home-footer-links">
+                <a href="/actors-login.html">Professionals</a>
+                <a href="/dashboards/casting.html">Casting</a>
+                <a href="/events-login.html">Events</a>
+                <a href="/brands-login.html">Brands</a>
+                <a href="/vendors-login.html">Vendors</a>
+                <a href="/admin-login.html">Admin</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

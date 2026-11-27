@@ -129,12 +129,86 @@
         ],
         followedCategoryIds: ['cat-actors', 'cat-directors', 'cat-casting'],
         otherActors: [
-            { id: 'act-1', name: 'Aarav Mehta', category: 'Lead Actor • Web Series', city: 'Mumbai', planId: 'pro', credits: '14 Credits • Verified Showreel', following: true, photoUrl: makeActorAvatar('AM', '#1f2937', '#b45309') },
-            { id: 'act-2', name: 'Diya Sharma', category: 'Screen & Theatre Actor', city: 'Delhi NCR', planId: 'pro', credits: '11 Credits • Award Nominee', following: false, photoUrl: makeActorAvatar('DS', '#312e81', '#db2777') },
-            { id: 'act-3', name: 'Kabir Malhotra', category: 'Commercial & Voice Actor', city: 'Bengaluru', planId: 'premium', credits: '9 Credits • 4 Brand Shoots', following: false, photoUrl: makeActorAvatar('KM', '#0f766e', '#1d4ed8') },
-            { id: 'act-4', name: 'Neha Kulkarni', category: 'Character Actor & Host', city: 'Pune', planId: 'premium', credits: '7 Credits • Bilingual', following: true, photoUrl: makeActorAvatar('NK', '#7c2d12', '#d97706') },
-            { id: 'act-5', name: 'Rishi Verma', category: 'Indie Film Actor', city: 'Hyderabad', planId: 'free', credits: '3 Short Films', following: false, photoUrl: makeActorAvatar('RV', '#374151', '#059669') },
-            { id: 'act-6', name: 'Tara Singhania', category: 'Model & Screen Performer', city: 'Mumbai', planId: 'free', credits: '2 Music Videos', following: false, photoUrl: makeActorAvatar('TS', '#4c1d95', '#e11d48') }
+            {
+                id: 'act-1',
+                name: 'Aarav Mehta',
+                category: 'Lead Actor • Web Series',
+                city: 'Mumbai',
+                planId: 'pro',
+                credits: '14 Credits • Verified Showreel',
+                following: true,
+                photoUrl: makeActorAvatar('AM', '#1f2937', '#b45309'),
+                videos: [
+                    { id: 'act1-v1', title: 'Crime Thriller Showreel 2026', category: 'Showreel', fileName: 'aarav-thriller-reel.mp4', sizeLabel: '18.4 MB • 2:15', uploadedAt: '4 days ago' },
+                    { id: 'act1-v2', title: 'Hindi & English Monologue', category: 'Monologue', fileName: 'aarav-monologue.mp4', sizeLabel: '9.6 MB • 1:20', uploadedAt: '2 weeks ago' }
+                ]
+            },
+            {
+                id: 'act-2',
+                name: 'Diya Sharma',
+                category: 'Screen & Theatre Actor',
+                city: 'Delhi NCR',
+                planId: 'pro',
+                credits: '11 Credits • Award Nominee',
+                following: false,
+                photoUrl: makeActorAvatar('DS', '#312e81', '#db2777'),
+                videos: [
+                    { id: 'act2-v1', title: 'Stage & Screen Showreel', category: 'Showreel', fileName: 'diya-stage-screen.mp4', sizeLabel: '15.1 MB • 1:55', uploadedAt: '5 days ago' },
+                    { id: 'act2-v2', title: 'Period Drama Audition Clip', category: 'Audition Clip', fileName: 'diya-period-audition.mp4', sizeLabel: '11.2 MB • 1:35', uploadedAt: '3 weeks ago' }
+                ]
+            },
+            {
+                id: 'act-3',
+                name: 'Kabir Malhotra',
+                category: 'Commercial & Voice Actor',
+                city: 'Bengaluru',
+                planId: 'premium',
+                credits: '9 Credits • 4 Brand Shoots',
+                following: false,
+                photoUrl: makeActorAvatar('KM', '#0f766e', '#1d4ed8'),
+                videos: [
+                    { id: 'act3-v1', title: 'Brand Commercials Montage', category: 'Commercial', fileName: 'kabir-brand-montage.mp4', sizeLabel: '12.8 MB • 1:40', uploadedAt: '1 week ago' }
+                ]
+            },
+            {
+                id: 'act-4',
+                name: 'Neha Kulkarni',
+                category: 'Character Actor & Host',
+                city: 'Pune',
+                planId: 'premium',
+                credits: '7 Credits • Bilingual',
+                following: true,
+                photoUrl: makeActorAvatar('NK', '#7c2d12', '#d97706'),
+                videos: [
+                    { id: 'act4-v1', title: 'Bilingual Hosting & Acting Reel', category: 'Showreel', fileName: 'neha-bilingual-reel.mp4', sizeLabel: '13.5 MB • 1:50', uploadedAt: '6 days ago' }
+                ]
+            },
+            {
+                id: 'act-5',
+                name: 'Rishi Verma',
+                category: 'Indie Film Actor',
+                city: 'Hyderabad',
+                planId: 'free',
+                credits: '3 Short Films',
+                following: false,
+                photoUrl: makeActorAvatar('RV', '#374151', '#059669'),
+                videos: [
+                    { id: 'act5-v1', title: 'Indie Short Film Scene', category: 'Short Film', fileName: 'rishi-indie-scene.mp4', sizeLabel: '10.4 MB • 1:15', uploadedAt: '2 weeks ago' }
+                ]
+            },
+            {
+                id: 'act-6',
+                name: 'Tara Singhania',
+                category: 'Model & Screen Performer',
+                city: 'Mumbai',
+                planId: 'free',
+                credits: '2 Music Videos',
+                following: false,
+                photoUrl: makeActorAvatar('TS', '#4c1d95', '#e11d48'),
+                videos: [
+                    { id: 'act6-v1', title: 'Music Video Performance Cut', category: 'Music Video', fileName: 'tara-mv-cut.mp4', sizeLabel: '16.0 MB • 2:05', uploadedAt: '1 week ago' }
+                ]
+            }
         ],
         earningsText: '₹25K',
         applications: [
@@ -453,10 +527,48 @@
             }
         ],
         network: [
-            { id: 'net-1', name: 'Meera Nair', role: 'Casting Director • Mumbai', connected: true, status: 'mutual' },
-            { id: 'net-2', name: 'Rohan Kapoor', role: 'Executive Producer • RedFrame', connected: true, status: 'mutual' },
-            { id: 'net-3', name: 'Ananya Verma', role: 'Talent Manager • Starlight', connected: false, status: 'pending_incoming' },
-            { id: 'net-4', name: 'Vikram Sethi', role: 'Director of Photography', connected: false, status: 'not_connected' }
+            {
+                id: 'net-1',
+                name: 'Meera Nair',
+                role: 'Casting Director • Mumbai',
+                connected: true,
+                status: 'mutual',
+                videos: [
+                    { id: 'net1-v1', title: 'Casting Process & Audition Tips', category: 'Casting Brief', fileName: 'meera-audition-tips.mp4', sizeLabel: '14.8 MB • 2:10', uploadedAt: '3 days ago' },
+                    { id: 'net1-v2', title: 'Q1 Web Series Casting Call Intro', category: 'Project Reel', fileName: 'meera-q1-casting.mp4', sizeLabel: '8.9 MB • 1:05', uploadedAt: '1 week ago' }
+                ]
+            },
+            {
+                id: 'net-2',
+                name: 'Rohan Kapoor',
+                role: 'Executive Producer • RedFrame',
+                connected: true,
+                status: 'mutual',
+                videos: [
+                    { id: 'net2-v1', title: 'RedFrame Originals 2026 Slate', category: 'Production Reel', fileName: 'redframe-2026-slate.mp4', sizeLabel: '22.4 MB • 2:45', uploadedAt: '5 days ago' }
+                ]
+            },
+            {
+                id: 'net-3',
+                name: 'Ananya Verma',
+                role: 'Talent Manager • Starlight',
+                connected: false,
+                status: 'pending_incoming',
+                videos: [
+                    { id: 'net3-v1', title: 'Starlight Talent Showcase', category: 'Showcase', fileName: 'starlight-showcase.mp4', sizeLabel: '17.3 MB • 2:20', uploadedAt: '1 week ago' }
+                ]
+            },
+            {
+                id: 'net-4',
+                name: 'Vikram Sethi',
+                role: 'Director of Photography',
+                connected: false,
+                status: 'not_connected',
+                videos: [
+                    { id: 'net4-v1', title: 'Anamorphic Cinematography Reel', category: 'Showreel', fileName: 'vikram-dop-reel.mp4', sizeLabel: '26.1 MB • 3:00', uploadedAt: '4 days ago' },
+                    { id: 'net4-v2', title: 'Night Shoot Lighting Breakdown', category: 'Behind the Scenes', fileName: 'vikram-lighting-bts.mp4', sizeLabel: '11.5 MB • 1:30', uploadedAt: '2 weeks ago' }
+                ]
+            }
         ],
         networkChats: {
             'net-1': [
@@ -476,7 +588,11 @@
                 reasonLabel: 'Profession Match',
                 detail: 'Looking for Lead & Supporting Actors for upcoming OTT thriller.',
                 interests: 'Web Series, Indie Cinema',
-                added: false
+                added: false,
+                videos: [
+                    { id: 'tm1-v1', title: 'OTT Thriller Teaser Cut', category: 'Director Reel', fileName: 'siddharth-thriller-cut.mp4', sizeLabel: '19.2 MB • 2:15', uploadedAt: '2 days ago' },
+                    { id: 'tm1-v2', title: 'Indie Short Film Trailer', category: 'Trailer', fileName: 'siddharth-indie-trailer.mp4', sizeLabel: '12.0 MB • 1:25', uploadedAt: '2 weeks ago' }
+                ]
             },
             {
                 id: 'tm-2',
@@ -487,7 +603,11 @@
                 reasonLabel: 'Previous Friend',
                 detail: 'Worked together on Stage Play • 3 mutual friends (Meera Nair)',
                 interests: 'Theatre, Screen Acting',
-                added: false
+                added: false,
+                videos: [
+                    { id: 'tm2-v1', title: 'Dramatic Screen Showreel 2026', category: 'Showreel', fileName: 'priya-screen-reel.mp4', sizeLabel: '15.6 MB • 1:50', uploadedAt: '4 days ago' },
+                    { id: 'tm2-v2', title: 'Theatre Monologue Live', category: 'Monologue', fileName: 'priya-theatre-mono.mp4', sizeLabel: '10.1 MB • 1:18', uploadedAt: '3 weeks ago' }
+                ]
             },
             {
                 id: 'tm-3',
@@ -498,7 +618,10 @@
                 reasonLabel: 'Shared Interest',
                 detail: 'Shares your interest in Commercial Shoots & Short Films.',
                 interests: 'Commercial Shoots, Music Videos',
-                added: false
+                added: false,
+                videos: [
+                    { id: 'tm3-v1', title: 'Commercial & Music Video Reel', category: 'Showreel', fileName: 'arjun-dop-commercial.mp4', sizeLabel: '24.3 MB • 2:40', uploadedAt: '6 days ago' }
+                ]
             },
             {
                 id: 'tm-4',
@@ -509,7 +632,11 @@
                 reasonLabel: 'Profession Match',
                 detail: 'Showreel & trailer editor collaborating with actors.',
                 interests: 'Showreels, Web Series',
-                added: false
+                added: false,
+                videos: [
+                    { id: 'tm4-v1', title: 'Actor Showreel Editing Samples', category: 'Edit Reel', fileName: 'kavya-edit-samples.mp4', sizeLabel: '16.8 MB • 2:05', uploadedAt: '3 days ago' },
+                    { id: 'tm4-v2', title: 'Action Trailer Pacing Cut', category: 'Trailer', fileName: 'kavya-action-cut.mp4', sizeLabel: '13.4 MB • 1:35', uploadedAt: '1 week ago' }
+                ]
             },
             {
                 id: 'tm-5',
@@ -520,7 +647,10 @@
                 reasonLabel: 'Previous Friend',
                 detail: 'Co-crew on Brand Campaign • 2 mutual friends (Rohan Kapoor)',
                 interests: 'Brand Collabs, Web Series',
-                added: false
+                added: false,
+                videos: [
+                    { id: 'tm5-v1', title: 'Brand Campaign Highlights 2026', category: 'Campaign Reel', fileName: 'devansh-brand-reel.mp4', sizeLabel: '14.0 MB • 1:45', uploadedAt: '5 days ago' }
+                ]
             },
             {
                 id: 'tm-6',
@@ -531,7 +661,10 @@
                 reasonLabel: 'Shared Interest',
                 detail: 'Shares your interest in Dubbing, Theatre & Storytelling.',
                 interests: 'Theatre, Voiceover, Indie Cinema',
-                added: false
+                added: false,
+                videos: [
+                    { id: 'tm6-v1', title: 'Animation & Dubbing Voice Reel', category: 'Voice & Video', fileName: 'zoya-dubbing-reel.mp4', sizeLabel: '9.8 MB • 1:30', uploadedAt: '1 week ago' }
+                ]
             }
         ],
         notifications: [
@@ -1724,47 +1857,67 @@
     }
 
     function renderCategories() {
+        const followingCount = state.otherActors.filter((a) => a.following).length;
         const navBadge = document.getElementById('categories-nav-badge');
-        if (navBadge) navBadge.textContent = String(state.followedCategoryIds.length);
-
-        const summary = document.getElementById('categories-following-summary');
-        if (summary) {
-            const count = state.followedCategoryIds.length;
-            summary.textContent = `Following ${count} ${count === 1 ? 'category' : 'categories'}`;
-        }
+        if (navBadge) navBadge.textContent = String(followingCount);
 
         const container = document.getElementById('categories-grid');
         if (!container) return;
 
         const query = (document.getElementById('category-search')?.value || '').trim().toLowerCase();
-        const filtered = state.categories.filter((cat) => {
-            const isFollowing = state.followedCategoryIds.includes(cat.id);
-            const matchesMode = categoryFilterMode === 'all' || isFollowing;
-            const matchesQuery = !query ||
-                cat.name.toLowerCase().includes(query) ||
-                cat.description.toLowerCase().includes(query);
-            return matchesMode && matchesQuery;
-        });
+        const cityFilter = document.getElementById('actor-dir-city-filter')?.value || 'all';
+        const planFilter = document.getElementById('actor-dir-plan-filter')?.value || 'all';
+
+        const filtered = state.otherActors
+            .filter((actor) => {
+                const matchesMode = categoryFilterMode === 'all' || actor.following;
+                const matchesCity = cityFilter === 'all' || actor.city === cityFilter;
+                const matchesPlan = planFilter === 'all' || actor.planId === planFilter;
+                const matchesQuery = !query ||
+                    actor.name.toLowerCase().includes(query) ||
+                    actor.category.toLowerCase().includes(query) ||
+                    actor.city.toLowerCase().includes(query) ||
+                    actor.credits.toLowerCase().includes(query);
+                return matchesMode && matchesCity && matchesPlan && matchesQuery;
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        const summary = document.getElementById('categories-following-summary');
+        if (summary) {
+            summary.textContent = `${filtered.length} ${filtered.length === 1 ? 'actor' : 'actors'} • ${followingCount} Following`;
+        }
 
         if (filtered.length === 0) {
-            container.innerHTML = `<div class="ew-panel"><p>No categories match your current filter.</p></div>`;
+            container.innerHTML = `<div class="ew-panel"><p>No actors match your current name search or filter.</p></div>`;
             return;
         }
 
-        container.innerHTML = filtered.map((cat) => {
-            const isFollowing = state.followedCategoryIds.includes(cat.id);
-            const displayCount = cat.followers + (isFollowing ? 1 : 0);
+        const planLabels = {
+            free: 'Basic (Free)',
+            premium: 'Premium (₹199)',
+            pro: 'Pro Elite (₹399)'
+        };
+
+        container.innerHTML = filtered.map((actor) => {
+            const fallbackActor = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
+            const photoSrc = actor.photoUrl || (fallbackActor ? fallbackActor.photoUrl : '');
             return `
-                <article class="ew-category-card ew-card-clickable ${isFollowing ? 'following' : ''}" data-open-profile="category:${escapeHtml(cat.id)}">
-                    <div>
-                        <h3>${escapeHtml(cat.name)}</h3>
-                        <p>${escapeHtml(cat.description)}</p>
+                <article class="ew-actor-card ew-card-clickable" data-open-profile="actor:${escapeHtml(actor.id)}">
+                    <div class="ew-actor-left">
+                        <img class="ew-actor-avatar ew-photo-clickable" src="${escapeHtml(photoSrc)}" alt="${escapeHtml(actor.name)}" title="Click to enlarge">
+                        <div>
+                            <h3>
+                                ${escapeHtml(actor.name)}
+                                <span class="ew-plan-badge-inline ${escapeHtml(actor.planId)}">${escapeHtml(planLabels[actor.planId] || actor.planId)}</span>
+                            </h3>
+                            <div class="ew-app-meta">${escapeHtml(actor.category)} • ${escapeHtml(actor.city)} • ${escapeHtml(actor.credits)}</div>
+                        </div>
                     </div>
-                    <div class="ew-category-foot">
-                        <span class="ew-app-meta">${displayCount.toLocaleString('en-IN')} followers</span>
-                        <button type="button" class="ew-btn ${isFollowing ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-toggle-follow-category="${escapeHtml(cat.id)}">
-                            ${isFollowing ? 'Following (Unfollow)' : 'Follow'}
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="ew-btn ${actor.following ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-toggle-follow-actor="${escapeHtml(actor.id)}">
+                            ${actor.following ? 'Following' : 'Follow'}
                         </button>
+                        <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="actor:${escapeHtml(actor.id)}">View Profile</button>
                     </div>
                 </article>
             `;
@@ -2044,6 +2197,7 @@
             if (actor) {
                 actor.following = !actor.following;
                 saveState();
+                renderCategories();
                 renderActorSearch();
                 showToast(actor.following ? `Following ${actor.name}` : `Unfollowed ${actor.name}`);
             }
@@ -2137,7 +2291,8 @@
                     name: tm.name,
                     role: `${tm.profession} • ${tm.city}`,
                     connected: false,
-                    status: 'pending_outgoing'
+                    status: 'pending_outgoing',
+                    videos: structuredClone(tm.videos || [])
                 });
                 saveState();
                 renderNetwork();
@@ -2199,6 +2354,8 @@
     document.getElementById('brand-inv-search')?.addEventListener('input', renderBrandInvitations);
     document.getElementById('brand-inv-format')?.addEventListener('change', renderBrandInvitations);
     document.getElementById('category-search')?.addEventListener('input', renderCategories);
+    document.getElementById('actor-dir-city-filter')?.addEventListener('change', renderCategories);
+    document.getElementById('actor-dir-plan-filter')?.addEventListener('change', renderCategories);
     document.getElementById('actor-search-input')?.addEventListener('input', renderActorSearch);
     document.getElementById('actor-plan-filter')?.addEventListener('change', renderActorSearch);
     document.getElementById('teammate-profession-filter')?.addEventListener('change', renderTeammateSuggestions);
@@ -2376,6 +2533,53 @@
         if (personModal) personModal.hidden = true;
     }
 
+    function renderProfileVideosSection(videos) {
+        const list = Array.isArray(videos) ? videos : [];
+        if (list.length === 0) {
+            return `
+                <div class="ew-profile-videos-section">
+                    <div class="ew-profile-videos-header">
+                        <strong>Uploaded Videos</strong>
+                        <span class="ew-app-meta">0 Videos</span>
+                    </div>
+                    <p class="ew-app-meta" style="margin: 0;">No videos uploaded by this profile yet.</p>
+                </div>
+            `;
+        }
+
+        const cardsHtml = list.map((vid) => {
+            const mediaHtml = vid.videoUrl
+                ? `<video class="ew-video-player" src="${escapeHtml(vid.videoUrl)}" controls preload="metadata"></video>`
+                : `<div class="ew-video-placeholder">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                        <strong>${escapeHtml(vid.fileName)}</strong>
+                        <span>${escapeHtml(vid.sizeLabel || '')}</span>
+                   </div>`;
+
+            return `
+                <article class="ew-video-card">
+                    ${mediaHtml}
+                    <div class="ew-video-body">
+                        <div>
+                            <h4>${escapeHtml(vid.title)}</h4>
+                            <div class="ew-app-meta">${escapeHtml(vid.category)} • ${escapeHtml(vid.uploadedAt)}</div>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        return `
+            <div class="ew-profile-videos-section">
+                <div class="ew-profile-videos-header">
+                    <strong>Uploaded Videos</strong>
+                    <span class="ew-app-meta">${list.length} ${list.length === 1 ? 'Video' : 'Videos'}</span>
+                </div>
+                <div class="ew-profile-videos-grid">${cardsHtml}</div>
+            </div>
+        `;
+    }
+
     function openPersonModal(ref) {
         if (!personModal || !ref) return;
         const [kind, id] = ref.split(':');
@@ -2387,6 +2591,9 @@
         if (kind === 'network') {
             const p = state.network.find((x) => x.id === id);
             if (!p) return;
+            const fallback = DEFAULT_STATE.network.find((n) => n.id === p.id || n.name === p.name)
+                || DEFAULT_STATE.teammateSuggestions.find((t) => t.name === p.name);
+            const videos = Array.isArray(p.videos) && p.videos.length ? p.videos : (fallback?.videos || []);
             const initials = p.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
             title = p.name;
             subtitle = p.role;
@@ -2395,10 +2602,13 @@
                 <div><strong>Connection Status:</strong> ${p.connected ? 'Connected' : 'Not Connected'}</div>
                 <div><strong>Collaboration Focus:</strong> Casting calls, production coordination, and talent referrals.</div>
                 <div><strong>Location &amp; Availability:</strong> Active on Entertainment World • Open to project inquiries.</div>
+                ${renderProfileVideosSection(videos)}
             `;
         } else if (kind === 'teammate') {
             const tm = state.teammateSuggestions.find((x) => x.id === id);
             if (!tm) return;
+            const fallback = DEFAULT_STATE.teammateSuggestions.find((t) => t.id === tm.id);
+            const videos = Array.isArray(tm.videos) && tm.videos.length ? tm.videos : (fallback?.videos || []);
             const initials = tm.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
             title = tm.name;
             subtitle = `${tm.profession} • ${tm.city}`;
@@ -2408,11 +2618,13 @@
                 <div><strong>Profile Summary:</strong> ${escapeHtml(tm.detail)}</div>
                 <div><strong>Shared Interests:</strong> ${escapeHtml(tm.interests)}</div>
                 <div><strong>Network Status:</strong> ${tm.added ? 'Added to Your Connections' : 'Suggested Teammate'}</div>
+                ${renderProfileVideosSection(videos)}
             `;
         } else if (kind === 'actor') {
             const actor = state.otherActors.find((x) => x.id === id);
             if (!actor) return;
             const fallback = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
+            const videos = Array.isArray(actor.videos) && actor.videos.length ? actor.videos : (fallback?.videos || []);
             title = actor.name;
             subtitle = `${actor.category} • ${actor.city}`;
             avatar = actor.photoUrl || (fallback ? fallback.photoUrl : '');
@@ -2421,6 +2633,7 @@
                 <div><strong>Credits &amp; Portfolio:</strong> ${escapeHtml(actor.credits)}</div>
                 <div><strong>City:</strong> ${escapeHtml(actor.city)}</div>
                 <div><strong>Follow Status:</strong> ${actor.following ? 'Following' : 'Not Following'}</div>
+                ${renderProfileVideosSection(videos)}
             `;
         } else if (kind === 'category') {
             const cat = state.categories.find((c) => c.id === id);
