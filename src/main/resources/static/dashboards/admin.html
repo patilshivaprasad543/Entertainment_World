@@ -146,30 +146,65 @@
                 <div class="ew-page-header">
                     <div>
                         <h1>Plans &amp; Revenue</h1>
-                        <p class="ew-page-subtitle">Subscription tiers and recent payment settlements</p>
+                        <p class="ew-page-subtitle">Subscription plans, revenue across all login portals, and complete payment history</p>
                     </div>
+                    <span id="admin-total-revenue-pill" class="ew-meta-note">₹4,75,200 / month</span>
                 </div>
-                <div class="ew-plans-grid">
-                    <article class="ew-panel">
-                        <h3>Basic Plan (Free)</h3>
-                        <p><strong>412</strong> active professionals • ₹0 / month</p>
-                        <span class="ew-badge closed">Active Tier</span>
-                    </article>
-                    <article class="ew-panel">
-                        <h3>Premium Plan (₹199/mo)</h3>
-                        <p><strong>284</strong> active professionals • ₹56,516 / month</p>
-                        <span class="ew-badge review">Most Popular</span>
-                    </article>
-                    <article class="ew-panel">
-                        <h3>Pro Plan (₹399/mo)</h3>
-                        <p><strong>216</strong> active professionals • ₹86,184 / month</p>
-                        <span class="ew-badge shortlisted">Top Revenue</span>
-                    </article>
+
+                <div id="admin-revenue-summary" class="ew-inv-summary-strip"></div>
+
+                <div class="ew-section" style="margin-top: 20px;">
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">All Login Portals — Plans &amp; Revenue</h2>
+                        <span class="ew-app-meta">5 Active Portals</span>
+                    </div>
+                    <div id="admin-portal-revenue-grid" class="ew-plans-grid"></div>
                 </div>
 
                 <div class="ew-section" style="margin-top: 24px;">
-                    <h2 class="ew-section-title">Recent Settlements</h2>
-                    <div id="admin-payments-list" class="ew-card-stack"></div>
+                    <div class="ew-section-head">
+                        <h2 class="ew-section-title">Payment History &amp; Settlements</h2>
+                        <span id="admin-payments-count" class="ew-app-meta"></span>
+                    </div>
+                    <div class="ew-toolbar">
+                        <input id="admin-payment-search" class="ew-input ew-search-input" type="search" placeholder="Search by subscriber name, organization, or invoice...">
+                        <select id="admin-payment-portal-filter" class="ew-select">
+                            <option value="ALL">All Portals</option>
+                            <option value="Professionals">Professionals</option>
+                            <option value="Casting">Casting</option>
+                            <option value="Events">Events</option>
+                            <option value="Brands">Brands</option>
+                            <option value="Vendors">Vendors</option>
+                        </select>
+                        <select id="admin-payment-plan-filter" class="ew-select">
+                            <option value="ALL">All Plans</option>
+                            <option value="Pro">Pro / Enterprise</option>
+                            <option value="Premium">Premium / Growth</option>
+                            <option value="Standard">Standard / Verified</option>
+                        </select>
+                        <select id="admin-payment-status-filter" class="ew-select">
+                            <option value="ALL">All Statuses</option>
+                            <option value="Settled">Settled</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                    </div>
+                    <div class="ew-table-wrap">
+                        <table class="ew-compare-table">
+                            <thead>
+                                <tr>
+                                    <th>Subscriber / Organization</th>
+                                    <th>Portal</th>
+                                    <th>Plan</th>
+                                    <th>Amount</th>
+                                    <th>Date &amp; Invoice</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-payments-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 

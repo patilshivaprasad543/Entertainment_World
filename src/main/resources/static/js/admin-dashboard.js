@@ -13,10 +13,69 @@
             { id: 'u-4', name: 'Nova Brand House', email: 'brand@entertainmentworld.com', role: 'BRAND', active: true },
             { id: 'u-5', name: 'Starlight Events', email: 'events@entertainmentworld.com', role: 'EVENT_MANAGEMENT', active: true }
         ],
+        portalPlans: [
+            {
+                id: 'pp-actors',
+                portal: 'Professionals (Actors & Talent)',
+                tiers: 'Basic Free • Premium ₹199 • Pro ₹399',
+                subscribers: 912,
+                paidSubscribers: 500,
+                monthlyRevenue: 142700,
+                badge: 'Top Volume',
+                badgeClass: 'shortlisted'
+            },
+            {
+                id: 'pp-casting',
+                portal: 'Casting Productions',
+                tiers: 'Starter Free • Studio Pro ₹1,499 • Enterprise ₹3,999',
+                subscribers: 48,
+                paidSubscribers: 42,
+                monthlyRevenue: 98400,
+                badge: 'High ARPU',
+                badgeClass: 'review'
+            },
+            {
+                id: 'pp-brands',
+                portal: 'Brand Promotions',
+                tiers: 'Brand Growth ₹2,499 • Enterprise ₹5,999',
+                subscribers: 26,
+                paidSubscribers: 26,
+                monthlyRevenue: 89200,
+                badge: '100% Paid',
+                badgeClass: 'shortlisted'
+            },
+            {
+                id: 'pp-events',
+                portal: 'Event Management',
+                tiers: 'Standard ₹999 • Premier ₹1,999 • Festival Pro ₹4,999',
+                subscribers: 34,
+                paidSubscribers: 29,
+                monthlyRevenue: 76500,
+                badge: 'Active',
+                badgeClass: 'audition'
+            },
+            {
+                id: 'pp-vendors',
+                portal: 'Vendors Management',
+                tiers: 'Supplier Basic • Verified ₹999 • Fleet Pro ₹2,499',
+                subscribers: 62,
+                paidSubscribers: 44,
+                monthlyRevenue: 68400,
+                badge: 'Growing',
+                badgeClass: 'review'
+            }
+        ],
         payments: [
-            { id: 'pay-1', title: 'Pro Plan Settlement (#INV-9021)', meta: '216 Subscribers • ₹86,184', status: 'Settled', badge: 'shortlisted' },
-            { id: 'pay-2', title: 'Premium Plan Settlement (#INV-9020)', meta: '284 Subscribers • ₹56,516', status: 'Settled', badge: 'shortlisted' },
-            { id: 'pay-3', title: 'Vendor Escrow Payout — Starlight Events', meta: '₹45,000 • Milestone 1', status: 'Pending', badge: 'review' }
+            { id: 'pay-1', subscriberName: 'Aarav Mehta', email: 'aarav.mehta@talent.in', portal: 'Professionals', plan: 'Pro Elite (₹399)', planTier: 'Pro', amount: 399, date: '27 Nov 2026', method: 'UPI', invoice: '#INV-9028', status: 'Paid', badge: 'shortlisted' },
+            { id: 'pay-2', subscriberName: 'Apex Casting Studio', email: 'casting@entertainmentworld.com', portal: 'Casting', plan: 'Enterprise (₹3,999)', planTier: 'Pro', amount: 3999, date: '26 Nov 2026', method: 'Corporate Card', invoice: '#INV-9027', status: 'Settled', badge: 'shortlisted' },
+            { id: 'pay-3', subscriberName: 'Nova Brand House', email: 'brand@entertainmentworld.com', portal: 'Brands', plan: 'Enterprise (₹5,999)', planTier: 'Pro', amount: 5999, date: '25 Nov 2026', method: 'NetBanking', invoice: '#INV-9026', status: 'Settled', badge: 'shortlisted' },
+            { id: 'pay-4', subscriberName: 'Starlight Events', email: 'events@entertainmentworld.com', portal: 'Events', plan: 'Festival Pro (₹4,999)', planTier: 'Pro', amount: 4999, date: '24 Nov 2026', method: 'NEFT', invoice: '#INV-9025', status: 'Pending', badge: 'review' },
+            { id: 'pay-5', subscriberName: 'Prime Stage Vendors', email: 'vendor@entertainmentworld.com', portal: 'Vendors', plan: 'Fleet Pro (₹2,499)', planTier: 'Pro', amount: 2499, date: '23 Nov 2026', method: 'UPI', invoice: '#INV-9024', status: 'Settled', badge: 'shortlisted' },
+            { id: 'pay-6', subscriberName: 'Diya Sharma', email: 'diya.sharma@talent.in', portal: 'Professionals', plan: 'Premium (₹199)', planTier: 'Premium', amount: 199, date: '22 Nov 2026', method: 'Card', invoice: '#INV-9023', status: 'Paid', badge: 'shortlisted' },
+            { id: 'pay-7', subscriberName: 'RedFrame Originals', email: 'studio@redframe.in', portal: 'Casting', plan: 'Studio Pro (₹1,499)', planTier: 'Premium', amount: 1499, date: '21 Nov 2026', method: 'UPI', invoice: '#INV-9022', status: 'Settled', badge: 'shortlisted' },
+            { id: 'pay-8', subscriberName: 'Veloce Audio Campaigns', email: 'ads@veloceaudio.in', portal: 'Brands', plan: 'Brand Growth (₹2,499)', planTier: 'Premium', amount: 2499, date: '20 Nov 2026', method: 'Card', invoice: '#INV-9021', status: 'Pending', badge: 'review' },
+            { id: 'pay-9', subscriberName: 'CineLight Rentals', email: 'ops@cinelight.in', portal: 'Vendors', plan: 'Verified Vendor (₹999)', planTier: 'Standard', amount: 999, date: '19 Nov 2026', method: 'UPI', invoice: '#INV-9020', status: 'Failed', badge: 'closed' },
+            { id: 'pay-10', subscriberName: 'Encore Live Shows', email: 'billing@encorelive.in', portal: 'Events', plan: 'Event Standard (₹999)', planTier: 'Standard', amount: 999, date: '18 Nov 2026', method: 'Card', invoice: '#INV-9019', status: 'Paid', badge: 'shortlisted' }
         ],
         broadcasts: [
             { id: 'bc-1', title: 'New 3-Tier Professional Plans Live', audience: 'Professionals (Actors)', message: 'Basic Free, Premium ₹199, and Pro ₹399 plans are now active.', time: 'Yesterday' }
@@ -30,7 +89,16 @@
         try {
             const raw = localStorage.getItem(ADMIN_STORAGE_KEY);
             if (!raw) return structuredClone(DEFAULT_ADMIN_STATE);
-            return { ...structuredClone(DEFAULT_ADMIN_STATE), ...JSON.parse(raw) };
+            const parsed = JSON.parse(raw);
+            const hasRichPayments = Array.isArray(parsed.payments) && parsed.payments.length && parsed.payments[0].subscriberName;
+            return {
+                ...structuredClone(DEFAULT_ADMIN_STATE),
+                ...parsed,
+                portalPlans: Array.isArray(parsed.portalPlans) && parsed.portalPlans.length
+                    ? parsed.portalPlans
+                    : structuredClone(DEFAULT_ADMIN_STATE.portalPlans),
+                payments: hasRichPayments ? parsed.payments : structuredClone(DEFAULT_ADMIN_STATE.payments)
+            };
         } catch {
             return structuredClone(DEFAULT_ADMIN_STATE);
         }
@@ -224,16 +292,101 @@
     }
 
     function renderPayments() {
-        const container = document.getElementById('admin-payments-list');
-        if (!container) return;
-        container.innerHTML = adminState.payments.map((item) => `
-            <article class="ew-app-card">
-                <div class="ew-app-info">
-                    <h3>${escapeHtml(item.title)}</h3>
-                    <div class="ew-app-meta">${escapeHtml(item.meta)}</div>
+        const portalPlans = Array.isArray(adminState.portalPlans) ? adminState.portalPlans : DEFAULT_ADMIN_STATE.portalPlans;
+        const totalRevenue = portalPlans.reduce((sum, p) => sum + (p.monthlyRevenue || 0), 0);
+        const totalPaidSubs = portalPlans.reduce((sum, p) => sum + (p.paidSubscribers || 0), 0);
+
+        const totalPill = document.getElementById('admin-total-revenue-pill');
+        if (totalPill) {
+            totalPill.textContent = `₹${totalRevenue.toLocaleString('en-IN')} / month`;
+        }
+
+        const payments = Array.isArray(adminState.payments) ? adminState.payments : [];
+        const settledTotal = payments
+            .filter((p) => p.status === 'Settled' || p.status === 'Paid')
+            .reduce((sum, p) => sum + (p.amount || 0), 0);
+        const pendingTotal = payments
+            .filter((p) => p.status === 'Pending')
+            .reduce((sum, p) => sum + (p.amount || 0), 0);
+
+        const summaryStrip = document.getElementById('admin-revenue-summary');
+        if (summaryStrip) {
+            summaryStrip.innerHTML = `
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">₹${totalRevenue.toLocaleString('en-IN')}</div>
+                    <div class="ew-inv-stat-label">Monthly Portal Revenue</div>
                 </div>
-                <span class="ew-badge ${escapeHtml(item.badge)}">${escapeHtml(item.status)}</span>
-            </article>
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">${totalPaidSubs.toLocaleString('en-IN')}</div>
+                    <div class="ew-inv-stat-label">Paid Subscribers</div>
+                </div>
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">₹${settledTotal.toLocaleString('en-IN')}</div>
+                    <div class="ew-inv-stat-label">Settled &amp; Paid</div>
+                </div>
+                <div class="ew-inv-stat">
+                    <div class="ew-inv-stat-val">₹${pendingTotal.toLocaleString('en-IN')}</div>
+                    <div class="ew-inv-stat-label">Pending Clearance</div>
+                </div>
+            `;
+        }
+
+        const portalGrid = document.getElementById('admin-portal-revenue-grid');
+        if (portalGrid) {
+            portalGrid.innerHTML = portalPlans.map((p) => `
+                <article class="ew-panel">
+                    <div class="ew-section-head" style="margin-bottom: 6px;">
+                        <h3 style="margin: 0;">${escapeHtml(p.portal)}</h3>
+                        <span class="ew-badge ${escapeHtml(p.badgeClass)}">${escapeHtml(p.badge)}</span>
+                    </div>
+                    <p style="margin: 0 0 8px; font-size: 0.84rem; color: var(--ew-text-secondary);">${escapeHtml(p.tiers)}</p>
+                    <p style="margin: 0;"><strong>${p.subscribers.toLocaleString('en-IN')}</strong> total (${p.paidSubscribers.toLocaleString('en-IN')} paid) • <strong>₹${p.monthlyRevenue.toLocaleString('en-IN')}</strong> / mo</p>
+                </article>
+            `).join('');
+        }
+
+        const tbody = document.getElementById('admin-payments-tbody');
+        const countEl = document.getElementById('admin-payments-count');
+        if (!tbody) return;
+
+        const query = (document.getElementById('admin-payment-search')?.value || '').trim().toLowerCase();
+        const portalFilter = document.getElementById('admin-payment-portal-filter')?.value || 'ALL';
+        const planFilter = document.getElementById('admin-payment-plan-filter')?.value || 'ALL';
+        const statusFilter = document.getElementById('admin-payment-status-filter')?.value || 'ALL';
+
+        const filtered = payments.filter((item) => {
+            const matchesPortal = portalFilter === 'ALL' || item.portal === portalFilter;
+            const matchesPlan = planFilter === 'ALL' || item.planTier === planFilter;
+            const matchesStatus = statusFilter === 'ALL' || item.status === statusFilter;
+            const matchesQuery = !query ||
+                (item.subscriberName || '').toLowerCase().includes(query) ||
+                (item.email || '').toLowerCase().includes(query) ||
+                (item.invoice || '').toLowerCase().includes(query) ||
+                (item.plan || '').toLowerCase().includes(query);
+            return matchesPortal && matchesPlan && matchesStatus && matchesQuery;
+        });
+
+        if (countEl) {
+            countEl.textContent = `${filtered.length} of ${payments.length} transactions`;
+        }
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 18px;">No payment records match your search or filters.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map((item) => `
+            <tr>
+                <td>
+                    <strong>${escapeHtml(item.subscriberName)}</strong>
+                    <div class="ew-app-meta">${escapeHtml(item.email)}</div>
+                </td>
+                <td><span class="module-tag">${escapeHtml(item.portal)}</span></td>
+                <td>${escapeHtml(item.plan)}</td>
+                <td><strong>₹${Number(item.amount || 0).toLocaleString('en-IN')}</strong></td>
+                <td>${escapeHtml(item.date)} • ${escapeHtml(item.method)} (${escapeHtml(item.invoice)})</td>
+                <td><span class="ew-badge ${escapeHtml(item.badge || 'review')}">${escapeHtml(item.status)}</span></td>
+            </tr>
         `).join('');
     }
 
@@ -372,6 +525,10 @@
 
     document.getElementById('admin-user-search')?.addEventListener('input', renderUsers);
     document.getElementById('admin-user-role-filter')?.addEventListener('change', renderUsers);
+    document.getElementById('admin-payment-search')?.addEventListener('input', renderPayments);
+    document.getElementById('admin-payment-portal-filter')?.addEventListener('change', renderPayments);
+    document.getElementById('admin-payment-plan-filter')?.addEventListener('change', renderPayments);
+    document.getElementById('admin-payment-status-filter')?.addEventListener('change', renderPayments);
 
     document.getElementById('admin-broadcast-form')?.addEventListener('submit', (e) => {
         e.preventDefault();

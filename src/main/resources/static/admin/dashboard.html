@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin Verification Portal — Entertainment World</title>
+  <link rel="stylesheet" href="/css/ew-theme.css">
+  <style>
+    .admin-wrap { max-width: 1320px; margin: 28px auto 60px; padding: 0 22px; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 18px 20px;
+    }
+    .kpi-num { font-size: 1.9rem; font-weight: 900; color: var(--bg-obsidian); }
+    .kpi-lbl { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-pill {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-light);
+      background: #FFFFFF;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+    }
+    .filter-pill.active {
+      background: var(--bg-obsidian);
+      color: #FFFFFF;
+      border-color: var(--bg-obsidian);
+    }
+    .admin-table-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+    table.adm-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+    table.adm-tbl th, table.adm-tbl td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+    table.adm-tbl th {
+      background: #FAF7F2;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 800;
+    }
+    .verify-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+    }
+    .doc-link-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--bg-ivory);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 0.86rem;
+    }
+    @media (max-width: 980px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .verify-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="ew-navbar">
+    <div class="container ew-navbar-inner" style="max-width:1320px;">
+      <a href="/" class="ew-brand">
+        <div class="ew-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#E5A93C"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="ew-brand-title">Entertainment World</div>
+          <div class="ew-brand-sub">Super Admin Verification &amp; Approval</div>
+        </div>
+      </a>
+      <div class="ew-nav-actions">
+        <span id="admin-identity" class="badge badge-showcase"></span>
+        <button type="button" onclick="EW.logout('/login.html?portal=ADMIN')" class="btn btn-outline-light btn-sm">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="font-size:0.75rem; font-weight:800; letter-spacing:0.12em; color:var(--crimson);">5. ADMIN VERIFICATION AND APPROVAL</div>
+        <h1 style="font-size:2rem;">Casting Company Verification Queue</h1>
+      </div>
+      <button type="button" onclick="refreshAll()" class="btn btn-outline-dark btn-sm">↻ Refresh Queue</button>
+    </div>
+
+    <div id="kpi-row" class="kpi-grid"></div>
+
+    <div class="toolbar">
+      <div class="filter-pills">
+        <button class="filter-pill active" onclick="setFilter('ALL', this)">All Requests</button>
+        <button class="filter-pill" onclick="setFilter('Pending', this)">Pending</button>
+        <button class="filter-pill" onclick="setFilter('Approved', this)">Approved</button>
+        <button class="filter-pill" onclick="setFilter('Rejected', this)">Rejected</button>
+        <button class="filter-pill" onclick="setFilter('SUSPENDED', this)">Suspended</button>
+      </div>
+      <input id="admin-search" class="form-control" style="max-width:320px;" placeholder="Search company, email, city, representative..." oninput="loadCompanies()">
+    </div>
+
+    <div class="admin-table-card">
+      <table class="adm-tbl">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Representative &amp; Contact</th>
+            <th>Location</th>
+            <th>Account Status</th>
+            <th>Email / Mobile</th>
+            <th>Doc Verification</th>
+            <th>Suspension</th>
+            <th>Pass Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="companies-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- 5. Admin Verification and Approval Modal -->
+  <div id="verify-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:1060px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <div>
+          <span class="badge badge-pending" style="margin-bottom:6px;">5. Admin Verification and Approval</span>
+          <h2 id="vm-company-title" style="font-size:1.55rem;">Company Verification</h2>
+        </div>
+        <button type="button" onclick="closeVerifyModal()" class="btn btn-outline-dark btn-sm">✕</button>
+      </div>
+
+      <div class="verify-grid">
+        <!-- Left: Submitted Company Details & Documents -->
+        <div>
+          <div id="vm-company-details" style="background:var(--bg-ivory); border:1px solid var(--border-light); border-radius:16px; padding:18px; margin-bottom:16px;"></div>
+          <h4 style="margin-bottom:10px;">Uploaded KYC &amp; Presence Checks</h4>
+          <div id="vm-company-docs"></div>
+        </div>
+
+        <!-- Right: Exact 8 Admin Fields Form -->
+        <form id="verify-form" class="card" style="padding:20px; border:1.5px solid var(--border-light);">
+          <input type="hidden" id="vf-company-id">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div>
+              <label class="form-label">Account status</label>
+              <select id="vf-account-status" class="form-select">
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Account suspension</label>
+              <select id="vf-account-suspension" class="form-select">
+                <option value="Active">Active</option>
+                <option value="Suspended">Suspended</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Email verification</label>
+              <select id="vf-email-ver" class="form-select">
+                <option value="Verified">Verified</option>
+                <option value="Not verified">Not verified</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Mobile verification</label>
+              <select id="vf-mobile-ver" class="form-select">
+                <option value="Verified">Verified</option>
+                <option value="Not verified">Not verified</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Document verification</label>
+              <select id="vf-doc-ver" class="form-select">
+                <option value="Verified">Verified</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Verification date</label>
+              <input type="date" id="vf-ver-date" class="form-control">
+            </div>
+            <div style="grid-column:span 2;">
+              <label class="form-label">Verified by <span class="opt">(Admin name/ID)</span></label>
+              <input type="text" id="vf-verified-by" class="form-control" required>
+            </div>
+            <div style="grid-column:span 2;">
+              <label class="form-label">Admin remarks <span class="opt">(Text)</span></label>
+              <textarea id="vf-remarks" class="form-textarea" placeholder="Enter verification remarks, document feedback, or suspension reason..."></textarea>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px; flex-wrap:wrap;">
+            <button type="button" onclick="quickApproveFill()" class="btn btn-outline-dark btn-sm">Quick Fill Approve All</button>
+            <button type="submit" id="vf-save-btn" class="btn btn-primary">Save Verification Decision</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/ew-core.js"></script>
+  <script>
+    let currentFilter = 'ALL';
+    let currentAdminIdentity = '';
+
+    function setFilter(status, btn) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      loadCompanies();
+    }
+
+    async function loadStats() {
+      const s = await EW.api('/api/admin/stats');
+      currentAdminIdentity = s.admin.displayIdentity;
+      document.getElementById('admin-identity').textContent = currentAdminIdentity;
+      document.getElementById('kpi-row').innerHTML = `
+        <div class="kpi-card"><div class="kpi-lbl">Total Companies</div><div class="kpi-num">${s.totalCompanies}</div></div>
+        <div class="kpi-card"><div class="kpi-lbl">Pending Approval</div><div class="kpi-num" style="color:#B45309;">${s.pendingCount}</div></div>
+        <div class="kpi-card"><div class="kpi-lbl">Approved</div><div class="kpi-num" style="color:var(--emerald);">${s.approvedCount}</div></div>
+        <div class="kpi-card"><div class="kpi-lbl">Paid Subscribers</div><div class="kpi-num" style="color:var(--crimson);">${s.paidActiveCount}</div></div>
+        <div class="kpi-card"><div class="kpi-lbl">Suspended</div><div class="kpi-num" style="color:var(--crimson-dark);">${s.suspendedCount}</div></div>
+      `;
+    }
+
+    async function loadCompanies() {
+      const q = encodeURIComponent(document.getElementById('admin-search').value || '');
+      const status = encodeURIComponent(currentFilter);
+      const list = await EW.api(`/api/admin/companies?status=${status}&q=${q}`);
+      const tbody = document.getElementById('companies-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:32px; color:var(--text-muted);">No matching casting companies found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(c => `
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <img src="${EW.esc(c.companyLogoPath)}" alt="" style="width:42px; height:42px; border-radius:10px; object-fit:cover; border:1px solid var(--border-light);">
+              <div>
+                <div style="font-weight:800; display:flex; align-items:center; gap:5px;">
+                  ${EW.esc(c.companyName)}
+                  ${c.verifiedBadge ? '<span class="blue-tick" style="width:16px; height:16px; font-size:10px;">✓</span>' : ''}
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted);">${EW.esc(c.organizationType || 'Casting Studio')}</div>
+              </div>
+            </div>
+          </td>
+          <td><strong>${EW.esc(c.representativeName)}</strong><br><span style="font-size:0.78rem; color:var(--text-muted);">${EW.esc(c.companyEmail)}<br>${EW.esc(c.contactNumber)}</span></td>
+          <td>${EW.esc(c.city)}, ${EW.esc(c.state)}<br><span style="font-size:0.78rem; color:var(--text-muted);">${EW.esc(c.country)}</span></td>
+          <td><span class="badge ${EW.badgeClass(c.accountStatus)}">${EW.esc(c.accountStatus)}</span></td>
+          <td>
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <span class="badge ${EW.badgeClass(c.emailVerification)}">Email: ${EW.esc(c.emailVerification)}</span>
+              <span class="badge ${EW.badgeClass(c.mobileVerification)}">Mobile: ${EW.esc(c.mobileVerification)}</span>
+            </div>
+          </td>
+          <td><span class="badge ${EW.badgeClass(c.documentVerification)}">${EW.esc(c.documentVerification)}</span></td>
+          <td><span class="badge ${EW.badgeClass(c.accountSuspension)}">${EW.esc(c.accountSuspension)}</span></td>
+          <td>${c.subscriptionActive ? `<span class="badge badge-paid">${EW.esc(c.activePassName)}</span>` : '<span class="badge badge-neutral">Unpaid</span>'}</td>
+          <td><button type="button" onclick="openVerifyModal(${c.id})" class="btn btn-dark btn-sm">Review / Verify</button></td>
+        </tr>`).join('');
+    }
+
+    function docRow(label, path, extraText = '') {
+      return `
+        <div class="doc-link-row">
+          <div><strong>${EW.esc(label)}</strong> ${extraText ? `<span class="mono" style="font-size:0.78rem; color:var(--text-muted);">(${EW.esc(extraText)})</span>` : ''}</div>
+          ${path ? `<a href="${EW.esc(path)}" target="_blank" class="btn btn-outline-dark btn-sm">View File ↗</a>` : '<span style="color:var(--text-muted); font-size:0.78rem;">Not provided</span>'}
+        </div>`;
+    }
+
+    async function openVerifyModal(companyId) {
+      const res = await EW.api(`/api/admin/companies/${companyId}`);
+      const c = res.company;
+      document.getElementById('vm-company-title').textContent = c.companyName;
+      document.getElementById('vm-company-details').innerHTML = `
+        <div style="display:flex; gap:14px; align-items:center; margin-bottom:12px;">
+          <img src="${EW.esc(c.companyLogoPath)}" style="width:62px; height:62px; border-radius:12px; object-fit:cover; border:1px solid var(--border-light);">
+          <div>
+            <div style="font-weight:800; font-size:1.05rem;">${EW.esc(c.companyName)}</div>
+            <div style="font-size:0.84rem; color:var(--text-muted);">Rep: ${EW.esc(c.representativeName)} · Est: ${EW.esc(c.yearEstablished || '—')}</div>
+          </div>
+        </div>
+        <div style="font-size:0.86rem; line-height:1.6;">
+          <div><strong>Email:</strong> ${EW.esc(c.companyEmail)}</div>
+          <div><strong>Mobile:</strong> ${EW.esc(c.contactNumber)}</div>
+          <div><strong>Address:</strong> ${EW.esc(c.companyAddress)}, ${EW.esc(c.city)}, ${EW.esc(c.state)}, ${EW.esc(c.country)}</div>
+          <div><strong>Website:</strong> ${c.website ? `<a href="${EW.esc(c.website)}" target="_blank" style="color:var(--crimson); text-decoration:underline;">${EW.esc(c.website)} ↗</a>` : 'Not provided'}</div>
+          <div style="margin-top:8px;"><strong>About:</strong> ${EW.esc(c.companyDescription)}</div>
+        </div>`;
+
+      document.getElementById('vm-company-docs').innerHTML =
+        docRow('GST Certificate', c.gstCertificatePath, c.gstNumber || '') +
+        docRow('Company Registration Certificate', c.companyRegistrationCertificatePath) +
+        docRow('PAN Tax Identity', c.panDocumentPath, c.panNumber || '') +
+        docRow('Business Address Proof', c.businessAddressProofPath) +
+        docRow('Authorization Letter', c.authorizationLetterPath) +
+        `<div class="doc-link-row">
+          <div><strong>Official Website Check</strong></div>
+          ${c.website ? `<a href="${EW.esc(c.website)}" target="_blank" class="btn btn-outline-dark btn-sm">Check Presence ↗</a>` : '<span style="color:var(--text-muted); font-size:0.78rem;">Optional / None</span>'}
+        </div>`;
+
+      document.getElementById('vf-company-id').value = c.id;
+      document.getElementById('vf-account-status').value = c.accountStatus || 'Pending';
+      document.getElementById('vf-account-suspension').value = c.accountSuspension || 'Active';
+      document.getElementById('vf-email-ver').value = c.emailVerification || 'Not verified';
+      document.getElementById('vf-mobile-ver').value = c.mobileVerification || 'Not verified';
+      document.getElementById('vf-doc-ver').value = (c.documentVerification === 'Verified' || c.documentVerification === 'Rejected') ? c.documentVerification : 'Verified';
+      document.getElementById('vf-ver-date').value = c.verificationDate || new Date().toISOString().slice(0, 10);
+      document.getElementById('vf-verified-by').value = c.verifiedBy || currentAdminIdentity;
+      document.getElementById('vf-remarks').value = c.adminRemarks || '';
+
+      document.getElementById('verify-modal').classList.add('open');
+    }
+
+    function quickApproveFill() {
+      document.getElementById('vf-account-status').value = 'Approved';
+      document.getElementById('vf-email-ver').value = 'Verified';
+      document.getElementById('vf-mobile-ver').value = 'Verified';
+      document.getElementById('vf-doc-ver').value = 'Verified';
+      document.getElementById('vf-account-suspension').value = 'Active';
+      document.getElementById('vf-ver-date').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('vf-verified-by').value = currentAdminIdentity;
+      if (!document.getElementById('vf-remarks').value.trim()) {
+        document.getElementById('vf-remarks').value = 'All business details, contact credentials, and KYC documents verified.';
+      }
+    }
+
+    function closeVerifyModal() {
+      document.getElementById('verify-modal').classList.remove('open');
+    }
+
+    document.getElementById('verify-form').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const id = document.getElementById('vf-company-id').value;
+      const btn = document.getElementById('vf-save-btn');
+      btn.disabled = true;
+      try {
+        const res = await EW.api(`/api/admin/companies/${id}/verify`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accountStatus: document.getElementById('vf-account-status').value,
+            accountSuspension: document.getElementById('vf-account-suspension').value,
+            emailVerification: document.getElementById('vf-email-ver').value,
+            mobileVerification: document.getElementById('vf-mobile-ver').value,
+            documentVerification: document.getElementById('vf-doc-ver').value,
+            verificationDate: document.getElementById('vf-ver-date').value,
+            verifiedBy: document.getElementById('vf-verified-by').value,
+            adminRemarks: document.getElementById('vf-remarks').value
+          })
+        });
+        EW.toast(res.message, 'success');
+        closeVerifyModal();
+        await refreshAll();
+      } catch (err) {
+        EW.toast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    async function refreshAll() {
+      try {
+        await loadStats();
+        await loadCompanies();
+      } catch (err) {
+        if (err.status === 401) window.location.href = '/login.html?portal=ADMIN';
+        else EW.toast(err.message, 'error');
+      }
+    }
+    refreshAll();
+  </script>
+</body>
+</html>

@@ -196,6 +196,39 @@
 
                 <section class="ew-section">
                     <div class="ew-section-head">
+                        <h2 class="ew-section-title">Studio Spotlights</h2>
+                        <button type="button" class="ew-link-btn" data-goto-view="opportunities">Explore all</button>
+                    </div>
+                    <div class="ew-spotlight-grid">
+                        <button type="button" class="ew-spotlight-card" data-goto-view="opportunities">
+                            <img src="/images/tour/tour-step2.jpg" alt="Featured Auditions &amp; Casting Calls" class="ew-spotlight-img">
+                            <div class="ew-spotlight-overlay">
+                                <span class="ew-spotlight-tag">CASTING CALLS</span>
+                                <strong>Web Series &amp; Film Auditions</strong>
+                                <span>Browse open lead &amp; supporting roles &rarr;</span>
+                            </div>
+                        </button>
+                        <button type="button" class="ew-spotlight-card" data-goto-view="event-invitations">
+                            <img src="/images/tour/tour-step3.jpg" alt="Live Shows &amp; Award Nights" class="ew-spotlight-img">
+                            <div class="ew-spotlight-overlay">
+                                <span class="ew-spotlight-tag">LIVE EVENTS</span>
+                                <strong>Award Nights &amp; Premieres</strong>
+                                <span>View your event invitations &rarr;</span>
+                            </div>
+                        </button>
+                        <button type="button" class="ew-spotlight-card" data-goto-view="brand-invitations">
+                            <img src="/images/tour/tour-step4.jpg" alt="Brand Campaigns &amp; Collaborations" class="ew-spotlight-img">
+                            <div class="ew-spotlight-overlay">
+                                <span class="ew-spotlight-tag">BRAND COLLABS</span>
+                                <strong>Paid Brand Campaigns</strong>
+                                <span>Review direct sponsorship offers &rarr;</span>
+                            </div>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="ew-section">
+                    <div class="ew-section-head">
                         <h2 class="ew-section-title">Recent applications</h2>
                         <button type="button" class="ew-link-btn" data-goto-view="applications">View all</button>
                     </div>
@@ -216,7 +249,7 @@
                 <div class="ew-page-header">
                     <div>
                         <h1>My Profile</h1>
-                        <p class="ew-page-subtitle">Manage your portfolio, showreel link, and booking availability</p>
+                        <p class="ew-page-subtitle">Manage your portfolio, bio, and booking availability</p>
                     </div>
                 </div>
                 <div class="ew-panel">
@@ -293,10 +326,6 @@
                             </select>
                         </div>
                         <div class="ew-field full">
-                            <label for="profile-showreel">Showreel / Portfolio URL</label>
-                            <input id="profile-showreel" class="ew-input" type="url">
-                        </div>
-                        <div class="ew-field full">
                             <label for="profile-bio">Professional Bio</label>
                             <textarea id="profile-bio" class="ew-textarea" rows="3"></textarea>
                         </div>
@@ -342,9 +371,11 @@
                             <input id="profile-video-file" class="ew-input" type="file" accept="video/*" required>
                         </div>
                         <div class="ew-field full" style="flex-direction: row; justify-content: flex-end;">
-                            <button type="submit" id="profile-video-submit" class="ew-btn ew-btn-primary">Upload Video</button>
+                            <button type="submit" id="profile-video-submit" class="ew-btn ew-btn-primary">Upload &amp; Analyze Video</button>
                         </div>
                     </form>
+
+                    <div id="profile-video-analysis-status" class="ew-video-analysis-box" hidden></div>
 
                     <div id="profile-videos-grid" class="ew-video-grid"></div>
                 </div>
@@ -643,19 +674,23 @@
 
                 <div class="ew-actor-search-section">
                     <div class="ew-section-head">
-                        <h2 class="ew-section-title">Search Other Actors &amp; Talent</h2>
-                        <span id="actor-search-count" class="ew-app-meta"></span>
+                        <h2 class="ew-section-title">Previous Plans &amp; Billing History</h2>
+                        <span id="plan-history-count" class="ew-app-meta"></span>
                     </div>
-                    <div class="ew-toolbar">
-                        <input id="actor-search-input" class="ew-input ew-search-input" type="search" placeholder="Search actors by name, city, or specialty...">
-                        <select id="actor-plan-filter" class="ew-select">
-                            <option value="all">All Plans</option>
-                            <option value="pro">Pro Elite (₹399)</option>
-                            <option value="premium">Premium (₹199)</option>
-                            <option value="free">Basic (Free)</option>
-                        </select>
+                    <div class="ew-table-wrap">
+                        <table class="ew-compare-table">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Amount</th>
+                                    <th>Billing Period</th>
+                                    <th>Payment / Invoice</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plan-history-tbody"></tbody>
+                        </table>
                     </div>
-                    <div id="actor-search-results" class="ew-card-stack"></div>
                 </div>
             </section>
 

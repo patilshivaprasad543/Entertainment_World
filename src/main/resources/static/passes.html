@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Your Subscription Pass — Entertainment World</title>
+  <link rel="stylesheet" href="/css/ew-theme.css">
+  <style>
+    .passes-wrap { max-width: 1180px; margin: 38px auto 64px; padding: 0 22px; }
+    .dur-bar {
+      display: inline-flex;
+      gap: 8px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      padding: 6px;
+      border-radius: 999px;
+      margin: 18px 0 28px;
+    }
+    .dur-btn {
+      border: none;
+      background: transparent;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.86rem;
+      cursor: pointer;
+      color: var(--text-body);
+    }
+    .dur-btn.active {
+      background: var(--crimson);
+      color: #FFFFFF;
+    }
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #FFFFFF;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+    }
+    .plan-table th, .plan-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      border-right: 1px solid var(--border-light);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+    .plan-table th:first-child, .plan-table td:first-child {
+      text-align: left;
+      font-weight: 700;
+      color: var(--text-dark);
+      width: 24%;
+    }
+    .plan-table th:last-child, .plan-table td:last-child { border-right: none; }
+    .rec-col {
+      background: #FFF9EE;
+    }
+    @media (max-width: 860px) {
+      .plan-table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="ew-navbar">
+    <div class="container ew-navbar-inner">
+      <a href="/" class="ew-brand">
+        <div class="ew-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#E5A93C"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="ew-brand-title">Entertainment World</div>
+          <div class="ew-brand-sub">Approved Casting Studio Passes</div>
+        </div>
+      </a>
+      <div class="ew-nav-actions">
+        <span id="hdr-company" style="font-size:0.86rem; color:rgba(255,255,255,0.85);"></span>
+        <button type="button" onclick="EW.logout()" class="btn btn-outline-light btn-sm">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="passes-wrap">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+      <div>
+        <span class="badge badge-approved" style="margin-bottom:10px;">✓ Super Admin Approved</span>
+        <h1 style="font-size:2.3rem;">Select your pass. <span class="serif-accent" style="color:var(--crimson);">Cast artists directly.</span></h1>
+        <p style="margin:6px 0 0; color:var(--text-muted);">Choose any of our 3 flexible subscription passes to unlock your full Entertainment World Recruiter Dashboard.</p>
+      </div>
+      <div id="already-active-btn"></div>
+    </div>
+
+    <div>
+      <div class="dur-bar">
+        <button class="dur-btn" onclick="setDuration(1, this)">1 Month</button>
+        <button class="dur-btn active" onclick="setDuration(3, this)">3 Months</button>
+        <button class="dur-btn" onclick="setDuration(6, this)">6 Months (10% Off)</button>
+        <button class="dur-btn" onclick="setDuration(12, this)">12 Months (20% Off)</button>
+      </div>
+    </div>
+
+    <div id="passes-table-wrap"></div>
+  </main>
+
+  <!-- Checkout Payment Modal -->
+  <div id="checkout-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <h2 style="font-size:1.45rem;">Complete Pass Payment</h2>
+        <button type="button" onclick="closeCheckout()" class="btn btn-outline-dark btn-sm">✕</button>
+      </div>
+      <div id="checkout-summary" style="background:var(--bg-ivory); border:1px solid var(--border-light); border-radius:14px; padding:16px; margin-bottom:18px;"></div>
+
+      <div style="margin-bottom:18px;">
+        <label class="form-label">Select Payment Method</label>
+        <select id="checkout-method" class="form-select">
+          <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+          <option value="Card">Corporate Credit / Debit Card</option>
+          <option value="NetBanking">NetBanking</option>
+        </select>
+      </div>
+      <button type="button" id="pay-now-btn" onclick="confirmPayment()" class="btn btn-primary" style="width:100%; padding:14px; font-size:0.98rem;">
+        Pay Now &amp; Unlock Dashboard →
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/ew-core.js"></script>
+  <script>
+    let passesData = [];
+    let selectedDuration = 3;
+    let chosenPass = null;
+
+    function computePassPrice(pass, months) {
+      if (months === pass.defaultMonths) return pass.basePriceInr;
+      const monthly = pass.basePriceInr / Math.max(1, pass.defaultMonths);
+      const factor = months === 6 ? 0.90 : months === 12 ? 0.80 : 1.0;
+      return Math.round(monthly * months * factor);
+    }
+
+    function setDuration(m, btn) {
+      selectedDuration = m;
+      document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPasses();
+    }
+
+    function renderPasses() {
+      if (!passesData.length) return;
+      const p = passesData;
+      const html = `
+        <table class="plan-table">
+          <thead>
+            <tr>
+              <th>Services &amp; Entitlements</th>
+              ${p.map(item => `
+                <th class="${item.badgeText ? 'rec-col' : ''}" style="vertical-align:top;">
+                  ${item.badgeText ? `<div class="badge badge-showcase" style="margin-bottom:8px;">${EW.esc(item.badgeText)}</div>` : ''}
+                  <div style="font-size:1.18rem; font-weight:800; color:var(--bg-obsidian);">${EW.esc(item.passName)}</div>
+                  <div style="font-size:0.78rem; font-weight:500; color:var(--text-muted); margin:4px 0 12px;">${EW.esc(item.subtitle)}</div>
+                  <div style="font-size:1.75rem; font-weight:900; color:var(--crimson); margin-bottom:12px;">
+                    ${EW.formatInr(computePassPrice(item, selectedDuration))}
+                    <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600;"> / ${selectedDuration} mo</span>
+                  </div>
+                  <button type="button" onclick="openCheckout('${item.passCode}')" class="btn ${item.badgeText ? 'btn-primary' : 'btn-outline-dark'}" style="width:100%;">
+                    Select Pass
+                  </button>
+                </th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Contact Views</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}"><strong>${EW.esc(item.contactViewsLabel)}</strong></td>`).join('')}
+            </tr>
+            <tr>
+              <td>Portfolio Views</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}"><strong>${EW.esc(item.portfolioViewsLabel)}</strong></td>`).join('')}
+            </tr>
+            <tr>
+              <td>Invite to Audition</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}">${item.inviteAuditionLimit}</td>`).join('')}
+            </tr>
+            <tr>
+              <td>Zero Commission</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}" style="color:var(--emerald); font-weight:800;">✓</td>`).join('')}
+            </tr>
+            <tr>
+              <td>Organise Shortlists in Folders</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}" style="color:var(--emerald); font-weight:800;">✓</td>`).join('')}
+            </tr>
+            <tr>
+              <td>Share Projects on Social Channels</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}" style="color:var(--emerald); font-weight:800;">✓</td>`).join('')}
+            </tr>
+            <tr>
+              <td>Promotion of Project</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}">${EW.esc(item.projectPromotionLabel)}</td>`).join('')}
+            </tr>
+            <tr>
+              <td>Call backs from Entertainment World</td>
+              ${p.map(item => `<td class="${item.badgeText ? 'rec-col' : ''}">${EW.esc(item.callbackSupport)}</td>`).join('')}
+            </tr>
+          </tbody>
+        </table>`;
+      document.getElementById('passes-table-wrap').innerHTML = html;
+    }
+
+    function openCheckout(passCode) {
+      chosenPass = passesData.find(x => x.passCode === passCode);
+      const base = computePassPrice(chosenPass, selectedDuration);
+      const gst = Math.round(base * 0.18);
+      const total = base + gst;
+      document.getElementById('checkout-summary').innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><strong>${EW.esc(chosenPass.passName)}</strong><span>${selectedDuration} Month(s)</span></div>
+        <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:0.88rem;"><span>Pass Fee</span><span>${EW.formatInr(base)}</span></div>
+        <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:0.88rem; margin-bottom:8px;"><span>GST (18%)</span><span>${EW.formatInr(gst)}</span></div>
+        <div style="display:flex; justify-content:space-between; padding-top:8px; border-top:1px solid var(--border-light); font-size:1.15rem; font-weight:900; color:var(--crimson);">
+          <span>Total Payable</span><span>${EW.formatInr(total)}</span>
+        </div>`;
+      document.getElementById('checkout-modal').classList.add('open');
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkout-modal').classList.remove('open');
+    }
+
+    async function confirmPayment() {
+      if (!chosenPass) return;
+      const btn = document.getElementById('pay-now-btn');
+      btn.disabled = true;
+      btn.textContent = 'Processing Payment...';
+      try {
+        const res = await EW.api('/api/subscription/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            passCode: chosenPass.passCode,
+            durationMonths: selectedDuration,
+            paymentMethod: document.getElementById('checkout-method').value
+          })
+        });
+        EW.toast(res.message, 'success');
+        setTimeout(() => { window.location.href = res.redirectTarget || '/dashboard.html'; }, 800);
+      } catch (err) {
+        EW.toast(err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Pay Now & Unlock Dashboard →';
+      }
+    }
+
+    async function init() {
+      try {
+        const res = await EW.api('/api/subscription/passes');
+        passesData = res.passes || [];
+        document.getElementById('hdr-company').textContent = res.company.companyName;
+        if (res.company.subscriptionActive) {
+          document.getElementById('already-active-btn').innerHTML =
+            `<a href="/dashboard.html" class="btn btn-dark btn-sm">Return to Dashboard (${EW.esc(res.company.activePassName)}) →</a>`;
+        }
+        renderPasses();
+      } catch (err) {
+        if (err.status === 401) window.location.href = '/login.html';
+        else if (err.status === 403) window.location.href = '/company-status.html';
+        else EW.toast(err.message, 'error');
+      }
+    }
+    init();
+  </script>
+</body>
+</html>

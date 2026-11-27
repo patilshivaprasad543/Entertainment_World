@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruiter Dashboard — Entertainment World</title>
+  <link rel="stylesheet" href="/css/ew-theme.css">
+  <style>
+    .dash-shell {
+      display: grid;
+      grid-template-columns: 1fr 270px;
+      gap: 24px;
+      max-width: 1380px;
+      margin: 24px auto 60px;
+      padding: 0 22px;
+      align-items: start;
+    }
+    .dash-main { min-width: 0; }
+    .dash-sidebar {
+      position: sticky;
+      top: 90px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .side-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-body);
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 4px;
+    }
+    .side-link:hover { background: var(--bg-ivory); color: var(--text-dark); }
+    .side-link.active { background: var(--crimson-soft); color: var(--crimson-dark); font-weight: 800; }
+
+    /* Profile Card & Blue Tick */
+    .profile-hero {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 26px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .profile-logo {
+      width: 104px;
+      height: 104px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    /* Artist Grid */
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .artist-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+    .artist-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .artist-img-wrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: #EEE8DC;
+      overflow: hidden;
+    }
+    .artist-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .artist-check {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 19px;
+      height: 19px;
+      accent-color: var(--crimson);
+      cursor: pointer;
+    }
+    .showcase-ribbon {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: var(--gold);
+      color: var(--bg-obsidian);
+      font-size: 0.66rem;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+    .video-pill {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(18, 17, 24, 0.85);
+      color: #FFFFFF;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: none;
+    }
+    .artist-body { padding: 13px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+    .artist-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      margin-top: auto;
+      border-top: 1px solid var(--border-light);
+    }
+    .icon-btn {
+      border: 1px solid var(--border-light);
+      background: var(--bg-ivory);
+      border-radius: 8px;
+      padding: 5px 9px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .icon-btn.active { background: var(--crimson-soft); border-color: var(--crimson); color: var(--crimson); }
+
+    /* Split layout for Search, My Artists, View Applications */
+    .split-2 {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .filter-panel {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .folder-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .folder-item.active { background: var(--crimson-soft); color: var(--crimson-dark); font-weight: 800; }
+
+    /* Notifications Dropdown */
+    .notif-wrap { position: relative; }
+    .notif-panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 46px;
+      width: 340px;
+      background: #FFFFFF;
+      color: var(--text-dark);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      padding: 14px;
+      z-index: 150;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+    .notif-panel.open { display: block; }
+
+    /* Quota Progress Bar */
+    .quota-track {
+      height: 12px;
+      background: #EAE4D8;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .quota-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson), #F1546F);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    @media (max-width: 1180px) {
+      .artists-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 980px) {
+      .dash-shell { grid-template-columns: 1fr; }
+      .dash-sidebar { position: static; order: -1; display: flex; flex-wrap: wrap; gap: 6px; }
+      .side-link { width: auto; }
+      .split-2 { grid-template-columns: 1fr; }
+      .artists-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="ew-navbar">
+    <div class="container ew-navbar-inner" style="max-width:1380px;">
+      <a href="/" class="ew-brand">
+        <div class="ew-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#E5A93C"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="ew-brand-title">Entertainment World</div>
+          <div class="ew-brand-sub">Casting Recruiter Dashboard</div>
+        </div>
+      </a>
+
+      <nav class="ew-nav-links">
+        <a href="#" onclick="switchSection('projects'); return false;">Projects</a>
+        <a href="#" onclick="switchSection('search'); return false;">Hire Artists</a>
+        <a href="#" onclick="switchSection('package'); return false;">Recruiter Packages</a>
+        <a href="#" onclick="switchSection('recommended'); return false;">Recommended</a>
+        <a href="#" onclick="switchSection('transactions'); return false;">Transactions</a>
+      </nav>
+
+      <div class="ew-nav-actions">
+        <div class="notif-wrap">
+          <button type="button" onclick="toggleNotifications()" class="btn btn-outline-light btn-sm">
+            🔔 <span id="notif-badge" class="badge badge-showcase" style="padding:1px 6px;">0</span>
+          </button>
+          <div id="notif-panel" class="notif-panel"></div>
+        </div>
+        <div id="hdr-studio-badge" style="display:flex; align-items:center; gap:6px; font-size:0.86rem; font-weight:700;"></div>
+        <button type="button" onclick="EW.logout()" class="btn btn-primary btn-sm">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dash-shell">
+    <main class="dash-main" id="dash-view">
+      <div class="card" style="padding:42px; text-align:center;">Loading Entertainment World Recruiter Dashboard...</div>
+    </main>
+
+    <aside class="dash-sidebar">
+      <button class="side-link active" data-sec="dashboard" onclick="switchSection('dashboard')">🏠 Dashboard</button>
+      <button class="side-link" data-sec="post-project" onclick="switchSection('post-project')">➕ Post Project</button>
+      <button class="side-link" data-sec="projects" onclick="switchSection('projects')">
+        <span>💼 Projects</span><span class="badge badge-rejected" style="font-size:0.62rem;">New</span>
+      </button>
+      <button class="side-link" data-sec="applications" onclick="switchSection('applications')">📥 View Applications</button>
+      <button class="side-link" data-sec="my-artists" onclick="switchSection('my-artists')">❤️ My Artists</button>
+      <button class="side-link" data-sec="search" onclick="switchSection('search')">🔎 Search Artists</button>
+      <button class="side-link" data-sec="recommended" onclick="switchSection('recommended')">👍 Recommended Artists</button>
+      <button class="side-link" data-sec="package" onclick="switchSection('package')">🎟️ Get Package</button>
+      <button class="side-link" data-sec="transactions" onclick="switchSection('transactions')">🧾 Transaction History</button>
+    </aside>
+  </div>
+
+  <!-- Artist Portfolio / Audition / Contact Modal -->
+  <div id="artist-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:740px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 id="am-title">Artist Portfolio</h3>
+        <button type="button" onclick="closeArtistModal()" class="btn btn-outline-dark btn-sm">✕</button>
+      </div>
+      <div id="am-body"></div>
+    </div>
+  </div>
+
+  <!-- Edit Recruiter Profile Modal -->
+  <div id="edit-profile-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>Edit Recruiter Profile</h3>
+        <button type="button" onclick="closeModal('edit-profile-modal')" class="btn btn-outline-dark btn-sm">✕</button>
+      </div>
+      <form id="edit-profile-form">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div>
+            <label class="form-label">Representative Name</label>
+            <input id="ep-rep" class="form-control" required>
+          </div>
+          <div>
+            <label class="form-label">Contact Number</label>
+            <input id="ep-phone" class="form-control" required>
+          </div>
+          <div>
+            <label class="form-label">City</label>
+            <input id="ep-city" class="form-control" required>
+          </div>
+          <div>
+            <label class="form-label">Official Website</label>
+            <input id="ep-web" class="form-control">
+          </div>
+          <div style="grid-column:span 2;">
+            <label class="form-label">Talent You Are Looking For</label>
+            <input id="ep-looking" class="form-control">
+          </div>
+          <div style="grid-column:span 2;">
+            <label class="form-label">Company Profile Bio</label>
+            <textarea id="ep-desc" class="form-textarea" required></textarea>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+          <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tag Artists to Folder Modal -->
+  <div id="tag-folder-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>Tag Selected Artists to Folder</h3>
+        <button type="button" onclick="closeModal('tag-folder-modal')" class="btn btn-outline-dark btn-sm">✕</button>
+      </div>
+      <select id="tag-folder-select" class="form-select" style="margin-bottom:16px;"></select>
+      <button type="button" onclick="confirmTagArtists()" class="btn btn-primary" style="width:100%;">Save to Folder</button>
+    </div>
+  </div>
+
+  <!-- Social Share Modal -->
+  <div id="share-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:460px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3>Share Casting Project</h3>
+        <button type="button" onclick="closeModal('share-modal')" class="btn btn-outline-dark btn-sm">✕</button>
+      </div>
+      <p id="share-proj-name" style="font-weight:700; margin-bottom:12px;"></p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+        <a id="share-x" target="_blank" class="btn btn-dark btn-sm">Share on X</a>
+        <a id="share-fb" target="_blank" class="btn btn-outline-dark btn-sm">Facebook</a>
+        <a id="share-wa" target="_blank" class="btn btn-outline-dark btn-sm">WhatsApp</a>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <input id="share-link-input" class="form-control" readonly>
+        <button type="button" onclick="copyShareLink()" class="btn btn-primary btn-sm">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/ew-core.js"></script>
+  <script src="/js/ew-dashboard.js"></script>
+</body>
+</html>

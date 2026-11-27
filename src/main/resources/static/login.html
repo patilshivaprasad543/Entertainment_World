@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Entertainment World</title>
+  <link rel="stylesheet" href="/css/ew-theme.css">
+  <style>
+    .login-shell {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: stretch;
+    }
+    .login-visual {
+      position: relative;
+      background: var(--bg-obsidian);
+      color: #FFFFFF;
+      padding: 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .login-visual img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.3;
+    }
+    .login-form-pane {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 440px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: var(--shadow-md);
+    }
+    .portal-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--bg-ivory);
+      padding: 6px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+    }
+    .portal-tab {
+      border: none;
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .portal-tab.active {
+      background: var(--bg-obsidian);
+      color: #FFFFFF;
+    }
+    .demo-accounts {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--bg-ivory);
+      border: 1px solid var(--border-light);
+      font-size: 0.82rem;
+    }
+    .demo-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .demo-row:last-child { border-bottom: none; }
+    @media (max-width: 900px) {
+      .login-shell { grid-template-columns: 1fr; }
+      .login-visual { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="ew-navbar">
+    <div class="container ew-navbar-inner">
+      <a href="/" class="ew-brand">
+        <div class="ew-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#E5A93C"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="ew-brand-title">Entertainment World</div>
+          <div class="ew-brand-sub">Find Stardom. Find Stars.</div>
+        </div>
+      </a>
+      <div class="ew-nav-actions">
+        <a href="/#register-section" class="btn btn-primary btn-sm">Register Casting Company</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="login-shell">
+    <section class="login-visual">
+      <img src="/assets/images/hero-spotlight.jpg" alt="Entertainment World Studio">
+      <div style="position:relative; z-index:2;">
+        <span class="badge badge-showcase">CASTING &amp; VERIFICATION PORTAL</span>
+        <h1 style="font-size:2.6rem; margin-top:18px; max-width:460px;">
+          Verified Studios. <span class="serif-accent" style="color:var(--gold);">Extraordinary</span> Talent.
+        </h1>
+        <p style="color:rgba(255,255,255,0.78); max-width:440px; margin-top:14px;">
+          Sign in to track your Super Admin approval status, activate 1 of 3 Subscription Passes, or access the complete Casting Recruiter Dashboard.
+        </p>
+      </div>
+      <div style="position:relative; z-index:2; display:flex; gap:24px; font-size:0.86rem; color:rgba(255,255,255,0.75);">
+        <div><strong style="color:#FFFFFF; display:block; font-size:1.2rem;">3 Passes</strong>Flexible Subscriptions</div>
+        <div><strong style="color:#FFFFFF; display:block; font-size:1.2rem;">Blue Tick</strong>Super Admin Verified</div>
+        <div><strong style="color:#FFFFFF; display:block; font-size:1.2rem;">7L+ Artists</strong>Pan-India Access</div>
+      </div>
+    </section>
+
+    <section class="login-form-pane">
+      <div class="login-box">
+        <h2 style="font-size:1.6rem; margin-bottom:6px;">Welcome Back</h2>
+        <p style="margin:0 0 20px; color:var(--text-muted); font-size:0.9rem;">Sign in as a Casting Company or Super Admin</p>
+
+        <div class="portal-tabs">
+          <button type="button" id="tab-company" class="portal-tab active" onclick="setPortal('COMPANY')">Casting Company</button>
+          <button type="button" id="tab-admin" class="portal-tab" onclick="setPortal('ADMIN')">Super Admin</button>
+        </div>
+
+        <form id="login-form">
+          <div style="margin-bottom:16px;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="login-email" class="form-control" required placeholder="casting@yourstudio.in">
+          </div>
+          <div style="margin-bottom:20px;">
+            <label class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-control" required placeholder="Enter your password">
+          </div>
+          <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%; padding:13px;">Sign In →</button>
+        </form>
+
+        <div class="demo-accounts">
+          <div style="font-weight:800; margin-bottom:6px; color:var(--bg-obsidian);">Quick Demo Sign-In Presets</div>
+          <div class="demo-row">
+            <div><strong>Super Admin</strong><br><span class="mono">admin@entertainmentworld.in</span></div>
+            <button type="button" class="btn btn-dark btn-sm" onclick="fillDemo('ADMIN', 'admin@entertainmentworld.in', 'Admin@123')">Fill</button>
+          </div>
+          <div class="demo-row">
+            <div><strong>Pending Company</strong><br><span class="mono">pending@aetherprism.in</span></div>
+            <button type="button" class="btn btn-outline-dark btn-sm" onclick="fillDemo('COMPANY', 'pending@aetherprism.in', 'Demo@123')">Fill</button>
+          </div>
+          <div class="demo-row">
+            <div><strong>Paid Active Studio</strong><br><span class="mono">studio@moonlightcinema.in</span></div>
+            <button type="button" class="btn btn-outline-dark btn-sm" onclick="fillDemo('COMPANY', 'studio@moonlightcinema.in', 'Demo@123')">Fill</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/ew-core.js"></script>
+  <script>
+    let activePortal = 'COMPANY';
+
+    function setPortal(portal) {
+      activePortal = portal;
+      document.getElementById('tab-company').classList.toggle('active', portal === 'COMPANY');
+      document.getElementById('tab-admin').classList.toggle('active', portal === 'ADMIN');
+      document.getElementById('login-email').placeholder = portal === 'ADMIN' ? 'admin@entertainmentworld.in' : 'casting@yourstudio.in';
+    }
+
+    function fillDemo(portal, email, pass) {
+      setPortal(portal);
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = pass;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('portal') === 'ADMIN') {
+      setPortal('ADMIN');
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      try {
+        const res = await EW.api('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('login-email').value,
+            password: document.getElementById('login-password').value,
+            portal: activePortal
+          })
+        });
+        window.location.href = res.redirectTarget;
+      } catch (err) {
+        EW.toast(err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Sign In →';
+      }
+    });
+  </script>
+</body>
+</html>

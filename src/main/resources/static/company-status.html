@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verification Status — Entertainment World</title>
+  <link rel="stylesheet" href="/css/ew-theme.css">
+  <style>
+    .status-wrap {
+      max-width: 980px;
+      margin: 42px auto;
+      padding: 0 20px;
+    }
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 24px 0 28px;
+    }
+    .pipe-step {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 0.88rem;
+    }
+    .pipe-step.done {
+      border-color: var(--emerald);
+      background: var(--emerald-soft);
+    }
+    .pipe-step.current {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+    }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .kv-box {
+      background: var(--bg-ivory);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    @media (max-width: 760px) {
+      .pipeline, .status-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="ew-navbar">
+    <div class="container ew-navbar-inner">
+      <a href="/" class="ew-brand">
+        <div class="ew-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#E5A93C"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="ew-brand-title">Entertainment World</div>
+          <div class="ew-brand-sub">Company Verification Portal</div>
+        </div>
+      </a>
+      <div class="ew-nav-actions">
+        <button type="button" onclick="loadStatus()" class="btn btn-outline-light btn-sm">Refresh Status</button>
+        <button type="button" onclick="EW.logout()" class="btn btn-primary btn-sm">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="status-wrap" id="status-root">
+    <div class="card" style="padding:36px; text-align:center;">Loading verification details...</div>
+  </main>
+
+  <script src="/js/ew-core.js"></script>
+  <script>
+    async function loadStatus() {
+      try {
+        const me = await EW.api('/api/auth/me');
+        if (!me.authenticated || me.role !== 'CASTING_COMPANY') {
+          window.location.href = '/login.html';
+          return;
+        }
+        const c = me.company;
+        if (c.accountStatus === 'Approved' && c.accountSuspension === 'Active' && c.subscriptionActive) {
+          window.location.href = '/dashboard.html';
+          return;
+        }
+
+        const isApproved = c.accountStatus === 'Approved' && c.accountSuspension === 'Active';
+        const isSuspended = c.accountSuspension === 'Suspended';
+        const isRejected = c.accountStatus === 'Rejected';
+
+        let bannerHtml = '';
+        if (isSuspended) {
+          bannerHtml = `
+            <div style="background:var(--crimson-soft); border:1.5px solid var(--crimson); border-radius:16px; padding:22px; margin-bottom:24px;">
+              <h2 style="color:var(--crimson-dark); margin-bottom:6px;">Account Suspended</h2>
+              <p style="margin:0;">Your casting company account has been suspended by Super Admin. Remarks: <strong>${EW.esc(c.adminRemarks || 'Contact Entertainment World compliance team.')}</strong></p>
+            </div>`;
+        } else if (isApproved) {
+          bannerHtml = `
+            <div style="background:var(--emerald-soft); border:1.5px solid var(--emerald); border-radius:16px; padding:24px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+              <div>
+                <h2 style="color:var(--emerald); margin-bottom:6px;">Super Admin Approved! Verified Blue Tick Ready</h2>
+                <p style="margin:0;">Select 1 of our 3 Subscription Passes to activate your Entertainment World Recruiter Dashboard.</p>
+              </div>
+              <a href="/passes.html" class="btn btn-primary">Choose 1 of 3 Subscription Passes →</a>
+            </div>`;
+        } else if (isRejected) {
+          bannerHtml = `
+            <div style="background:var(--crimson-soft); border:1.5px solid var(--crimson); border-radius:16px; padding:22px; margin-bottom:24px;">
+              <h2 style="color:var(--crimson-dark); margin-bottom:6px;">Verification Rejected</h2>
+              <p style="margin:0;">Admin Remarks: <strong>${EW.esc(c.adminRemarks || 'Please contact support with updated corporate verification documents.')}</strong></p>
+            </div>`;
+        } else {
+          bannerHtml = `
+            <div style="background:var(--gold-soft); border:1.5px solid var(--gold); border-radius:16px; padding:22px; margin-bottom:24px;">
+              <h2 style="color:#8F5E06; margin-bottom:6px;">Pending Super Admin Confirmation</h2>
+              <p style="margin:0;">Your registration form &amp; business verification documents have reached the Super Admin. Once confirmed, you can pay for your Subscription Pass and enter the Recruiter Dashboard.</p>
+            </div>`;
+        }
+
+        document.getElementById('status-root').innerHTML = `
+          ${bannerHtml}
+          <div class="pipeline">
+            <div class="pipe-step done"><strong>1. Form Submitted</strong><div style="color:var(--text-muted); margin-top:4px;">Company details &amp; KYC received</div></div>
+            <div class="pipe-step ${isApproved ? 'done' : 'current'}"><strong>2. Super Admin Review</strong><div style="color:var(--text-muted); margin-top:4px;">Status: ${EW.esc(c.accountStatus)}</div></div>
+            <div class="pipe-step ${isApproved ? 'current' : ''}"><strong>3. 3 Subscription Passes</strong><div style="color:var(--text-muted); margin-top:4px;">${isApproved ? 'Ready for Payment' : 'Unlocks after approval'}</div></div>
+            <div class="pipe-step"><strong>4. Recruiter Dashboard</strong><div style="color:var(--text-muted); margin-top:4px;">Post calls &amp; cast talent</div></div>
+          </div>
+
+          <div class="card" style="padding:30px;">
+            <div style="display:flex; align-items:center; gap:18px; margin-bottom:24px; flex-wrap:wrap;">
+              <img src="${EW.esc(c.companyLogoPath)}" alt="Logo" style="width:72px; height:72px; border-radius:16px; object-fit:cover; border:1px solid var(--border-light);">
+              <div>
+                <h2 style="display:flex; align-items:center; gap:8px;">
+                  ${EW.esc(c.companyName)}
+                  ${c.verifiedBadge ? '<span class="blue-tick" title="Verified by Entertainment World">✓</span>' : ''}
+                </h2>
+                <div style="color:var(--text-muted); font-size:0.9rem;">${EW.esc(c.companyEmail)} · ${EW.esc(c.contactNumber)} · ${EW.esc(c.city)}, ${EW.esc(c.state)}</div>
+              </div>
+            </div>
+
+            <h3 style="margin-bottom:14px;">Admin Verification Summary</h3>
+            <div class="status-grid">
+              <div class="kv-box"><span>Account status</span><span class="badge ${EW.badgeClass(c.accountStatus)}">${EW.esc(c.accountStatus)}</span></div>
+              <div class="kv-box"><span>Email verification</span><span class="badge ${EW.badgeClass(c.emailVerification)}">${EW.esc(c.emailVerification)}</span></div>
+              <div class="kv-box"><span>Mobile verification</span><span class="badge ${EW.badgeClass(c.mobileVerification)}">${EW.esc(c.mobileVerification)}</span></div>
+              <div class="kv-box"><span>Document verification</span><span class="badge ${EW.badgeClass(c.documentVerification)}">${EW.esc(c.documentVerification)}</span></div>
+              <div class="kv-box"><span>Account suspension</span><span class="badge ${EW.badgeClass(c.accountSuspension)}">${EW.esc(c.accountSuspension)}</span></div>
+              <div class="kv-box"><span>Verified by</span><strong>${EW.esc(c.verifiedBy || 'Awaiting Admin')}</strong></div>
+              <div class="kv-box"><span>Verification date</span><strong class="mono">${EW.esc(c.verificationDate || '—')}</strong></div>
+              <div class="kv-box"><span>Admin remarks</span><span>${EW.esc(c.adminRemarks || 'Under review')}</span></div>
+            </div>
+          </div>`;
+      } catch (err) {
+        EW.toast(err.message, 'error');
+      }
+    }
+    loadStatus();
+  </script>
+</body>
+</html>

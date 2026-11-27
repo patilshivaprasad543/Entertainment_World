@@ -4,7 +4,7 @@
 
     const PLAN_LIMITS = {
         free: {
-            maxVideos: 5,
+            maxVideos: 1,
             maxApps: 1,
             maxWishlist: 5,
             advancedFilters: false,
@@ -15,7 +15,7 @@
             mediaKit: false,
             priceEstimator: false,
             teamCampaigns: false,
-            perksLabel: '5 Portfolio Files • 1 Audition/Event Application'
+            perksLabel: '1 Portfolio Video • 1 Audition/Event Application'
         },
         premium: {
             maxVideos: 20,
@@ -59,7 +59,7 @@
             buttonClass: 'ew-btn-outline',
             description: 'Create your profile, manage availability, and start applying.',
             features: [
-                'Upload up to 5 portfolio videos/files',
+                'Upload up to 1 portfolio video',
                 '1 Audition / Event application',
                 'Availability Calendar included',
                 'Influencer Profile & Brand Requests'
@@ -116,6 +116,40 @@
 
     const DEFAULT_STATE = {
         currentPlan: 'free',
+        planHistory: [
+            {
+                id: 'ph-1',
+                planName: 'Basic (Free)',
+                price: '₹0',
+                period: 'Current • Started 01 Nov 2026',
+                paymentMethod: 'Free Tier • #INV-2026-004',
+                status: 'Active'
+            },
+            {
+                id: 'ph-2',
+                planName: 'Premium',
+                price: '₹199 / mo',
+                period: '01 Oct 2026 – 31 Oct 2026',
+                paymentMethod: 'UPI • #INV-2026-003',
+                status: 'Expired'
+            },
+            {
+                id: 'ph-3',
+                planName: 'Pro Elite',
+                price: '₹399 / mo',
+                period: '01 Sep 2026 – 30 Sep 2026',
+                paymentMethod: 'Card • #INV-2026-002',
+                status: 'Expired'
+            },
+            {
+                id: 'ph-4',
+                planName: 'Basic (Free)',
+                price: '₹0',
+                period: '15 Aug 2026 – 31 Aug 2026',
+                paymentMethod: 'Free Tier • #INV-2026-001',
+                status: 'Completed'
+            }
+        ],
         auditionsCount: 3,
         categories: [
             { id: 'cat-actors', name: 'Actors', description: 'Lead, supporting, theatre, and web-series performers.', followers: 18420 },
@@ -136,8 +170,9 @@
                 city: 'Mumbai',
                 planId: 'pro',
                 credits: '14 Credits • Verified Showreel',
+                followers: 1240,
                 following: true,
-                photoUrl: makeActorAvatar('AM', '#1f2937', '#b45309'),
+                photoUrl: '/images/avatars/actor-male-1.jpg',
                 videos: [
                     { id: 'act1-v1', title: 'Crime Thriller Showreel 2026', category: 'Showreel', fileName: 'aarav-thriller-reel.mp4', sizeLabel: '18.4 MB • 2:15', uploadedAt: '4 days ago' },
                     { id: 'act1-v2', title: 'Hindi & English Monologue', category: 'Monologue', fileName: 'aarav-monologue.mp4', sizeLabel: '9.6 MB • 1:20', uploadedAt: '2 weeks ago' }
@@ -150,8 +185,9 @@
                 city: 'Delhi NCR',
                 planId: 'pro',
                 credits: '11 Credits • Award Nominee',
+                followers: 980,
                 following: false,
-                photoUrl: makeActorAvatar('DS', '#312e81', '#db2777'),
+                photoUrl: '/images/avatars/actor-female-1.jpg',
                 videos: [
                     { id: 'act2-v1', title: 'Stage & Screen Showreel', category: 'Showreel', fileName: 'diya-stage-screen.mp4', sizeLabel: '15.1 MB • 1:55', uploadedAt: '5 days ago' },
                     { id: 'act2-v2', title: 'Period Drama Audition Clip', category: 'Audition Clip', fileName: 'diya-period-audition.mp4', sizeLabel: '11.2 MB • 1:35', uploadedAt: '3 weeks ago' }
@@ -164,8 +200,9 @@
                 city: 'Bengaluru',
                 planId: 'premium',
                 credits: '9 Credits • 4 Brand Shoots',
+                followers: 640,
                 following: false,
-                photoUrl: makeActorAvatar('KM', '#0f766e', '#1d4ed8'),
+                photoUrl: '/images/avatars/producer-male-1.jpg',
                 videos: [
                     { id: 'act3-v1', title: 'Brand Commercials Montage', category: 'Commercial', fileName: 'kabir-brand-montage.mp4', sizeLabel: '12.8 MB • 1:40', uploadedAt: '1 week ago' }
                 ]
@@ -177,8 +214,9 @@
                 city: 'Pune',
                 planId: 'premium',
                 credits: '7 Credits • Bilingual',
+                followers: 520,
                 following: true,
-                photoUrl: makeActorAvatar('NK', '#7c2d12', '#d97706'),
+                photoUrl: '/images/talent-actor.jpg',
                 videos: [
                     { id: 'act4-v1', title: 'Bilingual Hosting & Acting Reel', category: 'Showreel', fileName: 'neha-bilingual-reel.mp4', sizeLabel: '13.5 MB • 1:50', uploadedAt: '6 days ago' }
                 ]
@@ -190,8 +228,9 @@
                 city: 'Hyderabad',
                 planId: 'free',
                 credits: '3 Short Films',
+                followers: 215,
                 following: false,
-                photoUrl: makeActorAvatar('RV', '#374151', '#059669'),
+                photoUrl: '/images/talent-singer.jpg',
                 videos: [
                     { id: 'act5-v1', title: 'Indie Short Film Scene', category: 'Short Film', fileName: 'rishi-indie-scene.mp4', sizeLabel: '10.4 MB • 1:15', uploadedAt: '2 weeks ago' }
                 ]
@@ -203,8 +242,9 @@
                 city: 'Mumbai',
                 planId: 'free',
                 credits: '2 Music Videos',
+                followers: 310,
                 following: false,
-                photoUrl: makeActorAvatar('TS', '#4c1d95', '#e11d48'),
+                photoUrl: '/images/talent-model.jpg',
                 videos: [
                     { id: 'act6-v1', title: 'Music Video Performance Cut', category: 'Music Video', fileName: 'tara-mv-cut.mp4', sizeLabel: '16.0 MB • 2:05', uploadedAt: '1 week ago' }
                 ]
@@ -533,6 +573,7 @@
                 role: 'Casting Director • Mumbai',
                 connected: true,
                 status: 'mutual',
+                photoUrl: '/images/avatars/director-female-1.jpg',
                 videos: [
                     { id: 'net1-v1', title: 'Casting Process & Audition Tips', category: 'Casting Brief', fileName: 'meera-audition-tips.mp4', sizeLabel: '14.8 MB • 2:10', uploadedAt: '3 days ago' },
                     { id: 'net1-v2', title: 'Q1 Web Series Casting Call Intro', category: 'Project Reel', fileName: 'meera-q1-casting.mp4', sizeLabel: '8.9 MB • 1:05', uploadedAt: '1 week ago' }
@@ -544,6 +585,7 @@
                 role: 'Executive Producer • RedFrame',
                 connected: true,
                 status: 'mutual',
+                photoUrl: '/images/avatars/producer-male-1.jpg',
                 videos: [
                     { id: 'net2-v1', title: 'RedFrame Originals 2026 Slate', category: 'Production Reel', fileName: 'redframe-2026-slate.mp4', sizeLabel: '22.4 MB • 2:45', uploadedAt: '5 days ago' }
                 ]
@@ -554,6 +596,7 @@
                 role: 'Talent Manager • Starlight',
                 connected: false,
                 status: 'pending_incoming',
+                photoUrl: '/images/avatars/actor-female-1.jpg',
                 videos: [
                     { id: 'net3-v1', title: 'Starlight Talent Showcase', category: 'Showcase', fileName: 'starlight-showcase.mp4', sizeLabel: '17.3 MB • 2:20', uploadedAt: '1 week ago' }
                 ]
@@ -564,6 +607,7 @@
                 role: 'Director of Photography',
                 connected: false,
                 status: 'not_connected',
+                photoUrl: '/images/avatars/actor-male-1.jpg',
                 videos: [
                     { id: 'net4-v1', title: 'Anamorphic Cinematography Reel', category: 'Showreel', fileName: 'vikram-dop-reel.mp4', sizeLabel: '26.1 MB • 3:00', uploadedAt: '4 days ago' },
                     { id: 'net4-v2', title: 'Night Shoot Lighting Breakdown', category: 'Behind the Scenes', fileName: 'vikram-lighting-bts.mp4', sizeLabel: '11.5 MB • 1:30', uploadedAt: '2 weeks ago' }
@@ -724,7 +768,10 @@
                     : structuredClone(DEFAULT_STATE.eventInvitations),
                 brandInvitations: Array.isArray(parsed.brandInvitations) && parsed.brandInvitations.length
                     ? parsed.brandInvitations
-                    : structuredClone(DEFAULT_STATE.brandInvitations)
+                    : structuredClone(DEFAULT_STATE.brandInvitations),
+                planHistory: Array.isArray(parsed.planHistory) && parsed.planHistory.length
+                    ? parsed.planHistory
+                    : structuredClone(DEFAULT_STATE.planHistory)
             };
         } catch {
             return structuredClone(DEFAULT_STATE);
@@ -1434,12 +1481,17 @@
 
             return `
                 <article class="ew-panel ew-card-clickable" data-open-profile="network:${escapeHtml(person.id)}">
-                    <div class="ew-section-head" style="margin-bottom: 8px;">
+                    <div class="ew-section-head" style="margin-bottom: 10px;">
                         <span class="ew-badge ${badgeClass}">${badgeText}</span>
                     </div>
-                    <h3>${escapeHtml(person.name)}</h3>
-                    <p>${escapeHtml(person.role)}</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <div class="ew-network-head">
+                        <img class="ew-network-avatar" src="${escapeHtml(person.photoUrl || DEFAULT_STATE.network.find((n) => n.id === person.id || n.name === person.name)?.photoUrl || '/images/avatars/director-female-1.jpg')}" alt="${escapeHtml(person.name)}">
+                        <div>
+                            <h3 style="margin-bottom: 2px;">${escapeHtml(person.name)}</h3>
+                            <p style="margin: 0;">${escapeHtml(person.role)}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;">
                         ${actionsHtml}
                         <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="network:${escapeHtml(person.id)}">View Profile</button>
                     </div>
@@ -1470,17 +1522,30 @@
             return;
         }
 
-        container.innerHTML = filtered.map((tm) => `
+        container.innerHTML = filtered.map((tm, idx) => {
+            const fallbackPhotos = [
+                '/images/avatars/producer-male-1.jpg',
+                '/images/avatars/actor-female-1.jpg',
+                '/images/avatars/actor-male-1.jpg',
+                '/images/avatars/director-female-1.jpg',
+                '/images/talent-actor.jpg',
+                '/images/talent-model.jpg'
+            ];
+            const tmPhoto = tm.photoUrl || fallbackPhotos[idx % fallbackPhotos.length];
+            return `
             <article class="ew-panel ew-card-clickable" data-open-profile="teammate:${escapeHtml(tm.id)}">
                 <div class="ew-suggestion-meta">
                     <span class="ew-reason-tag ${escapeHtml(tm.reasonType)}">${escapeHtml(tm.reasonLabel)}</span>
                     <span class="ew-badge closed">${escapeHtml(tm.profession)}</span>
                 </div>
-                <h3>${escapeHtml(tm.name)}</h3>
-                <p>${escapeHtml(tm.detail)}</p>
-                <div class="ew-app-meta" style="margin-bottom: 14px;">
-                    ${escapeHtml(tm.city)} • Interests: ${escapeHtml(tm.interests)}
+                <div class="ew-network-head" style="margin-bottom: 8px;">
+                    <img class="ew-network-avatar" src="${escapeHtml(tmPhoto)}" alt="${escapeHtml(tm.name)}">
+                    <div>
+                        <h3 style="margin-bottom: 2px;">${escapeHtml(tm.name)}</h3>
+                        <div class="ew-app-meta">${escapeHtml(tm.city)} • Interests: ${escapeHtml(tm.interests)}</div>
+                    </div>
                 </div>
+                <p style="margin-bottom: 14px;">${escapeHtml(tm.detail)}</p>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <button type="button" class="ew-btn ${tm.added ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-add-teammate="${escapeHtml(tm.id)}" ${tm.added ? 'disabled' : ''}>
                         ${tm.added ? 'Added to Network' : 'Add Teammate'}
@@ -1488,7 +1553,8 @@
                     <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="teammate:${escapeHtml(tm.id)}">View Profile</button>
                 </div>
             </article>
-        `).join('');
+        `;
+        }).join('');
     }
 
     function renderNotifications() {
@@ -1567,7 +1633,8 @@
         document.getElementById('profile-gender').value = user?.gender || state.profileExtras.gender || '';
         document.getElementById('profile-experience').value = user?.experienceCategory || state.profileExtras.experienceCategory || '';
         document.getElementById('profile-bio').value = state.profileExtras.bio;
-        document.getElementById('profile-showreel').value = state.profileExtras.showreelUrl;
+        const showreelEl = document.getElementById('profile-showreel');
+        if (showreelEl) showreelEl.value = state.profileExtras.showreelUrl || '';
         document.getElementById('profile-availability').value = state.profileExtras.availability;
     }
 
@@ -1812,16 +1879,20 @@
         const alertBox = document.getElementById('profile-video-limit-alert');
         const alertText = document.getElementById('profile-video-limit-text');
         const submitBtn = document.getElementById('profile-video-submit');
+        const titleInput = document.getElementById('profile-video-title');
+        const categorySelect = document.getElementById('profile-video-category');
+        const fileInput = document.getElementById('profile-video-file');
 
         if (alertBox && alertText) {
             alertBox.hidden = !limitReached;
             if (limitReached) {
-                alertText.textContent = `Your ${activePlan.name} (${activePlan.shortLabel}) allows up to ${maxVideos} ${maxVideos === 1 ? 'video' : 'videos'}. Upgrade to ${state.currentPlan === 'free' ? 'Premium (₹199/mo) for 5 videos or Pro Elite (₹399/mo) for unlimited' : 'Pro Elite (₹399/mo) for unlimited'} uploads.`;
+                alertText.textContent = `Your ${activePlan.name} (${activePlan.shortLabel}) allows up to ${maxVideos} ${maxVideos === 1 ? 'video' : 'videos'}. Upgrade to ${state.currentPlan === 'free' ? 'Premium (₹199/mo) for 20 videos or Pro Plan (₹399/mo) for 50' : 'Pro Plan (₹399/mo) for 50'} uploads.`;
             }
         }
-        if (submitBtn) {
-            submitBtn.disabled = limitReached;
-        }
+        if (submitBtn) submitBtn.disabled = limitReached;
+        if (titleInput) titleInput.disabled = limitReached;
+        if (categorySelect) categorySelect.disabled = limitReached;
+        if (fileInput) fileInput.disabled = limitReached;
 
         const grid = document.getElementById('profile-videos-grid');
         if (!grid) return;
@@ -1900,7 +1971,9 @@
 
         container.innerHTML = filtered.map((actor) => {
             const fallbackActor = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
-            const photoSrc = actor.photoUrl || (fallbackActor ? fallbackActor.photoUrl : '');
+            const hasRealPhoto = actor.photoUrl && !String(actor.photoUrl).startsWith('data:image/svg+xml');
+            const photoSrc = hasRealPhoto ? actor.photoUrl : (fallbackActor ? fallbackActor.photoUrl : '');
+            const followerCount = typeof actor.followers === 'number' ? actor.followers : (fallbackActor?.followers ?? 0);
             return `
                 <article class="ew-actor-card ew-card-clickable" data-open-profile="actor:${escapeHtml(actor.id)}">
                     <div class="ew-actor-left">
@@ -1910,7 +1983,7 @@
                                 ${escapeHtml(actor.name)}
                                 <span class="ew-plan-badge-inline ${escapeHtml(actor.planId)}">${escapeHtml(planLabels[actor.planId] || actor.planId)}</span>
                             </h3>
-                            <div class="ew-app-meta">${escapeHtml(actor.category)} • ${escapeHtml(actor.city)} • ${escapeHtml(actor.credits)}</div>
+                            <div class="ew-app-meta">${escapeHtml(actor.category)} • ${escapeHtml(actor.city)} • ${escapeHtml(actor.credits)} • <strong>${followerCount.toLocaleString('en-IN')} Followers</strong></div>
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -1924,62 +1997,36 @@
         }).join('');
     }
 
-    function renderActorSearch() {
-        const container = document.getElementById('actor-search-results');
-        const countEl = document.getElementById('actor-search-count');
-        if (!container) return;
+    function renderPlanHistory() {
+        const tbody = document.getElementById('plan-history-tbody');
+        const countEl = document.getElementById('plan-history-count');
+        if (!tbody) return;
 
-        const query = (document.getElementById('actor-search-input')?.value || '').trim().toLowerCase();
-        const planFilter = document.getElementById('actor-plan-filter')?.value || 'all';
-
-        const filtered = state.otherActors.filter((actor) => {
-            const matchesPlan = planFilter === 'all' || actor.planId === planFilter;
-            const matchesQuery = !query ||
-                actor.name.toLowerCase().includes(query) ||
-                actor.category.toLowerCase().includes(query) ||
-                actor.city.toLowerCase().includes(query);
-            return matchesPlan && matchesQuery;
-        });
-
+        const history = Array.isArray(state.planHistory) ? state.planHistory : [];
         if (countEl) {
-            countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'actor' : 'actors'} found`;
+            countEl.textContent = `${history.length} ${history.length === 1 ? 'record' : 'records'}`;
         }
 
-        if (filtered.length === 0) {
-            container.innerHTML = `<div class="ew-panel"><p>No actors found matching your search or plan filter.</p></div>`;
+        if (history.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 18px;">No previous plan history available.</td></tr>`;
             return;
         }
 
-        const planLabels = {
-            free: 'Basic (Free)',
-            premium: 'Premium (₹199)',
-            pro: 'Pro Elite (₹399)'
+        const badgeClassMap = {
+            Active: 'shortlisted',
+            Completed: 'review',
+            Expired: 'closed'
         };
 
-        container.innerHTML = filtered.map((actor) => {
-            const fallbackActor = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
-            const photoSrc = actor.photoUrl || (fallbackActor ? fallbackActor.photoUrl : '');
-            return `
-            <article class="ew-actor-card ew-card-clickable" data-open-profile="actor:${escapeHtml(actor.id)}">
-                <div class="ew-actor-left">
-                    <img class="ew-actor-avatar ew-photo-clickable" src="${escapeHtml(photoSrc)}" alt="${escapeHtml(actor.name)}" title="Click to enlarge">
-                    <div>
-                        <h3>
-                            ${escapeHtml(actor.name)}
-                            <span class="ew-plan-badge-inline ${escapeHtml(actor.planId)}">${escapeHtml(planLabels[actor.planId] || actor.planId)}</span>
-                        </h3>
-                        <div class="ew-app-meta">${escapeHtml(actor.category)} • ${escapeHtml(actor.city)} • ${escapeHtml(actor.credits)}</div>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="button" class="ew-btn ${actor.following ? 'ew-btn-outline' : 'ew-btn-primary'} ew-btn-sm" data-toggle-follow-actor="${escapeHtml(actor.id)}">
-                        ${actor.following ? 'Following' : 'Follow'}
-                    </button>
-                    <button type="button" class="ew-btn ew-btn-outline ew-btn-sm" data-open-profile="actor:${escapeHtml(actor.id)}">View Profile</button>
-                </div>
-            </article>
-        `;
-        }).join('');
+        tbody.innerHTML = history.map((item) => `
+            <tr>
+                <td><strong>${escapeHtml(item.planName)}</strong></td>
+                <td>${escapeHtml(item.price)}</td>
+                <td>${escapeHtml(item.period)}</td>
+                <td>${escapeHtml(item.paymentMethod)}</td>
+                <td><span class="ew-badge ${escapeHtml(badgeClassMap[item.status] || 'review')}">${escapeHtml(item.status)}</span></td>
+            </tr>
+        `).join('');
     }
 
     function escapeHtml(value) {
@@ -2157,8 +2204,24 @@
             const chosen = PLANS.find((p) => p.id === planId);
             if (chosen && state.currentPlan !== chosen.id) {
                 state.currentPlan = chosen.id;
+                if (!Array.isArray(state.planHistory)) state.planHistory = [];
+                state.planHistory.forEach((entry) => {
+                    if (entry.status === 'Active') {
+                        entry.status = 'Completed';
+                    }
+                });
+                const invNum = String(state.planHistory.length + 1).padStart(3, '0');
+                state.planHistory.unshift({
+                    id: `ph-${Date.now()}`,
+                    planName: chosen.name,
+                    price: chosen.price === '₹0' ? '₹0' : `${chosen.price} / mo`,
+                    period: 'Current • Switched just now',
+                    paymentMethod: chosen.id === 'free' ? `Free Tier • #INV-2026-${invNum}` : `Online • #INV-2026-${invNum}`,
+                    status: 'Active'
+                });
                 saveState();
                 renderPlans();
+                renderPlanHistory();
                 showToast(`Switched to ${chosen.name} (${chosen.shortLabel})`);
             }
             return;
@@ -2195,10 +2258,12 @@
         if (actorFollowBtn) {
             const actor = state.otherActors.find((a) => a.id === actorFollowBtn.dataset.toggleFollowActor);
             if (actor) {
+                const fallbackActor = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
+                const currentFollowers = typeof actor.followers === 'number' ? actor.followers : (fallbackActor?.followers ?? 0);
                 actor.following = !actor.following;
+                actor.followers = Math.max(0, currentFollowers + (actor.following ? 1 : -1));
                 saveState();
                 renderCategories();
-                renderActorSearch();
                 showToast(actor.following ? `Following ${actor.name}` : `Unfollowed ${actor.name}`);
             }
             return;
@@ -2356,8 +2421,6 @@
     document.getElementById('category-search')?.addEventListener('input', renderCategories);
     document.getElementById('actor-dir-city-filter')?.addEventListener('change', renderCategories);
     document.getElementById('actor-dir-plan-filter')?.addEventListener('change', renderCategories);
-    document.getElementById('actor-search-input')?.addEventListener('input', renderActorSearch);
-    document.getElementById('actor-plan-filter')?.addEventListener('change', renderActorSearch);
     document.getElementById('teammate-profession-filter')?.addEventListener('change', renderTeammateSuggestions);
 
     document.getElementById('profile-form')?.addEventListener('submit', (e) => {
@@ -2390,7 +2453,7 @@
             gender: document.getElementById('profile-gender').value,
             experienceCategory: document.getElementById('profile-experience').value,
             bio: document.getElementById('profile-bio').value.trim(),
-            showreelUrl: document.getElementById('profile-showreel').value.trim(),
+            showreelUrl: document.getElementById('profile-showreel')?.value.trim() || state.profileExtras.showreelUrl || '',
             availability: document.getElementById('profile-availability').value
         };
         saveState();
@@ -2434,7 +2497,203 @@
         reader.readAsDataURL(file);
     });
 
-    document.getElementById('profile-video-form')?.addEventListener('submit', (e) => {
+    const INAPPROPRIATE_VIDEO_TERMS = [
+        'nsfw', 'porn', 'xxx', 'nude', 'nudity', 'explicit', 'gore', 'violence',
+        'violent', 'abuse', 'hate', 'terror', 'scam', 'pirated', '18+', 'adult',
+        'sex', 'sexual', 'weapon', 'drugs', 'harassment', 'vulgar', 'obscene'
+    ];
+
+    let videoAnalysisHideTimer = null;
+
+    function setVideoAnalysisStatus(mode, titleText, detailText) {
+        const box = document.getElementById('profile-video-analysis-status');
+        if (!box) return;
+        clearTimeout(videoAnalysisHideTimer);
+        if (!mode) {
+            box.hidden = true;
+            box.className = 'ew-video-analysis-box';
+            box.innerHTML = '';
+            return;
+        }
+        box.hidden = false;
+        box.className = `ew-video-analysis-box ${mode}`;
+        box.innerHTML = `<strong>${escapeHtml(titleText)}</strong><span>${escapeHtml(detailText)}</span>`;
+        if (mode === 'approved') {
+            videoAnalysisHideTimer = setTimeout(() => {
+                setVideoAnalysisStatus(null);
+            }, 4000);
+        }
+    }
+
+    function checkTextForInappropriateTerms(text) {
+        const normalized = String(text || '').toLowerCase();
+        return INAPPROPRIATE_VIDEO_TERMS.find((term) => {
+            if (term === '18+') return normalized.includes('18+');
+            const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`, 'i').test(normalized);
+        }) || null;
+    }
+
+    function sampleAndAnalyzeVideoFrames(objectUrl) {
+        return new Promise((resolve) => {
+            const video = document.createElement('video');
+            video.muted = true;
+            video.playsInline = true;
+            video.preload = 'auto';
+
+            let settled = false;
+            const finish = (result) => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timeoutId);
+                video.removeAttribute('src');
+                video.load();
+                resolve(result);
+            };
+
+            const timeoutId = setTimeout(() => {
+                finish({ ok: false, reason: 'Video analysis timed out. Please upload a standard MP4, WEBM, or MOV file.' });
+            }, 8000);
+
+            video.onerror = () => {
+                finish({ ok: false, reason: 'Unable to decode video stream. The file may be corrupted or in an unsupported format.' });
+            };
+
+            video.onloadedmetadata = async () => {
+                if (!video.duration || !Number.isFinite(video.duration) || video.duration <= 0 || !video.videoWidth || !video.videoHeight) {
+                    finish({ ok: false, reason: 'Invalid video stream: missing duration or video dimensions.' });
+                    return;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = 160;
+                canvas.height = 90;
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                if (!ctx) {
+                    finish({ ok: true });
+                    return;
+                }
+
+                const sampleFractions = [0.15, 0.5, 0.85];
+                let highExposureFrames = 0;
+                let blankFrames = 0;
+
+                for (const frac of sampleFractions) {
+                    const targetTime = Math.min(Math.max(0, video.duration - 0.05), Math.max(0, video.duration * frac));
+                    await new Promise((res) => {
+                        let done = false;
+                        const onSeeked = () => {
+                            if (done) return;
+                            done = true;
+                            clearTimeout(seekTimer);
+                            video.removeEventListener('seeked', onSeeked);
+                            res();
+                        };
+                        const seekTimer = setTimeout(onSeeked, 1500);
+                        video.addEventListener('seeked', onSeeked, { once: true });
+                        try {
+                            video.currentTime = targetTime;
+                        } catch {
+                            onSeeked();
+                        }
+                    });
+
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const totalPixels = canvas.width * canvas.height;
+                    let skinPixels = 0;
+                    let lumaSum = 0;
+                    let lumaSqSum = 0;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        const y = 0.299 * r + 0.587 * g + 0.114 * b;
+                        lumaSum += y;
+                        lumaSqSum += y * y;
+
+                        const cb = 128 - 0.168736 * r - 0.331264 * g + 0.5 * b;
+                        const cr = 128 + 0.5 * r - 0.418688 * g - 0.081312 * b;
+                        if (y > 60 && cb >= 77 && cb <= 127 && cr >= 133 && cr <= 173) {
+                            skinPixels += 1;
+                        }
+                    }
+
+                    const meanLuma = lumaSum / totalPixels;
+                    const variance = (lumaSqSum / totalPixels) - (meanLuma * meanLuma);
+                    if (variance < 8) {
+                        blankFrames += 1;
+                    }
+                    if (skinPixels / totalPixels > 0.68) {
+                        highExposureFrames += 1;
+                    }
+                }
+
+                if (highExposureFrames >= 2) {
+                    finish({
+                        ok: false,
+                        reason: 'Visual content check flagged potentially explicit or inappropriate exposure in sampled frames.'
+                    });
+                    return;
+                }
+
+                if (blankFrames === sampleFractions.length) {
+                    finish({
+                        ok: false,
+                        reason: 'Video appears completely blank or static across all sampled frames.'
+                    });
+                    return;
+                }
+
+                finish({ ok: true });
+            };
+
+            video.src = objectUrl;
+        });
+    }
+
+    async function analyzeUploadedVideo(file, title) {
+        const validExt = /\.(mp4|webm|mov|m4v|avi|mkv)$/i.test(file.name);
+        if (!file.type.startsWith('video/') && !validExt) {
+            return { ok: false, reason: 'Unsupported file type. Please upload a valid video file (MP4, WEBM, or MOV).' };
+        }
+
+        if (file.size <= 0) {
+            return { ok: false, reason: 'Uploaded video file is empty.' };
+        }
+
+        if (file.size > 200 * 1024 * 1024) {
+            return { ok: false, reason: 'Video exceeds the 200 MB maximum file size limit.' };
+        }
+
+        const matchedTerm = checkTextForInappropriateTerms(`${title} ${file.name}`);
+        if (matchedTerm) {
+            return {
+                ok: false,
+                reason: `Inappropriate or restricted keyword ("${matchedTerm}") detected in video title or filename.`
+            };
+        }
+
+        const tempUrl = URL.createObjectURL(file);
+        const frameResult = await sampleAndAnalyzeVideoFrames(tempUrl);
+        if (!frameResult.ok) {
+            URL.revokeObjectURL(tempUrl);
+            return frameResult;
+        }
+
+        return { ok: true, objectUrl: tempUrl };
+    }
+
+    document.getElementById('profile-video-file')?.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        const titleInput = document.getElementById('profile-video-title');
+        if (file && titleInput && !titleInput.value.trim()) {
+            titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ').trim();
+        }
+    });
+
+    document.getElementById('profile-video-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const limits = getActiveLimits();
         if (state.videos.length >= limits.maxVideos) {
@@ -2445,12 +2704,42 @@
         const title = document.getElementById('profile-video-title').value.trim();
         const category = document.getElementById('profile-video-category').value;
         const fileInput = document.getElementById('profile-video-file');
+        const submitBtn = document.getElementById('profile-video-submit');
         const file = fileInput.files && fileInput.files[0];
         if (!title || !file) return;
 
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Analyzing Video...';
+        }
+        setVideoAnalysisStatus(
+            'analyzing',
+            'Analyzing Uploaded Video...',
+            `Scanning "${file.name}" metadata, stream integrity, and sampled frames for content safety.`
+        );
+
+        const analysis = await analyzeUploadedVideo(file, title);
+
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Upload & Analyze Video';
+        }
+
+        if (!analysis.ok) {
+            setVideoAnalysisStatus(
+                'rejected',
+                'Video Rejected — Content Policy Violation',
+                analysis.reason
+            );
+            fileInput.value = '';
+            renderVideos();
+            showToast(`Rejected "${title}": ${analysis.reason}`);
+            return;
+        }
+
         const vidId = `vid-${Date.now()}`;
         const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
-        videoObjectUrls.set(vidId, URL.createObjectURL(file));
+        videoObjectUrls.set(vidId, analysis.objectUrl);
 
         state.videos.unshift({
             id: vidId,
@@ -2458,13 +2747,18 @@
             category,
             fileName: file.name,
             sizeLabel: `${sizeMb} MB`,
-            uploadedAt: 'Just now'
+            uploadedAt: 'Just now • Verified Safe'
         });
         saveState();
         renderVideos();
         renderPlanUsage();
         e.target.reset();
-        showToast(`Uploaded "${title}"`);
+        setVideoAnalysisStatus(
+            'approved',
+            'Video Approved & Uploaded',
+            `"${title}" passed content analysis and has been added to your portfolio.`
+        );
+        showToast(`Uploaded "${title}" (Verified Safe)`);
     });
 
     document.getElementById('complaint-form')?.addEventListener('submit', (e) => {
@@ -2597,7 +2891,7 @@
             const initials = p.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
             title = p.name;
             subtitle = p.role;
-            avatar = makeActorAvatar(initials, '#1f2937', '#b45309');
+            avatar = p.photoUrl || fallback?.photoUrl || makeActorAvatar(initials, '#1f2937', '#b45309');
             bodyHtml = `
                 <div><strong>Connection Status:</strong> ${p.connected ? 'Connected' : 'Not Connected'}</div>
                 <div><strong>Collaboration Focus:</strong> Casting calls, production coordination, and talent referrals.</div>
@@ -2612,7 +2906,7 @@
             const initials = tm.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
             title = tm.name;
             subtitle = `${tm.profession} • ${tm.city}`;
-            avatar = makeActorAvatar(initials, '#312e81', '#db2777');
+            avatar = tm.photoUrl || '/images/avatars/actor-male-1.jpg' || makeActorAvatar(initials, '#312e81', '#db2777');
             bodyHtml = `
                 <div><strong>Match Reason:</strong> ${escapeHtml(tm.reasonLabel)}</div>
                 <div><strong>Profile Summary:</strong> ${escapeHtml(tm.detail)}</div>
@@ -2625,11 +2919,14 @@
             if (!actor) return;
             const fallback = DEFAULT_STATE.otherActors.find((a) => a.id === actor.id);
             const videos = Array.isArray(actor.videos) && actor.videos.length ? actor.videos : (fallback?.videos || []);
+            const followerCount = typeof actor.followers === 'number' ? actor.followers : (fallback?.followers ?? 0);
+            const hasRealPhoto = actor.photoUrl && !String(actor.photoUrl).startsWith('data:image/svg+xml');
             title = actor.name;
             subtitle = `${actor.category} • ${actor.city}`;
-            avatar = actor.photoUrl || (fallback ? fallback.photoUrl : '');
+            avatar = hasRealPhoto ? actor.photoUrl : (fallback ? fallback.photoUrl : '');
             bodyHtml = `
                 <div><strong>Plan Tier:</strong> ${actor.planId === 'pro' ? 'Pro Elite (₹399)' : actor.planId === 'premium' ? 'Premium (₹199)' : 'Basic (Free)'}</div>
+                <div><strong>Followers:</strong> ${followerCount.toLocaleString('en-IN')}</div>
                 <div><strong>Credits &amp; Portfolio:</strong> ${escapeHtml(actor.credits)}</div>
                 <div><strong>City:</strong> ${escapeHtml(actor.city)}</div>
                 <div><strong>Follow Status:</strong> ${actor.following ? 'Following' : 'Not Following'}</div>
@@ -2919,8 +3216,8 @@
     renderTeammateSuggestions();
     renderNotifications();
     renderPlans();
+    renderPlanHistory();
     renderCategories();
-    renderActorSearch();
     renderComplaints();
     populateProfileForm();
     populateSettings();
